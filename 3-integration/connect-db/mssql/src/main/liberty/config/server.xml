@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="defaultServer">
+    <!-- Enable features -->
+    <featureManager>
+        <feature>cdi-2.0</feature>
+        <feature>jaxb-2.2</feature>
+        <feature>jsf-2.3</feature>
+        <feature>jaxrs-2.1</feature>
+        <feature>ejbLite-3.2</feature>
+        <feature>jpa-2.2</feature>
+    </featureManager>
+
+    <!-- Define http & https endpoints -->
+    <httpEndpoint id="defaultHttpEndpoint" host="*"
+        httpPort="9080" httpsPort="9443" />
+
+    <!-- Automatically expand WAR files and EAR files -->
+    <applicationManager autoExpand="true" />
+
+    <!-- Define web application with its context root and location -->
+    <webApplication id="javaee-cafe" contextRoot="/"
+        location="${server.config.dir}/apps/javaee-cafe.war">
+    </webApplication>
+
+    <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
+        <jdbcDriver libraryRef="driver-library" />
+        <properties.microsoft.sqlserver  
+            serverName="${db.server.name}"
+            portNumber="${db.port.number}"
+            databaseName="${db.name}"
+            user="${db.user}"
+            password="${db.password}" />
+    </dataSource>
+
+    <library id="driver-library">
+        <fileset dir="${shared.resource.dir}" includes="*.jar" />
+    </library>
+</server>
