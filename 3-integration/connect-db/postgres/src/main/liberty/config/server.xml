@@ -29,7 +29,8 @@
             portNumber="${db.port.number}"
             databaseName="${db.name}"
             user="${db.user}"
-            password="${db.password}" />
+            password="${db.password}"
+            ssl="true" />
     </dataSource>
 
     <library id="driver-library">
