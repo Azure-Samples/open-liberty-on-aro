@@ -22,21 +22,17 @@
         location="${server.config.dir}/apps/javaee-cafe.war">
     </webApplication>
 
-    <dataSource id="JavaEECafeDB"
-        jdbcDriverRef="postgresql-driver" jndiName="jdbc/JavaEECafeDB"
-        transactional="true" type="javax.sql.ConnectionPoolDataSource">
-        <properties databaseName="postgres" portNumber="5432"
-            serverName="${postgresql.server.name}" user="${postgresql.user}"
-            password="${postgresql.password}" />
+    <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
+        <jdbcDriver libraryRef="driver-library" />
+        <properties.postgresql
+            serverName="${db.server.name}"
+            portNumber="${db.port.number}"
+            databaseName="${db.name}"
+            user="${db.user}"
+            password="${db.password}" />
     </dataSource>
 
-    <jdbcDriver id="postgresql-driver"
-        javax.sql.ConnectionPoolDataSource="org.postgresql.ds.PGConnectionPoolDataSource"
-        javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"
-        libraryRef="postgresql-library" />
-
-    <library id="postgresql-library">
-        <fileset dir="${shared.resource.dir}"
-            id="PostgreSQLFileset" includes="postgresql-42.2.4.jar" />
+    <library id="driver-library">
+        <fileset dir="${shared.resource.dir}" includes="*.jar" />
     </library>
 </server>

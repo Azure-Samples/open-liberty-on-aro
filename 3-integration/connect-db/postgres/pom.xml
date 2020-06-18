@@ -17,9 +17,11 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <failOnMissingWebXml>false</failOnMissingWebXml>
-    <postgresql.server.name></postgresql.server.name>
-    <postgresql.user></postgresql.user>
-    <postgresql.password></postgresql.password>
+    <db.server.name></db.server.name>
+    <db.port.number></db.port.number>
+    <db.name></db.name>
+    <db.user></db.user>
+    <db.password></db.password>
   </properties>
   <dependencies>
     <dependency>
@@ -71,9 +73,11 @@
                   <libertyRuntimeVersion>[20.0.0.1,)</libertyRuntimeVersion>
                   <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
                   <bootstrapProperties>
-                    <postgresql.server.name>${postgresql.server.name}</postgresql.server.name>
-                    <postgresql.user>${postgresql.user}</postgresql.user>
-                    <postgresql.password>${postgresql.password}</postgresql.password>
+                    <db.server.name>${db.server.name}</db.server.name>
+                    <db.port.number>${db.port.number}</db.port.number>
+                    <db.name>${db.name}</db.name>
+                    <db.user>${db.user}</db.user>
+                    <db.password>${db.password}</db.password>
                   </bootstrapProperties>
                 </configuration>
               </execution>
@@ -85,7 +89,7 @@
             <version>3.1.2</version>
             <executions>
               <execution>
-                <id>copy-postgresql-driver</id>
+                <id>copy-jdbc-driver</id>
                 <phase>package</phase>
                 <goals>
                   <goal>copy-dependencies</goal>
