@@ -1,0 +1,10 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-elk-cluster-logging
+  namespace: open-liberty-demo
+spec:
+  replicas: 1
+  # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
+  expose: true
