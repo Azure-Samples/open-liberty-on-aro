@@ -1,0 +1,56 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-elk-hosted-elasticsearch
+  namespace: open-liberty-demo
+spec:
+  replicas: 1
+  # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
+  expose: true
+  # Note: run `oc adm policy add-scc-to-user privileged -n ${NAMESPACE} -z filebeat-svc-account` in advance
+  serviceAccountName: filebeat-svc-account
+  env:
+  - name: WLP_LOGGING_MESSAGE_FORMAT
+    value: JSON
+  - name: WLP_LOGGING_MESSAGE_SOURCE
+    value: message,trace,accessLog,ffdc,audit
+  volumeMounts:
+  - name: logs-volume
+    mountPath: /logs
+  volumes:
+  - name: logs-volume
+    emptyDir: {}
+  - name: config
+    configMap:
+      defaultMode: 0600
+      name: filebeat-config
+  sidecarContainers:
+  - name: filebeat
+    image: docker.elastic.co/beats/filebeat:7.6.2
+    args: [
+      "-c", "/etc/filebeat.yml",
+      "-e",
+    ]
+    securityContext:
+      runAsUser: 0
+      privileged: true
+    env:
+    - name: ELASTIC_CLOUD_ID
+      valueFrom:
+        secretKeyRef:
+          name: elastic-cloud-secret
+          key: elastic.cloud.id
+    - name: ELASTIC_CLOUD_AUTH
+      valueFrom:
+        secretKeyRef:
+          name: elastic-cloud-secret
+          key: elastic.cloud.auth
+    volumeMounts:
+    - name: config
+      mountPath: /etc/filebeat.yml
+      readOnly: true
+      subPath: filebeat.yml
+    - name: logs-volume
+      mountPath: /logs
+      readOnly: true
