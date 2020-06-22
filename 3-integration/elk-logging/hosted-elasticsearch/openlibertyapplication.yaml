@@ -8,7 +8,6 @@ spec:
   # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
   applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
   expose: true
-  # Note: run `oc adm policy add-scc-to-user privileged -n ${NAMESPACE} -z filebeat-svc-account` in advance
   serviceAccountName: filebeat-svc-account
   env:
   - name: WLP_LOGGING_MESSAGE_FORMAT
