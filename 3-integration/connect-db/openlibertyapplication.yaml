@@ -1,7 +1,10 @@
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  name: javaee-cafe-connect-db
+  # NOTE:
+  # - replace "${DB_Type} with "mssql" for testing DB connection with Azure SQL
+  # - replace "${DB_Type} with "postgres" for testing DB connection with Azure Database for PostgreSQL
+  name: javaee-cafe-connect-db-${DB_Type}
   namespace: open-liberty-demo
 spec:
   replicas: 1
