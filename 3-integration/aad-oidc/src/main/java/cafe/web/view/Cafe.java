@@ -11,9 +11,11 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
+import javax.security.enterprise.SecurityContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -35,6 +37,15 @@ public class Cafe implements Serializable {
 
 	private String baseUri;
 	private transient Client client;
+
+    @Inject
+    private transient SecurityContext securityContext;
+
+    @Inject
+    private transient CafeJwtUtil jwtUtil;
+
+    @Inject
+    private transient CafeRequestFilter filter;
 
 	@NotNull
 	@NotEmpty
@@ -63,6 +74,14 @@ public class Cafe implements Serializable {
 		return coffeeList;
 	}
 
+    public String getLoggedOnUser() {
+        return securityContext.getCallerPrincipal().getName();
+    }
+
+    public boolean isDisabledForDeletion() {
+        return !jwtUtil.isUserInAdminGroup();
+    }
+
 	@PostConstruct
 	private void init() {
 		try {
@@ -78,7 +97,7 @@ public class Cafe implements Serializable {
 				public boolean verify(String hostname, SSLSession session) {
 					return true;
 				}
-			}).build();
+            }).build().register(filter);
 			this.getAllCoffees();
 		} catch (IllegalArgumentException | NullPointerException | WebApplicationException | UnknownHostException ex) {
 			logger.severe("Processing of HTTP response failed.");
