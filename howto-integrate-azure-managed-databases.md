@@ -7,7 +7,7 @@
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application inside Open Liberty on an Azure Red Hat OpenShift 4 cluster](README.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application inside Open Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
 
 ## Connect your application to Azure SQL Database
 
@@ -29,7 +29,7 @@ Follow the instructions below to set up an Azure SQL Database single database fo
 
 ### Prepare your Open Liberty application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](README.md) has no database connectivity. Follow instructions below to make it connect to Azure SQL Database.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) has no database connectivity. Follow instructions below to make it connect to Azure SQL Database.
 
 1. Update `server.xml` by enabling **jpa-2.2** feature and adding **dataSource** configuration.
    
@@ -367,8 +367,8 @@ stringData:
    ````
 
    > [!NOTE]
-   > - Refer to [Set up Azure Red Hat OpenShift cluster](README.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-   > - **open-liberty-demo** is already created in the [previous guide](README.md).
+   > - Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
+   > - **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
 3. Create **Secret**:
    
@@ -467,7 +467,7 @@ Follow the instructions below to set up an Azure Database for PostgreSQL server 
 
 ### Prepare your Open Liberty application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](README.md) has no database connectivity. Follow instructions below to make it connect to Azure Database for PostgreSQL.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) has no database connectivity. Follow instructions below to make it connect to Azure Database for PostgreSQL.
 
 1. Update `server.xml` by enabling **jpa-2.2** feature and adding **dataSource** configuration. The updated file is almost same as the one for **Azure Database for PostgreSQL**, except the **dataSource** configuration.
    
@@ -664,8 +664,8 @@ stringData:
    ````
 
    > [!NOTE]
-   > - Refer to [Set up Azure Red Hat OpenShift cluster](README.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-   > - **open-liberty-demo** is already created in the [previous guide](README.md).
+   > - Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
+   > - **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
 3. Create **Secret**:
    

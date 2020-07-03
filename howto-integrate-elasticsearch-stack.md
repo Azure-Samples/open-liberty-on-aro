@@ -7,7 +7,7 @@ In this guide, you will integrate your Open Liberty application with Elasticsear
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application inside Open Liberty on an Azure Red Hat OpenShift 4 cluster](README.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application inside Open Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
 
 ## Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 
@@ -28,7 +28,7 @@ Follow the instructions below to create a deployment for the hosted Elasticsearc
 
 ### Use Filebeat to retrieve and ship application logs
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](README.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
 
 Follow the steps below to configure Filebeat as a side container to retrieve and ship application logs.
 
@@ -52,8 +52,8 @@ metadata:
    ````
 
    > [!NOTE]
-   > - Refer to [Set up Azure Red Hat OpenShift cluster](README.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-   > - **open-liberty-demo** is already created in the [previous guide](README.md).
+   > - Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
+   > - **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
 3. Create service account:
    
@@ -184,7 +184,7 @@ spec:
 
 > [!NOTE]
 > - Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
-> - Image `javaee-cafe-simple` is built from [previous guide](README.md#build-application-image).
+> - Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Run the following commands to deploy your Open Liberty Application:
 
@@ -226,7 +226,7 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 Another option is to install EFK (Elasticsearch, Fluentd, and Kibana) stack on the ARO 4 cluster, which aggregates log data from all containers running on the cluster. The steps below describe the process of deploying EFK stack using the **Elasticsearch Operator** and the **Cluster Logging Operator**.
 > [!NOTE]
-> Elasticsearch is a memory-intensive application. Refer to section [Set up Azure Red Hat OpenShift cluster](README.md#set-up-azure-red-hat-openshift-cluster) from the previous guide to learn how to specify appropriate virtual machine size for the worker nodes when creating the cluster.
+> Elasticsearch is a memory-intensive application. Refer to section [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) from the previous guide to learn how to specify appropriate virtual machine size for the worker nodes when creating the cluster.
 
 ### Deploy cluster logging
 
@@ -260,7 +260,7 @@ After the newly created Cluster Logging instance is up and running, configure Fl
 
 ### Deploy sample application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](README.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
 
 Now we can deploy the sample Open Liberty Application, using the YAML file located at `<path-to-repo>/3-integration/elk-logging/cluster-logging/openlibertyapplication.yaml`.
 
@@ -279,7 +279,7 @@ spec:
 
 > [!NOTE]
 > - Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
-> - Image `javaee-cafe-simple` is built from [previous guide](README.md#build-application-image).
+> - Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Change directory to `<path-to-repo>/3-integration/elk-logging/cluster-logging`.
 2. Run the following commands to deploy your Open Liberty Application:
