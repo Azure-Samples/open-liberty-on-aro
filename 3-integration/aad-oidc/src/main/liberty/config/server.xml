@@ -46,10 +46,13 @@
         inboundPropagation="supported" />
     
     <!-- JWT builder -->
-    <jwtBuilder id="jwtAuthUserBuilder" keyAlias="default" issuer="https://example.com" expiresInSeconds="600" />
+    <jwtBuilder id="jwtAuthUserBuilder" keyStoreRef="defaultKeyStore" 
+        keyAlias="${key.alias}" issuer="https://example.com" expiresInSeconds="600" />
+    <variable name="key.alias" defaultValue="default"/>
 
     <!-- JWT consumer -->
-    <mpJwt id="jwtUserConsumer" keyName="default" issuer="https://example.com" authFilterRef="mpJwtAuthFilter" />
+    <mpJwt id="jwtUserConsumer" jwksUri="https://localhost:9443/jwt/ibm/api/jwtAuthUserBuilder/jwk" 
+        issuer="https://example.com" authFilterRef="mpJwtAuthFilter" />
 
     <!-- JWT auth filter -->
     <authFilter id="mpJwtAuthFilter">
