@@ -14,5 +14,5 @@ buildNumber.properties
 .project
 .classpath
 *.jar
-3-integration/aad-oidc/*.crt
-3-integration/aad-oidc/*.key
+*.crt
+*.key
