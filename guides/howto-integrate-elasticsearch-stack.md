@@ -311,10 +311,11 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kinaba web console.
 
 1. Log into ARO web console. Click **Monitoring** > **Logging**. 
-3. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
-4. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** at top-right of the page.
-1. Click **Discover**. Select index pattern **project.\*** from the dropdown list. 
-1. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
+2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
+3. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
+   ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
+4. Click **Discover**. Select index pattern **project.\*** from the dropdown list. 
+5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
 
 ## Next steps
