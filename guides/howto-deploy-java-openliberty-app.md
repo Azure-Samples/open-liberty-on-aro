@@ -45,75 +45,50 @@ We will use a Java EE 8 application as our example in this guide. Open Liberty i
 
 ### Get a quickstart with a basic Java Application
 
-Change directory to `<path-to-repo>/1-start` of your local clone to see the sample application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). Here is the project structure:
+Change directory to `<path-to-repo>/1-start` of your local clone to see the sample application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). It will be used as a start point to demonstrate how easily it can be migrated to Open Liberty. Here is the project structure:
 
 ```Text
 ├── pom.xml                                         # Maven POM file
 └── src
-    ├── main
-    │   ├── java
-    │   │   └── cafe
-    │   │       ├── model
-    │   │       │   ├── CafeRepository.java         # Cafe CRUD repository (in-memory)
-    │   │       │   └── entity
-    │   │       │       └── Coffee.java             # Coffee entity
-    │   │       └── web
-    │   │           ├── rest
-    │   │           │   └── CafeResource.java       # Cafe CRUD REST APIs
-    │   │           └── view
-    │   │               └── Cafe.java               # Cafe bean in JSF client
-    │   ├── resources
-    │   │   ├── META-INF
-    │   │   └── cafe
-    │   │       └── web
-    │   │           ├── messages.properties         # Resource bundle in EN
-    │   │           └── messages_es.properties      # Resource bundle in ES
-    │   └── webapp
-    │       ├── WEB-INF
-    │       │   ├── faces-config.xml                # JSF configuration file specifying resource bundles and supported locales
-    │       │   └── web.xml                         # Deployment descriptor for a Servlet-based Java web application
-    │       └── index.xhtml                         # Home page for JSF client
-    └── test
-        └── java                                    # Placeholder for tests
+    └── main
+        ├── java
+        │   └── cafe
+        │       ├── model
+        │       │   ├── CafeRepository.java         # Cafe CRUD repository (in-memory)
+        │       │   └── entity
+        │       │       └── Coffee.java             # Coffee entity
+        │       └── web
+        │           ├── rest
+        │           │   └── CafeResource.java       # Cafe CRUD REST APIs
+        │           └── view
+        │               └── Cafe.java               # Cafe bean in JSF client
+        ├── resources
+        │   ├── META-INF
+        │   └── cafe
+        │       └── web
+        │           ├── messages.properties         # Resource bundle in EN
+        │           └── messages_es.properties      # Resource bundle in ES
+        └── webapp
+            ├── WEB-INF
+            │   ├── faces-config.xml                # JSF configuration file specifying resource bundles and supported locales
+            │   └── web.xml                         # Deployment descriptor for a Servlet-based Java web application
+            └── index.xhtml                         # Home page for JSF client
 ```
-
-1. Run `mvn clean package`.  This will generate a war package `javaee-cafe.war` in the directory `./target`.
 
 ### Run the application on Open Liberty
 
-To run the application on Open Liberty, you will need a `server.xml` file with the following content.
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<server description="defaultServer">
-    <!-- Enable features -->
-    <featureManager>
-        <feature>cdi-2.0</feature>
-        <feature>jaxb-2.2</feature>
-        <feature>jsf-2.3</feature>
-        <feature>jaxrs-2.1</feature>
-        <feature>ejbLite-3.2</feature>
-    </featureManager>
-
-    <!-- Define http & https endpoints -->
-    <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="9080" httpsPort="9443" />
-
-    <!-- Automatically expand WAR files and EAR files -->
-    <applicationManager autoExpand="true" />
-
-    <!-- Define web application with its context root and location -->
-    <webApplication id="javaee-cafe" contextRoot="/" location="${server.config.dir}/apps/javaee-cafe.war">
-    </webApplication>
-</server>
-```
-
+To migrate the application to Open Liberty, you will need to add a `server.xml` file, which configures the necessary features of Open Liberty.
 Add this configuration file to `<path-to-repo>/1-start/src/main/liberty/config`. The [liberty-maven-plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) looks in this directory when packaging the application for deployment. We will use the plugin as a convenience to easily run the application locally. The plugin need not be included while deploying the application to OpenShift.
 
 The `liberty-maven-plugin` provides a number of goals for managing an Open Liberty server and applications.  We will use dev mode to get a look at the sample application running locally.
+Follow steps below to run the application on Open Liberty in your local machine.
 
-1. Replace `<path-to-repo>/1-start/pom.xml` with `<path-to-repo>/2-simple/pom.xml`.
-2. Run `mvn clean liberty:dev` in a console.
-3. Wait until the server starts. You will output similar to the followings in your console.
+1. Add `<path-to-repo>/2-simple/src/main/liberty/config/server.xml` to `<path-to-repo>/1-start/src/main/liberty/config`.
+2. Replace `<path-to-repo>/1-start/pom.xml` with `<path-to-repo>/2-simple/pom.xml`.
+3. Change directory to `<path-to-repo>/1-start` of your local clone.
+4. Run `mvn clean package` in a console.  This will generate a war package `javaee-cafe.war` in the directory `./target`.
+5. Run `mvn liberty:dev`.
+6. Wait until the server starts. You will output similar to the followings in your console.
 
 ```Text
 [INFO] Listening for transport dt_socket at address: 7777
