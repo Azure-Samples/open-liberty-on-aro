@@ -19,7 +19,8 @@ Azure Active Directory (Azure AD) implements OpenID Connect (OIDC), an authentic
 2. [Create a few Azure AD users](https://docs.microsoft.com/azure/active-directory/fundamentals/add-users-azure-active-directory). You can use these accounts or your own to test the application. Note down email addresses and passwords for login.
 3. Create an **admin group** to enable JWT (Json Web Token) RBAC (role-based-access-control) functionality. Follow [create a basic group and add members using Azure Active Directory](https://docs.microsoft.com/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal) to create a group with type as **Security** and add one or more members. Note down the **group ID**.
 4. [Create a new application registration](https://docs.microsoft.com/azure/active-directory/develop/quickstart-register-app) in your Azure AD tenant. Specify **Redirect URI** to be [https://localhost:9443/oidcclient/redirect/liberty-aad-oidc-javaeecafe](https://localhost:9443/oidcclient/redirect/liberty-aad-oidc-javaeecafe). Note down the **client ID**.
-   > [!NOTE] You need to come back later to add another **Redirect URI** after the sample application is deployed to the ARO 4 cluster.
+   > [!NOTE]
+   > You need to come back later to add another **Redirect URI** after the sample application is deployed to the ARO 4 cluster.
 5. Create a new client secret. In the newly created application registration, click **Certificates & secrets** > Select **New client secret** > Provide **a description** and hit **Add**. Note down the generated **client secret** value.
 6. Add a **groups claim** into the ID token. In the newly created application registration, click **Token configuration** > Click **Add groups claim** > Select **Security groups** as group types to include in the ID token > Expand **ID** and select **Group ID** in the **Customize token properties by type** section.
 
