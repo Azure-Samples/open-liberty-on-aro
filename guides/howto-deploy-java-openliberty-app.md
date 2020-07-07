@@ -2,8 +2,8 @@
 
 This guide demonstrates how to run your Java, Java EE, Jakarta EE or MicroProfile application on the Open Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing an Open Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.
 
-- [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
-- [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides a flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
+* [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
+* [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides a flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
 
 ## Prerequisites
 
@@ -22,11 +22,12 @@ Finish the following prerequisites to successfully walk through this guide.
 Follow the instructions in these two tutorials and then return here to continue.
 
 1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](https://docs.microsoft.com/azure/openshift/tutorial-create-cluster).
-> [!NOTE]
-> If you plan to run memory-intensive applications on the cluster, specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
-> - [Azure CLI to create a cluster](https://docs.microsoft.com/cli/azure/aro?view=azure-cli-latest#az-aro-create)
-> - [Supported virtual machine sizes for memory optimized](https://docs.microsoft.com/azure/openshift/support-policies-v4#memory-optimized)
-> - [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
+
+   > [!NOTE]
+   > If you plan to run memory-intensive applications on the cluster, specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
+   > * [Azure CLI to create a cluster](https://docs.microsoft.com/cli/azure/aro?view=azure-cli-latest#az-aro-create)
+   > * [Supported virtual machine sizes for memory optimized](https://docs.microsoft.com/azure/openshift/support-policies-v4#memory-optimized)
+   > * [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
 
 2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](https://docs.microsoft.com/azure/openshift/tutorial-connect-cluster).
 
@@ -270,9 +271,9 @@ Advance to one of the next guides which integrate Open Liberty applications with
 
 Here are references used in this guide:
 
-- [Open Liberty](https://openliberty.io/)
-- [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/)
-- [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator)
-- [Open Liberty Server Configuration](https://openliberty.io/docs/ref/config/)
-- [Liberty Maven Plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin)
-- [Open Liberty Container Images](https://github.com/OpenLiberty/ci.docker)
+* [Open Liberty](https://openliberty.io/)
+* [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/)
+* [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator)
+* [Open Liberty Server Configuration](https://openliberty.io/docs/ref/config/)
+* [Liberty Maven Plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin)
+* [Open Liberty Container Images](https://github.com/OpenLiberty/ci.docker)

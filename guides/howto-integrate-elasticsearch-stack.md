@@ -52,17 +52,17 @@ metadata:
    ````
 
    > [!NOTE]
-   > - Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-   > - **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
+   > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
+   > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
 3. Create service account:
-   
+
    ```bash
    oc create -f ./filebeat-svc-account.yaml
    ```
 
 4. Grant the Filebeat service account access to the privileged security context constraints (SCC):
-   
+
    ```bash
    oc adm policy add-scc-to-user privileged -n open-liberty-demo -z filebeat-svc-account
    ```
@@ -89,7 +89,7 @@ data:
 ```
 
 1. Create **ConfigMap**:
-   
+
    ```bash
    oc create -f ./filebeat-config.yaml
    ```
@@ -111,11 +111,11 @@ stringData:
 ```
 
 > [!NOTE]
-> - Replace **${ELASTIC_CLOUD_ID}** with **Cloud ID** you wrote down before.
-> - Replace **${ELASTIC_CLOUD_AUTH}** with **User name:Password** you wrote down before.
+> * Replace **${ELASTIC_CLOUD_ID}** with **Cloud ID** you wrote down before.
+> * Replace **${ELASTIC_CLOUD_AUTH}** with **User name:Password** you wrote down before.
 
 1. Create **Secret**:
-   
+
    ```bash
    oc create -f ./elastic-cloud-secret.yaml
    ```
@@ -183,18 +183,18 @@ spec:
 ```
 
 > [!NOTE]
-> - Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
-> - Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
+> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Run the following commands to deploy your Open Liberty Application:
 
    ```bash
    # Create OpenLibertyApplication custom resource
    oc create -f ./openlibertyapplication.yaml
-   
+
    # Check if OpenLibertyApplication instance is created
    oc get openlibertyapplication
-   
+
    # Check if deployment created by Operator is ready
    oc get deployment
 
@@ -216,9 +216,9 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 3. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Stack Management** > **Index Patterns** > **Create index pattern**.
    ![create-index-pattern-define](./media/howto-integrate-elasticsearch-stack/create-index-pattern-define.png)
 4. Set **filebeat-\*** as index pattern. Click **Next step**.
-   ![create-index-pattern-settings](./media/howto-integrate-elasticsearch-stack/create-index-pattern-settings.png) 
+   ![create-index-pattern-settings](./media/howto-integrate-elasticsearch-stack/create-index-pattern-settings.png)
 5. Select **@timestamp** as **Time Filter field name** > Click **Create index pattern**.
-6. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Discover**. Check index pattern **filebeat-\*** is selected. 
+6. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Discover**. Check index pattern **filebeat-\*** is selected.
 7. Add **host&#46;name**, **loglevel**, and **message** from **Available fields** into **Selected fields**. Discover application logs from the work area of the page.
    ![discover-application-logs](./media/howto-integrate-elasticsearch-stack/discover-application-logs.png)
 
@@ -235,6 +235,7 @@ Follow the instructions in these tutorials and then return here to continue.
 1. [Connect to the cluster](https://docs.microsoft.com/azure/openshift/tutorial-connect-cluster).
 2. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
 3. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
+
 > [!NOTE]
 > To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
 
@@ -278,8 +279,8 @@ spec:
 ```
 
 > [!NOTE]
-> - Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
-> - Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
+> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Change directory to `<path-to-repo>/3-integration/elk-logging/cluster-logging`.
 2. Run the following commands to deploy your Open Liberty Application:
@@ -290,31 +291,31 @@ spec:
 
    # Create OpenLibertyApplication custom resource
    oc create -f ./openlibertyapplication.yaml
-   
+
    # Check if OpenLibertyApplication instance is created
    oc get openlibertyapplication
 
    # Check if deployment created by Operator is ready
    oc get deployment
-   
+
    # Check if route is created by Operator
    oc get route
    ```
 
-2. Once the Open Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
-3. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
+3. Once the Open Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+4. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
 
 For reference, you can find these deployment files from `<path-to-repo>/3-integration/elk-logging/cluster-logging` of your local clone.
 
-### Visualize your application logs in Kibana
+### Visualize your application logs in Kibana (EFK)
 
 As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kinaba web console.
 
-1. Log into ARO web console. Click **Monitoring** > **Logging**. 
+1. Log into ARO web console. Click **Monitoring** > **Logging**.
 2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
 3. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
    ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
-4. Click **Discover**. Select index pattern **project.\*** from the dropdown list. 
+4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
 5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
 
@@ -338,9 +339,9 @@ If you've finished all of above guides, advance to the complete guide, which inc
 
 Here are references used in this guide:
 
-- [Hosted Elasticsearch service on Microsoft Azure](https://www.elastic.co/azure)
-- [Run Filebeat on Kubernetes](https://www.elastic.co/guide/en/beats/filebeat/current/running-on-kubernetes.html)
-- [Deploying cluster logging](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html)
-- [Configure Fluentd to merge JSON log message body](https://kabanero.io/guides/app-logging-ocp-4-2/#configure-fluentd-to-merge-json-log-message-body)
-- [Open Liberty logging and tracing](https://www.openliberty.io/docs/ref/general/?_ga=2.160860285.1762477551.1592542266-979049641.1573374390#logging.html)
-- [Open Liberty Environment Variables](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.adoc#open-liberty-environment-variables)
+* [Hosted Elasticsearch service on Microsoft Azure](https://www.elastic.co/azure)
+* [Run Filebeat on Kubernetes](https://www.elastic.co/guide/en/beats/filebeat/current/running-on-kubernetes.html)
+* [Deploying cluster logging](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html)
+* [Configure Fluentd to merge JSON log message body](https://kabanero.io/guides/app-logging-ocp-4-2/#configure-fluentd-to-merge-json-log-message-body)
+* [Open Liberty logging and tracing](https://www.openliberty.io/docs/ref/general/?_ga=2.160860285.1762477551.1592542266-979049641.1573374390#logging.html)
+* [Open Liberty Environment Variables](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.adoc#open-liberty-environment-variables)
