@@ -9,6 +9,7 @@ This guide demonstrates how to run your Java, Java EE, Jakarta EE or MicroProfil
 
 Finish the following prerequisites to successfully walk through this guide.
 
+<!-- IMPORTANT: find a way to capture this activation action to count against our OKRs.  DO NOT PUBLISH without this. -->
 1. Install a Java SE implementation per your needs (for example, [AdoptOpenJDK OpenJDK 8 LTS/OpenJ9](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9)).
 2. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
 3. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
@@ -21,32 +22,36 @@ Finish the following prerequisites to successfully walk through this guide.
 
 Follow the instructions in these two tutorials and then return here to continue.
 
-1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](https://docs.microsoft.com/azure/openshift/tutorial-create-cluster).
-
+1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-create-cluster).  Though the "Get a Red Hat pull secret" step is labeled as optional, it is required for this article.  The pull secret enables your Azure Red Dat OpenShift cluster to find the Open Liberty operator.
    > [!NOTE]
-   > If you plan to run memory-intensive applications on the cluster, specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
+   > If you plan to run memory-intensive applications on the cluster, pecify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
    > * [Azure CLI to create a cluster](https://docs.microsoft.com/cli/azure/aro?view=azure-cli-latest#az-aro-create)
-   > * [Supported virtual machine sizes for memory optimized](https://docs.microsoft.com/azure/openshift/support-policies-v4#memory-optimized)
+   > * [Supported virtual machine sizes for memory optimized](/azure/openshift/support-policies-v4#memory-optimized)
    > * [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
 
-2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](https://docs.microsoft.com/azure/openshift/tutorial-connect-cluster).
+2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-connect-cluster).  The steps from "Install the OpenShift CLI" onward are not required for this article.
+
+## Install the Open Liberty Open Shift Operator
 
 After creating and connecting to the cluster, install the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator).
 
 1. Log in to the OpenShift web console from your browser.
 2. Navigate to **Operators** > **OperatorHub** and search for **Open Liberty Operator**.
-3. Click **Open Liberty Operator** from the search results.
-4. Click **Install**.
+3. Select **Open Liberty Operator** from the search results.
+4. Select **Install**.
+5. Fill out the values as shown in the following image.
    ![install-operator](./media/howto-deploy-java-openliberty-app/install-operator.png)
-5. Click **Subscribe** and wait until **Open Liberty Operator** is listed as one of Installed Operators.
+6. Select **Subscribe** and wait a minute or two.  
+7. Navigate to **Operators** > **OperatorHub**, then select **Installed Operators**.
+8. Observe the Open Liberty operator with status of "Succeeded".  If you do not, trouble shoot and resolve the problem before continuing.
 
 ## Prepare Open Liberty application
 
 We will use a Java EE 8 application as our example in this guide. Open Liberty is a Java EE 8 full profile compatible server, so it will be able to easily run the application. If you already have a Java EE, Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Liberty, IBM WebSphere Traditional, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Open Liberty.
 
-### Get a quickstart with a basic Java Application
+### Sample Application
 
-Change directory to `<path-to-repo>/1-start` of your local clone to see the sample application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). It will be used as a start point to demonstrate how easily it can be migrated to Open Liberty. Here is the project structure:
+Within the git repo you cloned during the prerequisites, change directory to `1-start`. The sample application uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). This standard Java EE app will be used as a starting point to demonstrate the ease of migration to Open Liberty. Here is the project structure:
 
 ```Text
 ├── pom.xml                                         # Maven POM file
@@ -78,15 +83,15 @@ Change directory to `<path-to-repo>/1-start` of your local clone to see the samp
 
 ### Run the application on Open Liberty
 
-To migrate the application to Open Liberty, you will need to add a `server.xml` file, which configures the necessary features of Open Liberty.
-Add this configuration file to `<path-to-repo>/1-start/src/main/liberty/config`. The [liberty-maven-plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) looks in this directory when packaging the application for deployment. We will use the plugin as a convenience to easily run the application locally. The plugin need not be included while deploying the application to OpenShift.
+To migrate the application to Open Liberty, you will need to add a `server.xml` file, which configures the necessary features of Open Liberty.  Add this configuration file to `1-start/src/main/liberty/config`. The [liberty-maven-plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) looks in this directory when packaging the application for deployment. The plugin need not be included while deploying the application to OpenShift, but we will use the plugin as a convenience to easily run the application locally.
 
-The `liberty-maven-plugin` provides a number of goals for managing an Open Liberty server and applications.  We will use dev mode to get a look at the sample application running locally.
+The `liberty-maven-plugin` provides a number of goals for managing an Open Liberty server and applications.  We will use `dev` mode to get a look at the sample application running locally.
+
 Follow steps below to run the application on Open Liberty in your local machine.
 
-1. Add `<path-to-repo>/2-simple/src/main/liberty/config/server.xml` to `<path-to-repo>/1-start/src/main/liberty/config`.
-2. Replace `<path-to-repo>/1-start/pom.xml` with `<path-to-repo>/2-simple/pom.xml`.
-3. Change directory to `<path-to-repo>/1-start` of your local clone.
+1. Copy `2-simple/src/main/liberty/config/server.xml` to `1-start/src/main/liberty/config`, overwriting the existing zero-length file.
+2. Replace `1-start/pom.xml` with `2-simple/pom.xml`.  This adds the `liberty-maven-plugin` to the pom.
+3. Change directory to `1-start` of your local clone.
 4. Run `mvn clean package` in a console.  This will generate a war package `javaee-cafe.war` in the directory `./target`.
 5. Run `mvn liberty:dev`.
 6. Wait until the server starts. You will output similar to the followings in your console.
@@ -117,7 +122,7 @@ The application will look similar to the following.
 
 Press **Control-C** to stop the application and Open Liberty server.
 
-For reference, these changes have already been applied in `<path-to-repo>/2-simple` of your local clone.
+For reference, these changes have already been applied in `2-simple` of your local clone.
 
 ## Deploy application on ARO 4 cluster
 
