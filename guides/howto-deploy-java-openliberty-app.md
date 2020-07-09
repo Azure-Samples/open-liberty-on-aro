@@ -170,7 +170,7 @@ docker build -t javaee-cafe-simple:1.0.0 --pull .
 
 Before deploying the containerized application to a remote cluster, run with your local Docker to verify whether it works.
 
-1. Run `docker run -it --rm -p 9080:9080 javaee-cafe-simple` in your console.
+1. Run `docker run -it --rm -p 9080:9080 javaee-cafe-simple:1.0.0` in your console.
 2. Wait for Open Liberty to start and the application to deploy successfully.
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Open Liberty server.

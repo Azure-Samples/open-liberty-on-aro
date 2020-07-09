@@ -96,7 +96,7 @@ docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
 
 After the application image is built, run with your local Docker to verify whether it works.
 
-1. Run `docker run -it --rm -p 9443:9443 -e CLIENT_ID=<client ID> -e CLIENT_SECRET=<client secret> -e TENANT_ID=<tenant ID> -e ADMIN_GROUP_ID=<group ID> javaee-cafe-aad-oidc` in your console.
+1. Run `docker run -it --rm -p 9443:9443 -e CLIENT_ID=<client ID> -e CLIENT_SECRET=<client secret> -e TENANT_ID=<tenant ID> -e ADMIN_GROUP_ID=<group ID> javaee-cafe-aad-oidc:1.0.0` in your console.
    > [!NOTE]
    > **client ID**, **client secret**, **tenant ID**, and **group ID** are properties you wrote down in previous step "[Set up Azure Active Directory](#set-up-azure-active-directory)".
 

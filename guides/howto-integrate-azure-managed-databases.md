@@ -317,7 +317,7 @@ RUN configure.sh
 
 Before deploying the containerized application to a remote cluster, run with your local Docker to verify whether it works.
 
-1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.database.windows.net -e DB_PORT_NUMBER=<Port number> -e DB_NAME=<Database name> -e DB_USER=<Server admin login>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-mssql` in your console.
+1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.database.windows.net -e DB_PORT_NUMBER=<Port number> -e DB_NAME=<Database name> -e DB_USER=<Server admin login>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-mssql:1.0.0` in your console.
    > [!NOTE]
    > * **Database name**, **Server name**, **Server admin login**, **Password** and **Port number** are properties you wrote down in previous step "[Create an Azure SQL Database single database](#create-an-azure-sql-database-single-database)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/azure-sql/database/firewall-create-server-level-portal-quickstart) for IP address of your client if you encountered the similar error below. Then re-run the application.
@@ -615,7 +615,7 @@ RUN configure.sh
 
 Before deploying the containerized application to a remote cluster, run with your local Docker to verify whether it works.
 
-1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.postgres.database.azure.com -e DB_PORT_NUMBER=<Port number> -e DB_NAME=postgres -e DB_USER=<Admin username>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-postgres` in your console.
+1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.postgres.database.azure.com -e DB_PORT_NUMBER=<Port number> -e DB_NAME=postgres -e DB_USER=<Admin username>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-postgres:1.0.0` in your console.
    > [!NOTE]
    > * **Server name**, **Port number**, **Admin username** and **Password** are properties you wrote down in previous step "[Create an Azure Database for PostgreSQL server](#create-an-azure-database-for-postgresql-server)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/postgresql/howto-manage-firewall-using-portal) for IP address of your client if you encountered the similar error below. Then re-run the application.
