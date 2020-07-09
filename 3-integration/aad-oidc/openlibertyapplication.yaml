@@ -6,7 +6,7 @@ metadata:
 spec:
   replicas: 1
   # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
   expose: true
   service:
     port: 9443

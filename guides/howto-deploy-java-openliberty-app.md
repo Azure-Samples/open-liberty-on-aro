@@ -1,6 +1,6 @@
 # Deploy a Java application with Open Liberty on an Azure Red Hat OpenShift 4 cluster
 
-This guide demonstrates how to run your Java, Java EE, Jakarta EE or MicroProfile application on the Open Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing an Open Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.
+This guide demonstrates how to run your Java, Java EE, Jakarta EE, or MicroProfile application on the Open Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing an Open Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.  The foundational elements of technology in this article include the following.
 
 * [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
 * [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides a flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
@@ -22,14 +22,16 @@ Finish the following prerequisites to successfully walk through this guide.
 
 Follow the instructions in these two tutorials and then return here to continue.
 
-1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-create-cluster).  Though the "Get a Red Hat pull secret" step is labeled as optional, it is required for this article.  The pull secret enables your Azure Red Dat OpenShift cluster to find the Open Liberty operator.
+1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-create-cluster).  
    > [!NOTE]
-   > If you plan to run memory-intensive applications on the cluster, pecify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
+   > Though the "Get a Red Hat pull secret" step is labeled as optional, **it is required for this article**.  The pull secret enables your Azure Red Dat OpenShift cluster to find the Open Liberty operator.
+   >
+   > If you plan to run memory-intensive applications on the cluster, specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
    > * [Azure CLI to create a cluster](https://docs.microsoft.com/cli/azure/aro?view=azure-cli-latest#az-aro-create)
    > * [Supported virtual machine sizes for memory optimized](/azure/openshift/support-policies-v4#memory-optimized)
    > * [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
 
-2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-connect-cluster).  The steps from "Install the OpenShift CLI" onward are not required for this article.
+2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-connect-cluster).  Be sure to follow the steps in "Install the OpenShift CLI" because we will use the `oc` command later in this article.
 
 ## Install the Open Liberty Open Shift Operator
 
@@ -45,13 +47,13 @@ After creating and connecting to the cluster, install the [Open Liberty Operator
 7. Navigate to **Operators** > **OperatorHub**, then select **Installed Operators**.
 8. Observe the Open Liberty operator with status of "Succeeded".  If you do not, trouble shoot and resolve the problem before continuing.
 
-## Prepare Open Liberty application
+## Prepare the Open Liberty application
 
-We will use a Java EE 8 application as our example in this guide. Open Liberty is a Java EE 8 full profile compatible server, so it will be able to easily run the application. If you already have a Java EE, Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Liberty, IBM WebSphere Traditional, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Open Liberty.
+We will use a Java EE 8 application as our example in this guide. Open Liberty is a [Java EE 8 full profile](https://javaee.github.io/javaee-spec/javadocs/) compatible server, so it will can easily run the application.  Open Liberty is also [Jakarta EE 8 full profile compatible](https://jakarta.ee/specifications/platform/8/apidocs/).  If you already have a Java EE, Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Liberty, IBM WebSphere Traditional, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Open Liberty.
 
 ### Sample Application
 
-Within the git repo you cloned during the prerequisites, change directory to `1-start`. The sample application uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). This standard Java EE app will be used as a starting point to demonstrate the ease of migration to Open Liberty. Here is the project structure:
+Within the git repo you cloned during the prerequisites, change directory to `1-start`. The sample application uses Maven for build time and **only Java EE 8 APIs** (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation) for runtime. This standard Java EE app will be used as a starting point to demonstrate the ease of migration to Open Liberty. Here is the project structure:
 
 ```Text
 ├── pom.xml                                         # Maven POM file
@@ -83,18 +85,18 @@ Within the git repo you cloned during the prerequisites, change directory to `1-
 
 ### Run the application on Open Liberty
 
-To migrate the application to Open Liberty, you will need to add a `server.xml` file, which configures the necessary features of Open Liberty.  Add this configuration file to `1-start/src/main/liberty/config`. The [liberty-maven-plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) looks in this directory when packaging the application for deployment. The plugin need not be included while deploying the application to OpenShift, but we will use the plugin as a convenience to easily run the application locally.
+To migrate the application to Open Liberty, you'll need to add a `server.xml` file, which configures the necessary features of Open Liberty.  Add this configuration file to `1-start/src/main/liberty/config`. The [liberty-maven-plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) looks in this directory when packaging the application for deployment. The plugin is not required to deploy the application to OpenShift, but we will use the it as a convenience to easily run the application locally.
 
 The `liberty-maven-plugin` provides a number of goals for managing an Open Liberty server and applications.  We will use `dev` mode to get a look at the sample application running locally.
 
-Follow steps below to run the application on Open Liberty in your local machine.
+Follow the steps below to run the application on Open Liberty on your local machine.
 
 1. Copy `2-simple/src/main/liberty/config/server.xml` to `1-start/src/main/liberty/config`, overwriting the existing zero-length file.
-2. Replace `1-start/pom.xml` with `2-simple/pom.xml`.  This adds the `liberty-maven-plugin` to the pom.
+2. Replace `1-start/pom.xml` with `2-simple/pom.xml` to add the `liberty-maven-plugin` to the pom.
 3. Change directory to `1-start` of your local clone.
-4. Run `mvn clean package` in a console.  This will generate a war package `javaee-cafe.war` in the directory `./target`.
+4. Run `mvn clean package` in a console to generate a war package `javaee-cafe.war` in the directory `./target`.
 5. Run `mvn liberty:dev`.
-6. Wait until the server starts. You will output similar to the followings in your console.
+6. Wait until the server starts. You'll see output similar to the followings in your console.
 
 ```Text
 [INFO] Listening for transport dt_socket at address: 7777
@@ -120,9 +122,17 @@ The application will look similar to the following.
 
    ![javaee-cafe-web-ui](./media/howto-deploy-java-openliberty-app/javaee-cafe-web-ui.png)
 
-Press **Control-C** to stop the application and Open Liberty server.
+Press **Control-C** to stop the application and Open Liberty server.  Instead, you can use the [`jps`](https://docs.oracle.com/en/java/javase/14/docs/specs/man/jps.html) command from JDK to safely stop the application, as shown here:
 
-For reference, these changes have already been applied in `2-simple` of your local clone.
+```bash
+$ jps
+613 Jps
+455 Launcher
+494 ws-server.jar
+$ kill 494
+```
+
+The directory `2-simple` of your local clone shows the Maven project with the above changes already applied.
 
 ## Deploy application on ARO 4 cluster
 
@@ -130,7 +140,7 @@ To deploy and run your Open Liberty application on an ARO 4 cluster, containeriz
 
 ### Build application image
 
-Here is the **Dockerfile** (located at `<path-to-repo>/2-simple/Dockerfile`) for building the application image:
+Here is the **Dockerfile** (located at `2-simple/Dockerfile`) for building the application image:
 
 ```Dockerfile
 # open liberty base image
@@ -144,29 +154,19 @@ COPY --chown=1001:0 target/javaee-cafe.war /config/apps/
 RUN configure.sh
 ```
 
-1. Change directory to `<path-to-repo>/2-simple` of your local clone.
+1. Change directory to `2-simple` of your local clone.
 2. Run the following commands to build the application image and push the image to your Docker Hub repository.
 
 ```bash
 # Build project and generate war package
 mvn clean package
 
-# Build and tag application image
-docker build -t javaee-cafe-simple --pull .
+# Build and tag application image.  This will cause Docker to pull the necessary base images.
+docker build -t javaee-cafe-simple:1.0.0 --pull .
 
-# Create a new tag with your Docker Hub account info that refers to source image
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker tag javaee-cafe-simple docker.io/${Your_DockerHub_Account}/javaee-cafe-simple
-
-# Log in to Docker Hub
-docker login
-
-# Push image to your Docker Hub repositories
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-simple
 ```
 
-### Run the application with Docker
+### Run the application locally with Docker
 
 Before deploying the containerized application to a remote cluster, run with your local Docker to verify whether it works.
 
@@ -175,11 +175,28 @@ Before deploying the containerized application to a remote cluster, run with you
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Open Liberty server.
 
+### Push the image to Docker Hub
+
+When you're satisfied with the state of the application, push it to Docker Hub with these commands.
+
+```bash
+# Create a new tag with your Docker Hub account info that refers to source image
+# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
+docker tag javaee-cafe-simple:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+
+# Log in to Docker Hub
+docker login
+
+# Push image to your Docker Hub repositories
+# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
+docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+```
+
 ### Prepare OpenLibertyApplication yaml file
 
 Because we use the Open Liberty Operator to manage Open Liberty applications, we need to create an instance of its *Custom Resource Definition*, of type "OpenLibertyApplication". The Operator will then take care of all aspects of managing the OpenShift resources required for deployment.
 
-Here is the resource definition for the **Open Liberty Application** (located at `<path-to-repo>/2-simple/Dockerfile/openlibertyapplication.yaml`) used in the guide:
+Here is the resource definition for the **Open Liberty Application** (located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`) used in the guide:
 
 ```yaml
 apiVersion: openliberty.io/v1beta1
@@ -190,7 +207,7 @@ metadata:
 spec:
   replicas: 1
   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
   expose: true
 ```
 
@@ -200,11 +217,12 @@ Now you can deploy the sample Open Liberty application to the Azure Red Hat Open
 
 1. Log in to the OpenShift web console from your browser.
 2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
+3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
    ![create-namespace](./media/howto-deploy-java-openliberty-app/create-namespace.png)
-3. Fill in "open-liberty-demo" for **Name** and click **Create**.
-4. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application** > **Create OpenLibertyApplication**
-   ![create-openlibertyapplication](./media/howto-deploy-java-openliberty-app/create-openlibertyapplication.png)
-5. Start from the autogenerated yaml, or copy and paste [the above yaml](#prepare-openlibertyapplication-yaml-file). The final yaml should look like the following.
+4. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
+   ![ARO Java Containment](./media/howto-deploy-java-openliberty-app/aro-java-containment.png)
+5. Select **Create OpenLibertyApplication**
+6. Replace the generated yaml with yours.  The final yaml should look like the following.
 
     ```yaml
     apiVersion: openliberty.io/v1beta1
@@ -215,46 +233,75 @@ Now you can deploy the sample Open Liberty application to the Azure Red Hat Open
     spec:
       replicas: 1
       # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-      applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple
+      applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
       expose: true
     ```
 
-6. Click **Create**.
-7. Navigate to **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
+7. Select **Create**.
+8. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
 
-You will see the application home page opened in the browser.
+You'll see the application home page opened in the browser.
 
 ### Deploy from CLI
 
-As an alternative to deploying via the web console GUI, you can also deploy the application from the command line. To use CLI deployment, you will need to log in to the OpenShift cluster web console and retrieve a token:
+Instead of using the web console GUI, you can deploy the application from the command-line. If you have not already done so, download and install the `oc` command-line tool by following Red Hat documentation [Getting Started with the CLI](https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html).  To use CLI deployment, you'll need to log in to the OpenShift cluster web console and retrieve a token:
 
 1. At the right-top of the web console, expand the context menu of the logged-in user (`kube:admin` for example), then click "Copy Login Command".
 2. Log in to a new tab window if necessary.
-3. Click "Display Token" > Copy value listed below "Log in with this token" > Paste and run the copied command in a console.  
-4. Change directory to `<path-to-repo>/2-simple` of your local clone, and run the following commands to deploy your Open Liberty application to the ARO 4 cluster.
+3. Select "Display Token".
+4. Copy the value listed below "Log in with this token" to the clipboard and run it in a shell, as shown here.
 
-```bash
-# Create new namespace where resources of demo app will belong to
-oc new-project open-liberty-demo
+   ```bash
+   oc login --token=XOdASlzeT7BHT0JZW6Fd4dl5EwHpeBlN27TAdWHseob --server=https://api.aqlm62xm.rnfghf.aroapp.io:6443
+   Logged into "https://api.aqlm62xm.rnfghf.aroapp.io:6443" as "kube:admin" using the token provided.
 
-# Create an ENV variable which will substitute the one defined in openlibertyapplication.yaml
-# Note: replace "<Your_DockerHub_Account>" with your valid Docker Hub account name
-export Your_DockerHub_Account=<Your_DockerHub_Account>
+   You have access to 57 projects, the list has been suppressed. You can list all projects with 'oc projects'
 
-# Substitute "Your_DockerHub_Account" in openlibertyapplication.yaml and then create resource
-envsubst < openlibertyapplication.yaml | oc create -f -
+   Using project "default".
+   ```
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication
+5. Change directory to `2-simple` of your local clone, and run the following commands to deploy your Open Liberty application to the ARO 4 cluster.
 
-# Check if deployment created by Operator is ready
-oc get deployment
+   ```bash
+   # Create new namespace where resources of demo app will belong to
+   oc new-project open-liberty-demo
 
-# Check if route is created by Operator
-oc get route
-```
+   Now using project "open-liberty-demo" on server "https://api.aqlm62xm.rnfghf.aroapp.io:6443".
 
-Once the Open Liberty application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+   # Create an ENV variable which will substitute the one defined in openlibertyapplication.yaml
+   # Note: replace "<Your_DockerHub_Account>" with your valid Docker Hub account name
+   export Your_DockerHub_Account=<Your_DockerHub_Account>
+
+   # Substitute "Your_DockerHub_Account" in openlibertyapplication.yaml and then create resource
+   envsubst < openlibertyapplication.yaml | oc create -f -
+
+   openlibertyapplication.openliberty.io/javaee-cafe-simple created
+
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication
+
+   NAME                 IMAGE                                                 EXPOSED   RECONCILED   AGE
+   javaee-cafe-simple   docker.io/<docker_account>/javaee-cafe-simple:1.0.0   true      True         36s
+
+   # Check if deployment created by Operator is ready
+   oc get deployment
+
+   NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
+   javaee-cafe-simple   1/1     1            0           102s
+   ```
+
+6. Check to see `1/1` under the `READY` column before you continue.  If not, investigate and resolve the problem before continuing.
+7. Discover the "route" to the application with the `oc get route` command, as shown here.
+
+   ```bash
+   # Check if route is created by Operator
+   oc get route
+
+   NAME                 HOST/PORT                                                                PATH   SERVICES             PORT       TERMINATION   WILDCARD
+   javaee-cafe-simple   javaee-cafe-simple-open-liberty-demo.apps.aqlm62xm.rnfghf.aroapp.io          javaee-cafe-simple   9080-tcp                 None
+   ```
+
+   Once the Open Liberty application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
 
 ## Next steps
 
@@ -262,9 +309,9 @@ In this guide, you learned how to:
 > [!div class="checklist"]
 > * Prepare an Open Liberty application
 > * Build the application image
-> * Run the containerized application on an ARO 4 cluster
+> * Run the containerized application on an ARO 4 cluster using the GUI and the CLI.
 
-Advance to one of the next guides which integrate Open Liberty applications with different Azure services:
+Advance to one of the next guides, which integrate Open Liberty applications with different Azure services:
 > [!div class="nextstepaction"]
 > [Integrate your Open Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
 

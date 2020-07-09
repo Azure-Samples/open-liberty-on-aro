@@ -12,7 +12,7 @@ spec:
   # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-mssql" for testing DB connection with Azure SQL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-postgres" for testing DB connection with Azure Database for PostgreSQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
   expose: true
   # NOTE:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
