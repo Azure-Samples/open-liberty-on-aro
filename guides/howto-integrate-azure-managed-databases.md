@@ -296,18 +296,18 @@ RUN configure.sh
    mvn clean package
 
    # Build and tag application image
-   docker build -t javaee-cafe-connect-db-mssql --pull .
+   docker build -t javaee-cafe-connect-db-mssql:1.0.0 --pull .
 
    # Create a new tag with your Docker Hub account info that refers to source image
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-connect-db-mssql docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql
+   docker tag javaee-cafe-connect-db-mssql:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql:1.0.0
 
    # Log in to Docker Hub
    docker login
 
    # Push image to your Docker Hub repositories
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql
+   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql:1.0.0
    ```
 
    > [!NOTE]
@@ -393,7 +393,7 @@ spec:
   # NOTE:
   # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-mssql" for testing DB connection with Azure SQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
   expose: true
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   env:
@@ -594,18 +594,18 @@ RUN configure.sh
    mvn clean package
 
    # Build and tag application image
-   docker build -t javaee-cafe-connect-db-postgres --pull .
+   docker build -t javaee-cafe-connect-db-postgres:1.0.0 --pull .
 
    # Create a new tag with your Docker Hub account info that refers to source image
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-connect-db-postgres docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres
+   docker tag javaee-cafe-connect-db-postgres:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres:1.0.0
 
    # Log in to Docker Hub
    docker login
 
    # Push image to your Docker Hub repositories
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres
+   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres:1.0.0
    ```
 
    > [!NOTE]
@@ -690,7 +690,7 @@ spec:
   # NOTE:
   # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-postgres" for testing DB connection with Azure Database for PostgreSQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
   expose: true
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   env:

@@ -133,7 +133,7 @@ metadata:
 spec:
   replicas: 1
   # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
   expose: true
   serviceAccountName: filebeat-svc-account
   env:
@@ -274,7 +274,7 @@ metadata:
 spec:
   replicas: 1
   # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:latest
+  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
   expose: true
 ```
 

@@ -77,18 +77,18 @@ The `Dockerfile` located at [`<path-to-repo>/3-integration/aad-oidc/Dockerfile`]
 cd <path-to-repo>/3-integration/aad-oidc
 
 # Build and tag application image
-docker build -t javaee-cafe-aad-oidc --pull .
+docker build -t javaee-cafe-aad-oidc:1.0.0 --pull .
 
 # Create a new tag with your Docker Hub account info that refers to source image
 # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker tag javaee-cafe-aad-oidc docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc
+docker tag javaee-cafe-aad-oidc:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
 
 # Log in to Docker Hub
 docker login
 
 # Push image to your Docker Hub repositories
 # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc
+docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
 ```
 
 > [!NOTE]

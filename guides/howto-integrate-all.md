@@ -62,18 +62,18 @@ The `Dockerfile` located at [`<path-to-repo>/4-finish/Dockerfile`](https://githu
 
    ```bash
    # Build and tag application image
-   docker build -t javaee-cafe-all-in-one --pull .
+   docker build -t javaee-cafe-all-in-one:1.0.0 --pull .
 
    # Create a new tag with your Docker Hub account info that refers to source image
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-all-in-one docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one
+   docker tag javaee-cafe-all-in-one:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one:1.0.0
 
    # Log in to Docker Hub
    docker login
 
    # Push image to your Docker Hub repositories
    # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one
+   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one:1.0.0
    ```
 
    > [!NOTE]
