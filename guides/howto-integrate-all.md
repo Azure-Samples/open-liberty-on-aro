@@ -165,12 +165,20 @@ Once the Open Liberty Application is up and running, copy **HOST/PORT** of the r
 
    1. Sign in as a user, who doesn't belong to the admin group you created before.
    2. Update your password if necessary. Accept permission requested if necessary.
-   3. You will see the application home page displayed, where the coffee **Delete** button is **disabled**.
+   3. You will see the email address of your AAD account displayed in the application home page, where the coffee **Delete** button is **disabled**.
    4. Create new coffees.
    5. Close the **InPrivate** window > open a new **InPrivate** window > sign in as another user, who does belong to the admin group you created before.
    6. Update your password if necessary. Accept permission requested if necessary.
-   7. You will see the application home page displayed, where the coffee **Delete** button is **enabled** now.
+   7. You will see the email address of your AAD account displayed in the application home page, where the coffee **Delete** button is **enabled** now.
    8. Create new coffees. Delete existing coffees.
+
+The application logs are shipped to the Elasticsearch cluster, and can be visualized in the Kinaba web console.
+
+1. Log into ARO web console. Click **Monitoring** > **Logging**.
+2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
+3. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
+4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
+5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
 
 ## Next steps
 

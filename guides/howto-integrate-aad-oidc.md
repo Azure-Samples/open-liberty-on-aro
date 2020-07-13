@@ -59,11 +59,11 @@ Once the application is up and running, open [https://localhost:9443](https://lo
    ![update-your-password](./media/howto-integrate-aad-oidc/update-your-password.png)
 3. Accept permission requested by the application.
    ![accept-permissions-requested](./media/howto-integrate-aad-oidc/accept-permissions-requested.png)
-4. You will see the application home page displayed, where the coffee **Delete** button is **disabled**.
+4. You will see the email address of your AAD account displayed in the application home page, where the coffee **Delete** button is **disabled**.
    ![delete-button-disabled](./media/howto-integrate-aad-oidc/delete-button-disabled.png)
 5. Close the **InPrivate** window > open a new **InPrivate** window > sign in as another user, who does belong to the admin group you created before.
 6. Update your password if necessary. Accept permission requested if necessary.
-7. You will see the application home page displayed, where the coffee **Delete** button is **enabled** now.
+7. You will see the email address of your AAD account displayed in the application home page, where the coffee **Delete** button is **enabled** now.
    ![delete-button-enabled](./media/howto-integrate-aad-oidc/delete-button-enabled.png)
 
 Press **Control-C** to stop the application and Open Liberty server.

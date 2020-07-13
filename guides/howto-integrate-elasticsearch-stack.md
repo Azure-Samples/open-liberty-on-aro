@@ -20,7 +20,7 @@ Follow the instructions below to create a deployment for the hosted Elasticsearc
 1. Sign up for a [free trial](https://www.elastic.co/azure).
 2. Log into [Elastic Cloud](https://cloud.elastic.co/login) using your free trial account.
 3. Click **Create deployment**.
-4. **Name your deployment** > Select **Azure as cloud platform** > **Leave defaults for others** or customize per your needs > Click **Create deployment**
+4. **Name your deployment** > Select **Azure as cloud platform** > **Leave defaults for others** or customize per your needs > Click **Create deployment**.
    ![create-elasticsearch-service-deployment](./media/howto-integrate-elasticsearch-stack/create-elasticsearch-service-deployment.png)
 5. Wait until the deployment is created.
    ![elasticsearch-service-deployment-created](./media/howto-integrate-elasticsearch-stack/elasticsearch-service-deployment-created.png)
