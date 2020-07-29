@@ -7,7 +7,7 @@
         <feature>jsf-2.3</feature>
         <feature>jaxrs-2.1</feature>
         <feature>ejbLite-3.2</feature>
-        <feature>openidConnectClient-1.0</feature>
+        <feature>socialLogin-1.0</feature>
         <feature>transportSecurity-1.0</feature>
         <feature>appSecurity-3.0</feature>
         <feature>jwt-1.0</feature>
@@ -37,22 +37,20 @@
     <ssl id="defaultSSLConfig"  trustDefaultCerts="true" />
 
     <!-- Add your tenant id, client ID and secret from AAD -->
-    <openidConnectClient
+    <oidcLogin
         id="liberty-aad-oidc-javaeecafe" clientId="${client.id}"
         clientSecret="${client.secret}"
-        discoveryEndpointUrl="https://login.microsoftonline.com/${tenant.id}/v2.0/.well-known/openid-configuration"
+        discoveryEndpoint="https://login.microsoftonline.com/${tenant.id}/v2.0/.well-known/openid-configuration"
         signatureAlgorithm="RS256"
-        userIdentityToCreateSubject="preferred_username"
-        inboundPropagation="supported" />
-    
-    <!-- JWT builder -->
-    <jwtBuilder id="jwtAuthUserBuilder" keyStoreRef="defaultKeyStore" 
-        keyAlias="${key.alias}" issuer="https://example.com" expiresInSeconds="600" />
-    <variable name="key.alias" defaultValue="default"/>
+        userNameAttribute="preferred_username" />
 
     <!-- JWT consumer -->
-    <mpJwt id="jwtUserConsumer" jwksUri="https://localhost:9443/jwt/ibm/api/jwtAuthUserBuilder/jwk" 
-        issuer="https://example.com" authFilterRef="mpJwtAuthFilter" />
+    <mpJwt id="jwtUserConsumer" 
+        jwksUri="https://login.microsoftonline.com/${tenant.id}/discovery/v2.0/keys" 
+        issuer="https://login.microsoftonline.com/${tenant.id}/v2.0"
+        audiences="${client.id}"
+        userNameAttribute="preferred_username"
+        authFilterRef="mpJwtAuthFilter" />
 
     <!-- JWT auth filter -->
     <authFilter id="mpJwtAuthFilter">
