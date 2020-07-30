@@ -172,7 +172,7 @@ oc get route
 
 Once the Open Liberty Application is up and running, copy **HOST/PORT** of the route from console output.
 
-1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Input ***https://<copied_HOST/PORT_value>/oidcclient/redirect/liberty-aad-oidc-javaeecafe*** > Click **Save**.
+1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Input ***https://<copied_HOST/PORT_value>/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe*** > Click **Save**.
 2. Open ***https://<copied_HOST/PORT_value>*** in your browser to visit the application home page.
 
 ## Next steps

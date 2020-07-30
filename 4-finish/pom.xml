@@ -42,14 +42,8 @@
     </dependency>
     <dependency>
       <groupId>com.ibm.websphere.appserver.api</groupId>
-      <artifactId>com.ibm.websphere.appserver.api.oidc</artifactId>
-      <version>1.0.39</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.ibm.websphere.appserver.api</groupId>
-      <artifactId>com.ibm.websphere.appserver.api.oauth</artifactId>
-      <version>1.2.39</version>
+      <artifactId>com.ibm.websphere.appserver.api.social</artifactId>
+      <version>1.0.42</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
