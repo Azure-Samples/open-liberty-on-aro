@@ -14,10 +14,9 @@ Complete the following prerequisites to successfully walk through this guide.
 1. Install a Java SE implementation (for example, [AdoptOpenJDK OpenJDK 8 LTS/OpenJ9](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9)).
 2. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
 3. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
-4. Register a [Docker Hub](https://id.docker.com/) account.
-5. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 2.0.75 or later.
-6. Register an Azure subscription. If you don't have one, you can get an [Azure subscription free for one year](https://azure.microsoft.com/free).
-7. Clone [this repository](https://github.com/Azure-Samples/open-liberty-on-aro) to your local file system.
+4. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 2.0.75 or later.
+5. Register an Azure subscription. If you don't have one, you can get an [Azure subscription free for one year](https://azure.microsoft.com/free).
+6. Clone [this repository](https://github.com/Azure-Samples/open-liberty-on-aro) to your local file system.
 
 ## Set up Azure Red Hat OpenShift cluster
 
@@ -46,6 +45,25 @@ After creating and connecting to the cluster, install the [Open Liberty Operator
    ![install-operator](./media/howto-deploy-java-openliberty-app/install-operator.png)
 6. Select **Subscribe** and wait a minute or two until the Open Liberty Operator is displayed.
 7. Observe the Open Liberty Operator with status of "Succeeded".  If you do not, trouble shoot and resolve the problem before continuing.
+
+## Create an Azure Container Registry
+
+Azure Container Registry (ACR) is a managed Docker container registry service used for storing private Docker container images. Follow the steps below to create your ACR instance.
+
+1. [Create a resource group](https://docs.microsoft.com/azure/container-registry/container-registry-get-started-azure-cli#create-a-resource-group) using the same location of your ARO 4 cluster.
+2. [Create a container registry](https://docs.microsoft.com/azure/container-registry/container-registry-get-started-azure-cli#create-a-container-registry). Take note of `registry name` you specified for the registry. Take note of `loginServer` in the output, which is the fully qualified registry name.
+3. [Log in to registry](https://docs.microsoft.com/azure/container-registry/container-registry-get-started-azure-cli#log-in-to-registry) to verify your access. The command returns a `Login Succeeded` message once successfully completed.
+
+## Create an image pull secret for authentication
+
+You can use your ACR instance as a source of container images with your ARO 4 cluster, by creating an image pull secret.
+
+1. Log in to the OpenShift web console from your browser.
+2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
+3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
+   ![create-namespace](./media/howto-deploy-java-openliberty-app/create-namespace.png)
+4. [Create a service principal](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-a-service-principal) with access to your ACR instance.
+5. [Create an image pull secret](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret) to store information needed to authenticate to your ACR instance. Specify `<secret-name>` as **registry-secret**, `<namespace>` as **open-liberty-demo**, and `container-registry-name` as name of your container registry.
 
 ## Prepare the Liberty application
 
@@ -149,21 +167,22 @@ Before deploying the containerized application to a remote cluster, run with you
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Liberty server.
 
-### Push the image to Docker Hub
+### Push the image to Azure Container Registry
 
-When you're satisfied with the state of the application, push it to Docker Hub using the following commands:
+When you're satisfied with the state of the application, push it to your ACR instance using the following commands:
 
 ```bash
-# Create a new tag with your Docker Hub account info that refers to source image
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker tag javaee-cafe-simple:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+# Create a new tag with your ACR instance info that refers to source image
+# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+docker tag javaee-cafe-simple:1.0.0 ${Container_Registry_URL}/javaee-cafe-simple:1.0.0
 
-# Log in to Docker Hub
-docker login
+# Log in to your ACR instance
+# Note: replace "${Registry_Name}" with the name of your ACR instance
+az acr login -n ${Registry_Name}
 
-# Push image to your Docker Hub repositories
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+# Push image to your ACR instance
+# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+docker push ${Container_Registry_URL}/javaee-cafe-simple:1.0.0
 ```
 
 ### Prepare OpenLibertyApplication yaml file
@@ -180,41 +199,25 @@ Because we use the Open Liberty Operator to manage Liberty applications, we need
      namespace: open-liberty-demo
    spec:
      replicas: 1
-     # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-     applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+     # Note: replace "${Container_Registry_URL}" with your container registry URL
+     applicationImage: ${Container_Registry_URL}/javaee-cafe-simple:1.0.0
+     pullSecret: registry-secret
      expose: true
    ```
 
-2. Edit the file by replacing **${Your_DockerHub_Account}** with your valid Docker Hub account name.
+2. Edit the file by replacing **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 
 Now you can deploy the sample Liberty application to the Azure Red Hat OpenShift 4 cluster [you created earlier in the article](#set-up-azure-red-hat-openshift-cluster).
 
 ### Deploy from GUI
 
 1. Log in to the OpenShift web console from your browser.
-2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
-3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
-   ![create-namespace](./media/howto-deploy-java-openliberty-app/create-namespace.png)
-4. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
+2. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
    ![ARO Java Containment](./media/howto-deploy-java-openliberty-app/aro-java-containment.png)
-5. Select **Create OpenLibertyApplication**
-6. Replace the generated yaml with yours.  The final yaml should look like the following.
-
-    ```yaml
-    apiVersion: openliberty.io/v1beta1
-    kind: OpenLibertyApplication
-    metadata:
-      name: javaee-cafe-simple
-      namespace: open-liberty-demo
-    spec:
-      replicas: 1
-      # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-      applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
-      expose: true
-    ```
-
-7. Select **Create**.
-8. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
+3. Select **Create OpenLibertyApplication**
+4. Replace the generated yaml with yours, which is located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`.
+5. Select **Create**.
+6. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
 
 You'll see the application home page opened in the browser.
 
@@ -240,15 +243,15 @@ Instead of using the web console GUI, you can deploy the application from the co
 
    ```bash
    # Create new namespace where resources of demo app will belong to
-   oc new-project open-liberty-demo
+   oc project open-liberty-demo
 
    Now using project "open-liberty-demo" on server "https://api.aqlm62xm.rnfghf.aroapp.io:6443".
 
    # Create an ENV variable which will substitute the one defined in openlibertyapplication.yaml
-   # Note: replace "<Your_DockerHub_Account>" with your valid Docker Hub account name
-   export Your_DockerHub_Account=<Your_DockerHub_Account>
+   # Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
+   export Container_Registry_URL=<Container_Registry_URL>
 
-   # Substitute "Your_DockerHub_Account" in openlibertyapplication.yaml and then create resource
+   # Substitute "Container_Registry_URL" in openlibertyapplication.yaml and then create resource
    envsubst < openlibertyapplication.yaml | oc create -f -
 
    openlibertyapplication.openliberty.io/javaee-cafe-simple created
