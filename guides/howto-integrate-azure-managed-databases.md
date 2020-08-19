@@ -289,7 +289,7 @@ RUN configure.sh
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/mssql` of your local clone.
 2. Download [mssql-jdbc-8.2.2.jre8.jar](https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.2.2.jre8/mssql-jdbc-8.2.2.jre8.jar) and put it to current working directory.
-3. Run the following commands to build application image and push to your Docker Hub repository.
+3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
    # Build project and generate war package
@@ -298,20 +298,21 @@ RUN configure.sh
    # Build and tag application image
    docker build -t javaee-cafe-connect-db-mssql:1.0.0 --pull .
 
-   # Create a new tag with your Docker Hub account info that refers to source image
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-connect-db-mssql:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql:1.0.0
+   # Create a new tag with your ACR instance info that refers to source image
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker tag javaee-cafe-connect-db-mssql:1.0.0 ${Container_Registry_URL}/javaee-cafe-connect-db-mssql:1.0.0
 
-   # Log in to Docker Hub
-   docker login
+   # Log in to your ACR instance
+   # Note: replace "${Registry_Name}" with the name of your ACR instance
+   az acr login -n ${Registry_Name}
 
-   # Push image to your Docker Hub repositories
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-mssql:1.0.0
+   # Push image to your ACR instance
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker push ${Container_Registry_URL}/javaee-cafe-connect-db-mssql:1.0.0
    ```
 
    > [!NOTE]
-   > Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 
 ### Run the application with Docker
 
@@ -384,17 +385,19 @@ Now we can deploy the sample application, which connects to Azure SQL Database, 
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  # NOTE:
+  # Note:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   name: javaee-cafe-connect-db-${DB_Type}
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # NOTE:
-  # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
+  # Note:
+  # - replace "${Container_Registry_URL}" with your container registry URL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-mssql" for testing DB connection with Azure SQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
+  applicationImage: ${Container_Registry_URL}/${Image_Name}:1.0.0
+  pullSecret: registry-secret
   expose: true
+  # Note:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   env:
   - name: DB_SERVER_NAME
@@ -426,7 +429,7 @@ spec:
 
 > [!NOTE]
 > * Replace **${DB_Type}** with **mssql**.
-> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Replace **${Image_Name}** with **javaee-cafe-connect-db-mssql**.
 
 1. Run the following commands to deploy your Open Liberty Application:
@@ -587,7 +590,7 @@ RUN configure.sh
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/postgres` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
-3. Run the following commands to build application image and push to your Docker Hub repository.
+3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
    # Build project and generate war package
@@ -596,20 +599,21 @@ RUN configure.sh
    # Build and tag application image
    docker build -t javaee-cafe-connect-db-postgres:1.0.0 --pull .
 
-   # Create a new tag with your Docker Hub account info that refers to source image
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-connect-db-postgres:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres:1.0.0
+   # Create a new tag with your ACR instance info that refers to source image
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker tag javaee-cafe-connect-db-postgres:1.0.0 ${Container_Registry_URL}/javaee-cafe-connect-db-postgres:1.0.0
 
-   # Log in to Docker Hub
-   docker login
+   # Log in to your ACR instance
+   # Note: replace "${Registry_Name}" with the name of your ACR instance
+   az acr login -n ${Registry_Name}
 
-   # Push image to your Docker Hub repositories
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-connect-db-postgres:1.0.0
+   # Push image to your ACR instance
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker push ${Container_Registry_URL}/javaee-cafe-connect-db-postgres:1.0.0
    ```
 
    > [!NOTE]
-   > Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 
 ### Run the application with Docker (PostgreSQL)
 
@@ -681,17 +685,19 @@ Now we can deploy the sample application, which connects to Azure Database for P
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  # NOTE:
+  # Note:
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   name: javaee-cafe-connect-db-${DB_Type}
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # NOTE:
-  # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
+  # Note:
+  # - replace "${Container_Registry_URL}" with your container registry URL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-postgres" for testing DB connection with Azure Database for PostgreSQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
+  applicationImage: ${Container_Registry_URL}/${Image_Name}:1.0.0
+  pullSecret: registry-secret
   expose: true
+  # Note:
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   env:
   - name: DB_SERVER_NAME
@@ -723,7 +729,7 @@ spec:
 
 > [!NOTE]
 > * Replace **${DB_Type}** with **postgres**.
-> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Replace **${Image_Name}** with **javaee-cafe-connect-db-postgres**.
 
 1. Run the following commands to deploy your Open Liberty Application:

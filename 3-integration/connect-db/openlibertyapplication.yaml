@@ -1,20 +1,21 @@
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  # NOTE:
+  # Note:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   name: javaee-cafe-connect-db-${DB_Type}
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # NOTE: 
-  # - replace "${Your_DockerHub_Account}" with your Docker Hub account name
+  # Note: 
+  # - replace "${Container_Registry_URL}" with your container registry URL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-mssql" for testing DB connection with Azure SQL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-postgres" for testing DB connection with Azure Database for PostgreSQL
-  applicationImage: docker.io/${Your_DockerHub_Account}/${Image_Name}:1.0.0
+  applicationImage: ${Container_Registry_URL}/${Image_Name}:1.0.0
+  pullSecret: registry-secret
   expose: true
-  # NOTE:
+  # Note:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   env:
