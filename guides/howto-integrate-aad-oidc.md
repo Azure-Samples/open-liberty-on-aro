@@ -79,20 +79,21 @@ cd <path-to-repo>/3-integration/aad-oidc
 # Build and tag application image
 docker build -t javaee-cafe-aad-oidc:1.0.0 --pull .
 
-# Create a new tag with your Docker Hub account info that refers to source image
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker tag javaee-cafe-aad-oidc:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
+# Create a new tag with your ACR instance info that refers to source image
+# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+docker tag javaee-cafe-aad-oidc:1.0.0 ${Container_Registry_URL}/javaee-cafe-aad-oidc:1.0.0
 
-# Log in to Docker Hub
-docker login
+# Log in to your ACR instance
+# Note: replace "${Registry_Name}" with the name of your ACR instance
+az acr login -n ${Registry_Name}
 
-# Push image to your Docker Hub repositories
-# Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-aad-oidc:1.0.0
+# Push image to your ACR instance
+# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+docker push ${Container_Registry_URL}/javaee-cafe-aad-oidc:1.0.0
 ```
 
 > [!NOTE]
-> Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 
 After the application image is built, run with your local Docker to verify whether it works.
 
@@ -148,8 +149,8 @@ export TLS_KEY=$(cat tls.key | base64 -w 0)
 envsubst < tls-crt-secret.yaml | oc create -f -
 
 # Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-aad-oidc"
-# Note: replace "<Your_DockerHub_Account>" with your valid Docker Hub account name
-export Your_DockerHub_Account=<Your_DockerHub_Account>
+# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
+export Container_Registry_URL=<Container_Registry_URL>
 
 # Create OpenLibertyApplication "javaee-cafe-aad-oidc"
 envsubst < openlibertyapplication.yaml | oc create -f -
@@ -168,7 +169,7 @@ oc get route
 > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
 > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 > * Replace **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** with the ones you noted down before.
-> * Replace **\<Your_DockerHub_Account>** with your valid Docker Hub account name.
+> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
 Once the Open Liberty Application is up and running, copy **HOST/PORT** of the route from console output.
 
