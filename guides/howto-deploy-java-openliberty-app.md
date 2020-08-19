@@ -64,7 +64,7 @@ You can use your ACR instance as a source of container images with your ARO 4 cl
 3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
    ![create-namespace](./media/howto-deploy-java-openliberty-app/create-namespace.png)
 4. [Create a service principal](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-a-service-principal) with access to your ACR instance.
-5. [Create an image pull secret](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret) to store information needed to authenticate to your ACR instance. Specify `<secret-name>` as **registry-secret**, `<namespace>` as **open-liberty-demo**, and `container-registry-name` as name of your container registry.
+5. [Create an image pull secret](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret) to store information needed to authenticate to your ACR instance. Specify `<secret-name>` as **registry-secret**, `<namespace>` as **open-liberty-demo**, and `<container-registry-name>` as name of your container registry.
 
 ## Prepare the Liberty application
 
