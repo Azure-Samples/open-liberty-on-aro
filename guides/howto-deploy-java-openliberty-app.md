@@ -27,6 +27,7 @@ Follow the instructions in these two tutorials and then return here to continue.
    > Though the "Get a Red Hat pull secret" step is labeled as optional, **it is required for this article**.  The pull secret enables your Azure Red Hat OpenShift cluster to find the Open Liberty Operator.
    >
    > If you plan to run memory-intensive applications on the cluster, specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For example, `Standard_E4s_v3` is the minimum virtual machine size to install the Elasticsearch Operator on a cluster. Refer to the following for further details:
+   >
    > * [Azure CLI to create a cluster](https://docs.microsoft.com/cli/azure/aro?view=azure-cli-latest#az-aro-create)
    > * [Supported virtual machine sizes for memory optimized](/azure/openshift/support-policies-v4#memory-optimized)
    > * [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
@@ -131,7 +132,7 @@ To run the application on Open Liberty, you need to create an Open Liberty serve
 
 7. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page. The application will look similar to the following:
    ![javaee-cafe-web-ui](./media/howto-deploy-java-openliberty-app/javaee-cafe-web-ui.png)
-8. Press **Control-C** to stop the application and Open Liberty server. 
+8. Press **Control-C** to stop the application and Open Liberty server.
 
 The directory `2-simple` of your local clone shows the Maven project with the above changes already applied.
 
@@ -141,18 +142,20 @@ To deploy and run your Liberty application on an ARO 4 cluster, containerize you
 
 ### Build application image
 
-Complete the following steps to build the application image: 
+Complete the following steps to build the application image:
 
 1. Change directory to `2-simple` of your local clone.
 2. Run `mvn clean package` to package the application.
 3. Run one of the following commands to build the application image.
    * Build with Open Liberty base image:
+
      ```bash
      # Build and tag application image. This will cause Docker to pull the necessary Open Liberty base images.
      docker build -t javaee-cafe-simple:1.0.0 --pull .
      ```
-   
+
    * Build with WebSphere Liberty base image:
+
      ```bash
      # Build and tag application image. This will cause Docker to pull the necessary WebSphere Liberty base images.
      docker build -t javaee-cafe-simple:1.0.0 --pull --file=Dockerfile-wlp .
@@ -260,7 +263,7 @@ Instead of using the web console GUI, you can deploy the application from the co
    oc get openlibertyapplication
 
    NAME                 IMAGE                                                 EXPOSED   RECONCILED   AGE
-   javaee-cafe-simple   docker.io/<docker_account>/javaee-cafe-simple:1.0.0   true      True         36s
+   javaee-cafe-simple   <Container_Registry_URL>/javaee-cafe-simple:1.0.0     true      True         36s
 
    # Check if deployment created by Operator is ready
    oc get deployment
@@ -286,6 +289,7 @@ Instead of using the web console GUI, you can deploy the application from the co
 
 In this guide, you learned how to:
 > [!div class="checklist"]
+>
 > * Prepare the Liberty application
 > * Build the application image
 > * Run the containerized application on an ARO 4 cluster using the GUI and the CLI.

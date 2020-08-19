@@ -2,6 +2,7 @@
 
 In this guide, you will integrate your Open Liberty application with Elasticsearch stack to enable distributed logging. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
+>
 > * Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 > * Distribute your application logs to EFK stack installed on ARO 4 cluster
 
@@ -52,6 +53,7 @@ metadata:
    ````
 
    > [!NOTE]
+   >
    > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
    > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
@@ -111,6 +113,7 @@ stringData:
 ```
 
 > [!NOTE]
+>
 > * Replace **${ELASTIC_CLOUD_ID}** with **Cloud ID** you wrote down before.
 > * Replace **${ELASTIC_CLOUD_AUTH}** with **User name:Password** you wrote down before.
 
@@ -184,6 +187,7 @@ spec:
 ```
 
 > [!NOTE]
+>
 > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
@@ -281,6 +285,7 @@ spec:
 ```
 
 > [!NOTE]
+>
 > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
@@ -325,6 +330,7 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 In this guide, you learned how to:
 > [!div class="checklist"]
+>
 > * Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 > * Distribute your application logs to EFK stack installed on ARO 4 cluster
 

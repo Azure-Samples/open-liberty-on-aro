@@ -2,6 +2,7 @@
 
 In this guide, you will integrate your Open Liberty application with Azure Active Directory OpenID Connect for security. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
+>
 > * Set up Azure Active Directory
 > * Prepare your application
 > * Prepare application image
@@ -93,7 +94,9 @@ docker push ${Container_Registry_URL}/javaee-cafe-aad-oidc:1.0.0
 ```
 
 > [!NOTE]
-> Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+>
+> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+> * Replace **${Registry_Name}** with the name of your ACR instance.
 
 After the application image is built, run with your local Docker to verify whether it works.
 
@@ -166,6 +169,7 @@ oc get route
 ```
 
 > [!NOTE]
+>
 > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
 > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 > * Replace **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** with the ones you noted down before.
@@ -180,6 +184,7 @@ Once the Open Liberty Application is up and running, copy **HOST/PORT** of the r
 
 In this guide, you learned how to:
 > [!div class="checklist"]
+>
 > * Set up Azure Active Directory
 > * Prepare your application
 > * Prepare application image

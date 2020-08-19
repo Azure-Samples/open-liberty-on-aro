@@ -2,6 +2,7 @@
 
 In this guide, you will integrate your Open Liberty application with different Azure services, including security, data persistence & distributed logging. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
+>
 > * Set up different services
 > * Prepare your application
 > * Prepare application image
@@ -78,7 +79,9 @@ The `Dockerfile` located at [`<path-to-repo>/4-finish/Dockerfile`](https://githu
    ```
 
    > [!NOTE]
-   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   >
+   > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   > * Replace **${Registry_Name}** with the name of your ACR instance.
 
 ## Deploy sample application
 
@@ -153,6 +156,7 @@ oc get route
 ```
 
 > [!NOTE]
+>
 > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
 > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 > * Replace **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** with the ones you noted down before.
@@ -185,6 +189,7 @@ The application logs are shipped to the Elasticsearch cluster, and can be visual
 
 In this guide, you learned how to:
 > [!div class="checklist"]
+>
 > * Set up different services
 > * Prepare your application
 > * Prepare application image
