@@ -58,26 +58,27 @@ The `Dockerfile` located at [`<path-to-repo>/4-finish/Dockerfile`](https://githu
 
 1. Change directory to `<path-to-repo>/4-finish` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
-3. Run the following commands to build application image and push to your Docker Hub repository.
+3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
    # Build and tag application image
    docker build -t javaee-cafe-all-in-one:1.0.0 --pull .
 
-   # Create a new tag with your Docker Hub account info that refers to source image
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker tag javaee-cafe-all-in-one:1.0.0 docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one:1.0.0
+   # Create a new tag with your ACR instance info that refers to source image
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker tag javaee-cafe-all-in-one:1.0.0 ${Container_Registry_URL}/javaee-cafe-all-in-one:1.0.0
 
-   # Log in to Docker Hub
-   docker login
+   # Log in to your ACR instance
+   # Note: replace "${Registry_Name}" with the name of your ACR instance
+   az acr login -n ${Registry_Name}
 
-   # Push image to your Docker Hub repositories
-   # Note: replace "${Your_DockerHub_Account}" with your valid Docker Hub account name
-   docker push docker.io/${Your_DockerHub_Account}/javaee-cafe-all-in-one:1.0.0
+   # Push image to your ACR instance
+   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
+   docker push ${Container_Registry_URL}/javaee-cafe-all-in-one:1.0.0
    ```
 
    > [!NOTE]
-   > Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 
 ## Deploy sample application
 
@@ -135,8 +136,8 @@ export DB_PASSWORD=<Password>
 envsubst < db-secret.yaml | oc create -f -
 
 # Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-all-in-one"
-# Note: replace "<Your_DockerHub_Account>" with your valid Docker Hub account name
-export Your_DockerHub_Account=<Your_DockerHub_Account>
+# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
+export Container_Registry_URL=<Container_Registry_URL>
 
 # Create OpenLibertyApplication "javaee-cafe-all-in-one"
 envsubst < openlibertyapplication.yaml | oc create -f -
@@ -156,7 +157,7 @@ oc get route
 > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 > * Replace **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** with the ones you noted down before.
 > * Replace **\<Server name>**, **\<Port number>**, **\<Admin username>**, and **\<Password>** with the ones you noted down before.
-> * Replace **\<Your_DockerHub_Account>** with your valid Docker Hub account name.
+> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
 Once the Open Liberty Application is up and running, copy **HOST/PORT** of the route from console output.
 
