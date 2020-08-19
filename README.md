@@ -4,11 +4,11 @@ languages:
 - java
 products:
 - azure
-description: "Sample projects for developing and deploying Java applications with Open Liberty on an Azure Red Hat OpenShift 4 cluster."
+description: "Sample projects for developing and deploying Java applications with Open/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster."
 urlFragment: "open-liberty-on-aro"
 ---
 
-# Open Liberty on Azure Red Hat OpenShift Samples
+# Open/WebSphere Liberty on Azure Red Hat OpenShift Samples
 
 <!-- 
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -24,18 +24,20 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 
 [Open Liberty](https://openliberty.io) is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
 
-This repository contains samples projects for developing and deploying Java applications with Open Liberty on an Azure Red Hat OpenShift 4 cluster.
-These sample projects show how to use various features in Open Liberty and how to integrate with different Azure services.
+[WebSphere Liberty](https://www.ibm.com/cloud/websphere-liberty) architecture shares the same code base as the open sourced Open Liberty server runtime, which provides additional benefits such as low-cost experimentation, customization and seamless migration from open source to production.
+
+This repository contains samples projects for developing and deploying Java applications with Open/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster.
+These sample projects show how to use various features in Open/WebSphere Liberty and how to integrate with different Azure services.
 Below table shows the list of samples available in this repository.
 
 | Sample                           | Description                                | Guide                            |
 |----------------------------------|--------------------------------------------|----------------------------------|
-| [`1-start`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/1-start) | Basic Java EE application with Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). | |
-| [`2-simple`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/2-simple) | Migrate [`1-start`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/1-start) sample to Open Liberty with minimum configurations. | [howto-guide](https://github.com/azure-samples/open-liberty-on-aro/tree/master/guides/howto-deploy-java-openliberty-app.md) |
-| [`3-integration/aad-oidc`](https://github.com/azure-samples/open-liberty-on-aro/tree/master/3-integration/aad-oidc) | Extend [`2-simple`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/2-simple) sample by integrating with Azure Active Directory OpenID Connect for security. | [howto-guide](https://github.com/azure-samples/open-liberty-on-aro/tree/master/guides/howto-integrate-aad-oidc.md) |
-| [`3-integration/connect-db`](https://github.com/azure-samples/open-liberty-on-aro/tree/master/3-integration/connect-db) | Extend [`2-simple`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/2-simple) sample by integrating with Azure managed databases for data persistence. | [howto-guide](https://github.com/azure-samples/open-liberty-on-aro/tree/master/guides/howto-integrate-azure-managed-databases.md) |
-| [`3-integration/elk-logging`](https://github.com/azure-samples/open-liberty-on-aro/tree/master/3-integration/elk-logging) | Extend [`2-simple`](https://github.com/Azure-Samples/open-liberty-on-aro/tree/master/2-simple) sample by integrating with Elasticsearch stack for distributed logging. | [howto-guide](https://github.com/azure-samples/open-liberty-on-aro/tree/master/guides/howto-integrate-elasticsearch-stack.md) |
-| [`4-finish`](https://github.com/azure-samples/open-liberty-on-aro/tree/master/4-finish) | A complete sample with all services integration including security, data persistence & distributed logging. | [howto-guide](https://github.com/azure-samples/open-liberty-on-aro/tree/master/guides/howto-integrate-all.md) |
+| [`1-start`](1-start) | Basic Java EE application with Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). | |
+| [`2-simple`](2-simple) | Migrate [`1-start`](1-start) sample to Open/WebSphere Liberty with minimum configurations. | [howto-guide](guides/howto-deploy-java-openliberty-app.md) |
+| [`3-integration/aad-oidc`](3-integration/aad-oidc) | Extend [`2-simple`](2-simple) sample by integrating with Azure Active Directory OpenID Connect for security. | [howto-guide](guides/howto-integrate-aad-oidc.md) |
+| [`3-integration/connect-db`](3-integration/connect-db) | Extend [`2-simple`](2-simple) sample by integrating with Azure managed databases for data persistence. | [howto-guide](guides/howto-integrate-azure-managed-databases.md) |
+| [`3-integration/elk-logging`](3-integration/elk-logging) | Extend [`2-simple`](2-simple) sample by integrating with Elasticsearch stack for distributed logging. | [howto-guide](guides/howto-integrate-elasticsearch-stack.md) |
+| [`4-finish`](4-finish) | A complete sample with all services integration including security, data persistence & distributed logging. | [howto-guide](guides/howto-integrate-all.md) |
 
 ## Contributing
 

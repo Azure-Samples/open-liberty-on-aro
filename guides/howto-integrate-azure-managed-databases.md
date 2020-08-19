@@ -2,6 +2,7 @@
 
 [Azure managed databases](https://azure.microsoft.com/product-categories/databases/) are managed, intelligent, and flexible cloud database services offered by Microsoft Azure. In this guide, you will integrate your Open Liberty application with Azure managed databases to enable data persistence. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
+>
 > * Connect your application to Azure SQL Database
 > * Connect your application to Azure Database for PostgreSQL
 
@@ -19,9 +20,11 @@ Follow the instructions below to set up an Azure SQL Database single database fo
 
 1. Create a single database in Azure SQL Database by following "[Quickstart: Create an Azure SQL Database single database](https://docs.microsoft.com/azure/azure-sql/database/single-database-create-quickstart)".
    > [!NOTE]
+   >
    > * In configuring **Basics** step, write down **Database name**, ***Server name**.database.windows.net*, **Server admin login** and **Password**.
    > * In configuring **Networking** step, set **Allow Azure services and resources to access this server** to **Yes**. It will allow access from your Open Liberty application running on ARO 4 cluster to this database server.
    >   ![create-sql-database-networking](./media/howto-integrate-azure-managed-databases/create-sql-database-networking.png)
+
 2. Once your database is created, open **your SQL server** > **Firewalls and virtual networks** > Set **Minimal TLS Version** to **>1.0** > Click **Save**.
    ![sql-database-minimum-TLS-version](./media/howto-integrate-azure-managed-databases/sql-database-minimum-TLS-version.png)
 3. Open **your SQL database** > **Connection strings** > Select **JDBC**. Write down the **Port number** following sql server address. For example, **1433** is the port number in the example below.
@@ -262,6 +265,7 @@ The application `<path-to-repo>/2-simple` used in the [previous guide](howto-dep
    ```
 
    > [!NOTE]
+   >
    > * **Database name**, **Server name**, **Server admin login**, **Password** and **Port number** are properties you wrote down in previous step "[Create an Azure SQL Database single database](#create-an-azure-sql-database-single-database)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/azure-sql/database/firewall-create-server-level-portal-quickstart) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseExceptionInternal Exception: java.sql.SQLException: Cannot open server 'xxxxxxx' requested by the login. Client with IP address 'xxx.xxx.xxx.xx' is not allowed to access the server.  To enable access, use the Windows Azure Management Portal or run sp_set_firewall_rule on the master database to create a firewall rule for this IP address or address range.  It may take up to five minutes for this change to take effect. ClientConnectionId:xxxx-xxxx-xxxx-xxxx-xxxx: SQL State = S0001, Error Code = 40,615
@@ -312,7 +316,9 @@ RUN configure.sh
    ```
 
    > [!NOTE]
-   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   >
+   > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   > * Replace **${Registry_Name}** with the name of your ACR instance.
 
 ### Run the application with Docker
 
@@ -320,6 +326,7 @@ Before deploying the containerized application to a remote cluster, run with you
 
 1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.database.windows.net -e DB_PORT_NUMBER=<Port number> -e DB_NAME=<Database name> -e DB_USER=<Server admin login>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-mssql:1.0.0` in your console.
    > [!NOTE]
+   >
    > * **Database name**, **Server name**, **Server admin login**, **Password** and **Port number** are properties you wrote down in previous step "[Create an Azure SQL Database single database](#create-an-azure-sql-database-single-database)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/azure-sql/database/firewall-create-server-level-portal-quickstart) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseExceptionInternal Exception: java.sql.SQLException: Cannot open server 'xxxxxxx' requested by the login. Client with IP address 'xxx.xxx.xxx.xx' is not allowed to access the server.  To enable access, use the Windows Azure Management Portal or run sp_set_firewall_rule on the master database to create a firewall rule for this IP address or address range.  It may take up to five minutes for this change to take effect. ClientConnectionId:xxxx-xxxx-xxxx-xxxx-xxxx DSRA0010E: SQL State = S0001, Error Code = 40,615
@@ -353,6 +360,7 @@ stringData:
 ```
 
 > [!NOTE]
+>
 > * Replace **${DB_Type}** with **mssql**.
 > * Replace **${DB_SERVER_NAME}** with ***Server name**.database.windows.net* you wrote down before.
 > * Replace **${DB_PORT_NUMBER}** with **Port number** you wrote down before.
@@ -368,6 +376,7 @@ stringData:
    ````
 
    > [!NOTE]
+   >
    > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
    > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
@@ -428,6 +437,7 @@ spec:
 ```
 
 > [!NOTE]
+>
 > * Replace **${DB_Type}** with **mssql**.
 > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Replace **${Image_Name}** with **javaee-cafe-connect-db-mssql**.
@@ -563,6 +573,7 @@ The application `<path-to-repo>/2-simple` used in the [previous guide](howto-dep
    ```
 
    > [!NOTE]
+   >
    > * **Server name**, **Port number**, **Admin username** and **Password** are properties you wrote down in previous step "[Create an Azure Database for PostgreSQL server](#create-an-azure-database-for-postgresql-server)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/postgresql/howto-manage-firewall-using-portal) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseException. Internal Exception: java.sql.SQLException: FATAL: no pg_hba.conf entry for host "xxx.xxx.xxx.xxx", user "xxxxxx", database "xxxxxx", SSL on DSRA0010E: SQL State = 28000, Error Code = 0
@@ -613,7 +624,9 @@ RUN configure.sh
    ```
 
    > [!NOTE]
-   > Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   >
+   > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
+   > * Replace **${Registry_Name}** with the name of your ACR instance.
 
 ### Run the application with Docker (PostgreSQL)
 
@@ -621,9 +634,11 @@ Before deploying the containerized application to a remote cluster, run with you
 
 1. Run `docker run -it --rm -p 9080:9080 -e DB_SERVER_NAME=<Server name>.postgres.database.azure.com -e DB_PORT_NUMBER=<Port number> -e DB_NAME=postgres -e DB_USER=<Admin username>@<Server name> -e DB_PASSWORD=<Password> javaee-cafe-connect-db-postgres:1.0.0` in your console.
    > [!NOTE]
+   >
    > * **Server name**, **Port number**, **Admin username** and **Password** are properties you wrote down in previous step "[Create an Azure Database for PostgreSQL server](#create-an-azure-database-for-postgresql-server)".
    > * [Create a firewall rule](https://docs.microsoft.com/azure/postgresql/howto-manage-firewall-using-portal) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseException. Internal Exception: java.sql.SQLException: FATAL: no pg_hba.conf entry for host "xxx.xxx.xxx.xxx", user "xxxxxx", database "xxxxxx", SSL on DSRA0010E: SQL State = 28000, Error Code = 0
+
 2. Wait for Open Liberty to start and the application to deploy successfully.
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Open Liberty server.
@@ -653,6 +668,7 @@ stringData:
 ```
 
 > [!NOTE]
+>
 > * Replace **${DB_Type}** with **postgres**.
 > * Replace **${DB_SERVER_NAME}** with ***<Server name>**.postgres.database.azure.com* you wrote down before.
 > * Replace **${DB_PORT_NUMBER}** with **Port number** you wrote down before.
@@ -668,6 +684,7 @@ stringData:
    ````
 
    > [!NOTE]
+   >
    > * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
    > * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
 
@@ -728,6 +745,7 @@ spec:
 ```
 
 > [!NOTE]
+>
 > * Replace **${DB_Type}** with **postgres**.
 > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Replace **${Image_Name}** with **javaee-cafe-connect-db-postgres**.
@@ -756,6 +774,7 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 
 In this guide, you learned how to:
 > [!div class="checklist"]
+>
 > * Connect your application to Azure SQL Database
 > * Connect your application to Azure Database for PostgreSQL
 
