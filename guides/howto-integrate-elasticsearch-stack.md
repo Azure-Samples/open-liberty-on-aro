@@ -132,8 +132,9 @@ metadata:
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+  # Note: replace "${Container_Registry_URL}" with your container registry URL
+  applicationImage: ${Container_Registry_URL}/javaee-cafe-simple:1.0.0
+  pullSecret: registry-secret
   expose: true
   serviceAccountName: filebeat-svc-account
   env:
@@ -183,7 +184,7 @@ spec:
 ```
 
 > [!NOTE]
-> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Run the following commands to deploy your Open Liberty Application:
@@ -273,13 +274,14 @@ metadata:
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # Note: replace "${Your_DockerHub_Account}" with your Docker Hub account name
-  applicationImage: docker.io/${Your_DockerHub_Account}/javaee-cafe-simple:1.0.0
+  # Note: replace "${Container_Registry_URL}" with your container registry URL
+  applicationImage: ${Container_Registry_URL}/javaee-cafe-simple:1.0.0
+  pullSecret: registry-secret
   expose: true
 ```
 
 > [!NOTE]
-> * Replace **${Your_DockerHub_Account}** with your Docker Hub account name.
+> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
 > * Image `javaee-cafe-simple` is built from [previous guide](howto-deploy-java-openliberty-app.md#build-application-image).
 
 1. Change directory to `<path-to-repo>/3-integration/elk-logging/cluster-logging`.
