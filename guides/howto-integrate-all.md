@@ -62,6 +62,9 @@ The `Dockerfile` located at [`<path-to-repo>/4-finish/Dockerfile`](https://githu
 3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
+   # Build project and generate war package
+   mvn clean package
+
    # Build and tag application image
    docker build -t javaee-cafe-all-in-one:1.0.0 --pull .
 
@@ -96,7 +99,7 @@ To integrate the application with Azure AD OpenID Connect and Azure Database for
 
 For reference, these changes have already been applied in `<path-to-repo>/4-finish` of your local clone.
 
-These resources have already been created in previous guides. Let's recap how we deploy the sample application to the ARO 4 cluster, by executing the following commands.
+Execute the following commands to deploy the sample application to the ARO 4 cluster.
 
 ```bash
 # Change directory to "<path-to-repo>/4-finish"
