@@ -51,7 +51,7 @@ mvn -Dclient.id=<client ID> -Dclient.secret=<client secret> -Dtenant.id=<tenant 
 ```
 
 > [!NOTE]
-> **client ID**, **client secret**, **tenant ID**, and **group ID** are properties you wrote down in previous step "[Set up Azure Active Directory](#set-up-azure-active-directory)".
+> **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** are properties you wrote down in previous step "[Set up Azure Active Directory](#set-up-azure-active-directory)".
 
 Once the application is up and running, open [https://localhost:9443](https://localhost:9443) in the **InPrivate** window of **Microsoft Edge**, verify the application is secured by Azure AD OpenID Connect.
 
@@ -102,7 +102,7 @@ After the application image is built, run with your local Docker to verify wheth
 
 1. Run `docker run -it --rm -p 9443:9443 -e CLIENT_ID=<client ID> -e CLIENT_SECRET=<client secret> -e TENANT_ID=<tenant ID> -e ADMIN_GROUP_ID=<group ID> javaee-cafe-aad-oidc:1.0.0` in your console.
    > [!NOTE]
-   > **client ID**, **client secret**, **tenant ID**, and **group ID** are properties you wrote down in previous step "[Set up Azure Active Directory](#set-up-azure-active-directory)".
+   > **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** are properties you wrote down in previous step "[Set up Azure Active Directory](#set-up-azure-active-directory)".
 
 2. Wait for Open Liberty to start and the application to deploy successfully.
 3. Open [https://localhost:9443/](https://localhost:9443/) in your browser to visit the application home page.
