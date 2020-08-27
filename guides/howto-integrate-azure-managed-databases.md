@@ -146,13 +146,13 @@ export Image_Name=javaee-cafe-connect-db-mssql
 envsubst < openlibertyapplication.yaml | oc create -f -
 
 # Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication
+oc get openlibertyapplication javaee-cafe-connect-db-mssql
 
 # Check if deployment created by Operator is ready
-oc get deployment
+oc get deployment javaee-cafe-connect-db-mssql
 
 # Check if route is created by Operator
-oc get route
+oc get route javaee-cafe-connect-db-mssql
 ```
 
 > [!NOTE]
@@ -294,13 +294,13 @@ export Image_Name=javaee-cafe-connect-db-postgres
 envsubst < openlibertyapplication.yaml | oc create -f -
 
 # Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication
+oc get openlibertyapplication javaee-cafe-connect-db-postgres
 
 # Check if deployment created by Operator is ready
-oc get deployment
+oc get deployment javaee-cafe-connect-db-postgres
 
 # Check if route is created by Operator
-oc get route
+oc get route javaee-cafe-connect-db-postgres
 ```
 
 > [!NOTE]

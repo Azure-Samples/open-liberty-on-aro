@@ -62,9 +62,6 @@ The `Dockerfile` located at [`<path-to-repo>/4-finish/Dockerfile`](https://githu
 3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
-   # Build project and generate war package
-   mvn clean package
-
    # Build and tag application image
    docker build -t javaee-cafe-all-in-one:1.0.0 --pull .
 
@@ -149,13 +146,13 @@ export Container_Registry_URL=<Container_Registry_URL>
 envsubst < openlibertyapplication.yaml | oc create -f -
 
 # Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication
+oc get openlibertyapplication javaee-cafe-all-in-one
 
 # Check if deployment created by Operator is ready
-oc get deployment
+oc get deployment javaee-cafe-all-in-one
 
 # Check if route is created by Operator
-oc get route
+oc get route javaee-cafe-all-in-one
 ```
 
 > [!NOTE]

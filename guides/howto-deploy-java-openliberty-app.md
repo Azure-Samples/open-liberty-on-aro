@@ -260,13 +260,13 @@ Instead of using the web console GUI, you can deploy the application from the co
    openlibertyapplication.openliberty.io/javaee-cafe-simple created
 
    # Check if OpenLibertyApplication instance is created
-   oc get openlibertyapplication
+   oc get openlibertyapplication javaee-cafe-simple
 
    NAME                 IMAGE                                                 EXPOSED   RECONCILED   AGE
    javaee-cafe-simple   <Container_Registry_URL>/javaee-cafe-simple:1.0.0     true      True         36s
 
    # Check if deployment created by Operator is ready
-   oc get deployment
+   oc get deployment javaee-cafe-simple
 
    NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
    javaee-cafe-simple   1/1     1            0           102s
@@ -277,7 +277,7 @@ Instead of using the web console GUI, you can deploy the application from the co
 
    ```bash
    # Check if route is created by Operator
-   oc get route
+   oc get route javaee-cafe-simple
 
    NAME                 HOST/PORT                                                                PATH   SERVICES             PORT       TERMINATION   WILDCARD
    javaee-cafe-simple   javaee-cafe-simple-open-liberty-demo.apps.aqlm62xm.rnfghf.aroapp.io             javaee-cafe-simple   9080-tcp                 None

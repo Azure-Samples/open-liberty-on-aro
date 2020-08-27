@@ -159,13 +159,13 @@ export Container_Registry_URL=<Container_Registry_URL>
 envsubst < openlibertyapplication.yaml | oc create -f -
 
 # Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication
+oc get openlibertyapplication javaee-cafe-aad-oidc
 
 # Check if deployment created by Operator is ready
-oc get deployment
+oc get deployment javaee-cafe-aad-oidc
 
 # Check if route is created by Operator
-oc get route
+oc get route javaee-cafe-aad-oidc
 ```
 
 > [!NOTE]
