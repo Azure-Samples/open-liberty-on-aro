@@ -1,6 +1,6 @@
 # Integrate your Liberty application with Azure managed databases
 
-[Azure managed databases](https://azure.microsoft.com/product-categories/databases/) are managed, intelligent, and flexible cloud database services offered by Microsoft Azure. In this guide, you will integrate your Open Liberty application with Azure managed databases to enable data persistence. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
+[Azure managed databases](https://azure.microsoft.com/product-categories/databases/) are managed, intelligent, and flexible cloud database services offered by Microsoft Azure. In this guide, you will integrate your Liberty application with Azure managed databases to enable data persistence. The Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
 >
 > * Connect your application to Azure SQL Database
@@ -8,7 +8,7 @@
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
 
 ## Connect your application to Azure SQL Database
 
@@ -64,7 +64,14 @@ Once the application is up and running, open [http://localhost:9080](http://loca
 
 ### Prepare application image
 
-The `Dockerfile` located at [`<path-to-repo>/3-integration/connect-db/mssql/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/mssql/Dockerfile) is almost same as the one used in the previous [basic guide](howto-deploy-java-openliberty-app.md), except the addition of JDBC driver. Follow steps below to build the application image:
+To build the application image, Dockerfile needs to be prepared in advance:
+
+| File Name             | Source Path                     | Destination Path              | Operation  | Description           |
+|-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
+| `Dockerfile` | [`<path-to-repo>/2-simple/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile) | [`<path-to-repo>/3-integration/connect-db/mssql/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/mssql/Dockerfile) | Updated | Add JDBC driver into application image, which is based on Open Liberty base image. |
+| `Dockerfile-wlp` | [`<path-to-repo>/2-simple/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile-wlp) | [`<path-to-repo>/3-integration/connect-db/mssql/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/mssql/Dockerfile-wlp) | Updated | Add JDBC driver into application image, which is based on WebSphere Liberty base image. |
+
+Follow steps below to build the application image:
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/mssql` of your local clone.
 2. Download [mssql-jdbc-8.2.2.jre8.jar](https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.2.2.jre8/mssql-jdbc-8.2.2.jre8.jar) and put it to current working directory.
@@ -72,7 +79,10 @@ The `Dockerfile` located at [`<path-to-repo>/3-integration/connect-db/mssql/Dock
 
    ```bash
    # Build and tag application image
-   docker build -t javaee-cafe-connect-db-mssql:1.0.0 --pull .
+   # Note:
+   # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
+   # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
+   docker build -t javaee-cafe-connect-db-mssql:1.0.0 --pull --file=${Docker_File} .
 
    # Create a new tag with your ACR instance info that refers to source image
    # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
@@ -89,6 +99,8 @@ The `Dockerfile` located at [`<path-to-repo>/3-integration/connect-db/mssql/Dock
 
    > [!NOTE]
    >
+   > * Replace **${Docker_File}** with **Dockerfile** to build application image with **Open Liberty** base image.
+   > * Replace **${Docker_File}** with **Dockerfile-wlp** to build application image with **WebSphere Liberty** base image.
    > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
    > * Replace **${Registry_Name}** with the name of your ACR instance.
 
@@ -101,9 +113,9 @@ After the application image is built, run with your local Docker to verify wheth
    > * [Create a firewall rule](https://docs.microsoft.com/azure/azure-sql/database/firewall-create-server-level-portal-quickstart) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseExceptionInternal Exception: java.sql.SQLException: Cannot open server 'xxxxxxx' requested by the login. Client with IP address 'xxx.xxx.xxx.xx' is not allowed to access the server.  To enable access, use the Windows Azure Management Portal or run sp_set_firewall_rule on the master database to create a firewall rule for this IP address or address range.  It may take up to five minutes for this change to take effect. ClientConnectionId:xxxx-xxxx-xxxx-xxxx-xxxx DSRA0010E: SQL State = S0001, Error Code = 40,615
 
-2. Wait for Open Liberty to start and the application to deploy successfully.
+2. Wait for Liberty to start and the application to deploy successfully.
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
-4. Press **Control-C** to stop the application and Open Liberty server.
+4. Press **Control-C** to stop the application and Liberty server.
 
 ### Deploy sample application
 
@@ -116,7 +128,7 @@ To make the application connect to the Azure SQL Database for data persistence, 
 
 For reference, these changes have already been applied in `<path-to-repo>/3-integration/connect-db` of your local clone.
 
-Now we can deploy the sample Open Liberty application to the ARO 4 cluster, by executing the following commands.
+Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
 
 ```bash
 # Change directory to "<path-to-repo>/3-integration/connect-db"
@@ -162,7 +174,7 @@ oc get route javaee-cafe-connect-db-mssql
 > * Replace **\<Server name>**, **\<Port number>**, **\<Database name>**, **\<Server admin login>**, and **\<Password>** with the ones you noted down before.
 > * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
-Once the Open Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+Once the Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
 
 ## Connect your application to Azure Database for PostgreSQL
 
@@ -212,15 +224,24 @@ Once the application is up and running, open [http://localhost:9080](http://loca
 
 ### Prepare application image (PostgreSQL)
 
-The `Dockerfile` located at [`<path-to-repo>/3-integration/connect-db/postgres/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/postgres/Dockerfile) is almost same as the one used in the previous [basic guide](howto-deploy-java-openliberty-app.md), except the addition of JDBC driver. Follow steps below to build the application image:
+To build the application image, Dockerfile needs to be prepared in advance:
+
+| File Name             | Source Path                     | Destination Path              | Operation  | Description           |
+|-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
+| `Dockerfile` | [`<path-to-repo>/2-simple/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile) | [`<path-to-repo>/3-integration/connect-db/postgres/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/postgres/Dockerfile) | Updated | Add JDBC driver into application image, which is based on Open Liberty base image. |
+| `Dockerfile-wlp` | [`<path-to-repo>/2-simple/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile-wlp) | [`<path-to-repo>/3-integration/connect-db/postgres/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/3-integration/connect-db/postgres/Dockerfile-wlp) | Updated | Add JDBC driver into application image, which is based on WebSphere Liberty base image. |
+
+Follow steps below to build the application image:
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/postgres` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
 3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
-   # Build and tag application image
-   docker build -t javaee-cafe-connect-db-postgres:1.0.0 --pull .
+   # Note:
+   # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
+   # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
+   docker build -t javaee-cafe-connect-db-postgres:1.0.0 --pull --file=${Docker_File} .
 
    # Create a new tag with your ACR instance info that refers to source image
    # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
@@ -237,6 +258,8 @@ The `Dockerfile` located at [`<path-to-repo>/3-integration/connect-db/postgres/D
 
    > [!NOTE]
    >
+   > * Replace **${Docker_File}** with **Dockerfile** to build application image with **Open Liberty** base image.
+   > * Replace **${Docker_File}** with **Dockerfile-wlp** to build application image with **WebSphere Liberty** base image.
    > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
    > * Replace **${Registry_Name}** with the name of your ACR instance.
 
@@ -249,9 +272,9 @@ After the application image is built, run with your local Docker to verify wheth
    > * [Create a firewall rule](https://docs.microsoft.com/azure/postgresql/howto-manage-firewall-using-portal) for IP address of your client if you encountered the similar error below. Then re-run the application.
    >   * [ERROR   ] CWWJP9992E: Exception [EclipseLink-4002] (Eclipse Persistence Services - 2.7.7.v20200504-69f2c2b80d): org.eclipse.persistence.exceptions.DatabaseException. Internal Exception: java.sql.SQLException: FATAL: no pg_hba.conf entry for host "xxx.xxx.xxx.xxx", user "xxxxxx", database "xxxxxx", SSL on DSRA0010E: SQL State = 28000, Error Code = 0
 
-2. Wait for Open Liberty to start and the application to deploy successfully.
+2. Wait for Liberty to start and the application to deploy successfully.
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
-4. Press **Control-C** to stop the application and Open Liberty server.
+4. Press **Control-C** to stop the application and Liberty server.
 
 ### Deploy sample application (PostgreSQL)
 
@@ -264,7 +287,7 @@ To make the application connect to the Azure Database for PostgreSQL for data pe
 
 For reference, these changes have already been applied in `<path-to-repo>/3-integration/connect-db` of your local clone.
 
-Now we can deploy the sample Open Liberty application to the ARO 4 cluster, by executing the following commands.
+Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
 
 ```bash
 # Change directory to "<path-to-repo>/3-integration/connect-db"
@@ -310,7 +333,7 @@ oc get route javaee-cafe-connect-db-postgres
 > * Replace **\<Server name>**, **\<Port number>**, **\<Admin username>**, and **\<Password>** with the ones you noted down before.
 > * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
-Once the Open Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+Once the Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
 
 ## Next steps
 
@@ -320,7 +343,7 @@ In this guide, you learned how to:
 > * Connect your application to Azure SQL Database
 > * Connect your application to Azure Database for PostgreSQL
 
-Advance to these guides, which integrate Open Liberty application with other Azure services:
+Advance to these guides, which integrate Liberty application with other Azure services:
 > [!div class="nextstepaction"]
 > [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 
