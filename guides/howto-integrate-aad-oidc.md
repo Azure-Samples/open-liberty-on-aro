@@ -1,4 +1,4 @@
-# Integrate your Open Liberty application with Azure Active Directory OpenID Connect
+# Integrate your Liberty application with Azure Active Directory OpenID Connect
 
 In this guide, you will integrate your Open Liberty application with Azure Active Directory OpenID Connect for security. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
@@ -192,14 +192,14 @@ In this guide, you learned how to:
 
 Advance to these guides, which integrate Open Liberty application with other Azure services:
 > [!div class="nextstepaction"]
-> [Integrate your Open Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
+> [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Open Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
+> [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]
-> [Integrate your Open Liberty application with different Azure services](howto-integrate-all.md)
+> [Integrate your Liberty application with different Azure services](howto-integrate-all.md)
 
 Here are references used in this guide:
 

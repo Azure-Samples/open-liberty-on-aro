@@ -1,4 +1,4 @@
-# Integrate your Open Liberty application with different Azure services
+# Integrate your Liberty application with different Azure services
 
 In this guide, you will integrate your Open Liberty application with different Azure services, including security, data persistence & distributed logging. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
@@ -13,9 +13,9 @@ In this guide, you will integrate your Open Liberty application with different A
 In previous guides, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these guides, walk them through with the following links and return here to continue.
 
 * [Deploy a Java application inside Open Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md)
-* [Integrate your Open Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
-* [Integrate your Open Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
-* [Integrate your Open Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
+* [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
+* [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
+* [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
 
 ## Set up different services
 

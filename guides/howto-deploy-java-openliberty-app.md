@@ -296,13 +296,13 @@ In this guide, you learned how to:
 
 Advance to one of the next guides, which integrate Liberty applications with different Azure services:
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
+> [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 
 > [!div class="nextstepaction"]
 > [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
+> [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
 
 Here are references used in this guide:
 
