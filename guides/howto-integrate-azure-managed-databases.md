@@ -238,6 +238,7 @@ Follow steps below to build the application image:
 3. Run the following commands to build application image and push to your ACR instance.
 
    ```bash
+   # Build and tag application image
    # Note:
    # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
    # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
