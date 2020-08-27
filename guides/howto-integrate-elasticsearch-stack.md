@@ -1,6 +1,6 @@
 # Integrate your Liberty application with Elasticsearch stack
 
-In this guide, you will integrate your Open Liberty application with Elasticsearch stack to enable distributed logging. The Open Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
+In this guide, you will integrate your Liberty application with Elasticsearch stack to enable distributed logging. The Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
 >
 > * Distribute your application logs to hosted Elasticsearch on Microsoft Azure
@@ -8,7 +8,7 @@ In this guide, you will integrate your Open Liberty application with Elasticsear
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
 
 ## Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 
@@ -42,7 +42,7 @@ To configure Filebeat as a side container to retrieve and ship application logs,
 
 For reference, you can find these deployment files from `<path-to-repo>/3-integration/elk-logging/hosted-elasticsearch` of your local clone.
 
-Now we can deploy the sample Open Liberty application to the ARO 4 cluster, by executing the following commands.
+Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
 
 ```bash
 # Change directory to "<path-to-repo>/3-integration/elk-logging/hosted-elasticsearch"
@@ -92,7 +92,7 @@ oc get route javaee-cafe-elk-hosted-elasticsearch
 > * Replace **\<Cloud ID>**, **\<User name>**, and **\<Password>** with the ones you noted down before.
 > * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
-Once the Open Liberty Application is up and running:
+Once the Liberty Application is up and running:
 
 1. Open **HOST/PORT** of the route in your browser to visit the application home page.
 2. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
@@ -160,7 +160,7 @@ To distribute your application logs to EFK stack, a number of Kubernetes resourc
 
 For reference, you can find these deployment files from `<path-to-repo>/3-integration/elk-logging/cluster-logging` of your local clone.
 
-Now we can deploy the sample Open Liberty application to the ARO 4 cluster, by executing the following commands.
+Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
 
 ```bash
 # Change directory to "<path-to-repo>/3-integration/elk-logging/cluster-logging"
@@ -190,7 +190,7 @@ oc get route javaee-cafe-elk-cluster-logging
 >
 > * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
 
-Once the Open Liberty Application is up and running:
+Once the Liberty Application is up and running:
 
 1. Open **HOST/PORT** of the route in your browser to visit the application home page.
 2. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
@@ -216,7 +216,7 @@ In this guide, you learned how to:
 > * Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 > * Distribute your application logs to EFK stack installed on ARO 4 cluster
 
-Advance to these guides, which integrate Open Liberty application with other Azure services:
+Advance to these guides, which integrate Liberty application with other Azure services:
 > [!div class="nextstepaction"]
 > [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
 
