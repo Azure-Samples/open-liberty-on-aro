@@ -125,9 +125,8 @@ Follow the instructions in these tutorials and then return here to continue.
 1. [Connect to the cluster](https://docs.microsoft.com/azure/openshift/tutorial-connect-cluster).
 2. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
 3. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
-
-> [!NOTE]
-> To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
+   > [!NOTE]
+   > To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
 
 After the newly created Cluster Logging instance is up and running, configure Fluentd to merge JSON log message body emitted by sample application.
 
@@ -202,10 +201,11 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 1. Log into ARO web console. Click **Monitoring** > **Logging**.
 2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
-3. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
+3. In **Authorize Access** page, click **Allow selected permissions**. Wait until Kibana web console is displayed.
+4. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
    ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
-4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
-5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
+5. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
+6. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
 
 ## Next steps
