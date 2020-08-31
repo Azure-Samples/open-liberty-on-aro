@@ -43,6 +43,7 @@ After creating and connecting to the cluster, install the [Open Liberty Operator
 3. Select **Open Liberty Operator** from the search results.
 4. Select **Install**.
 5. In the popup **Create Operator Subscription**, check **All namespaces on the cluster (default)** for **Installation Mode**, **beta** for **Update Channel**, and **Automatic** for **Approval Strategy**:
+
    ![install-operator](./media/howto-deploy-java-openliberty-app/install-operator.png)
 6. Select **Subscribe** and wait a minute or two until the Open Liberty Operator is displayed.
 7. Observe the Open Liberty Operator with status of "Succeeded".  If you do not, trouble shoot and resolve the problem before continuing.
@@ -62,6 +63,7 @@ You can use your ACR instance as a source of container images with your ARO 4 cl
 1. Log in to the OpenShift web console from your browser.
 2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
 3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
+
    ![create-namespace](./media/howto-deploy-java-openliberty-app/create-namespace.png)
 4. [Create a service principal](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-a-service-principal) with access to your ACR instance. Specify `<container-registry-name>` as name of your container registry. Take note of `Service principal ID` and `Service principal password` in the output.
 5. [Create an image pull secret](https://docs.microsoft.com/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret) to store information needed to authenticate to your ACR instance. Specify `<secret-name>` as **registry-secret**, `<namespace>` as **open-liberty-demo**, `<container-registry-name>` as name of your container registry, `service-principal-ID` and `service-principal-password` as the ones you noted down in the previous step.
@@ -131,6 +133,7 @@ To run the application on Open Liberty, you need to create an Open Liberty serve
    ```
 
 7. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page. The application will look similar to the following:
+
    ![javaee-cafe-web-ui](./media/howto-deploy-java-openliberty-app/javaee-cafe-web-ui.png)
 8. Press **Control-C** to stop the application and Open Liberty server.
 
@@ -216,6 +219,7 @@ Now you can deploy the sample Liberty application to the Azure Red Hat OpenShift
 
 1. Log in to the OpenShift web console from your browser.
 2. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
+
    ![ARO Java Containment](./media/howto-deploy-java-openliberty-app/aro-java-containment.png)
 3. Select **Create OpenLibertyApplication**
 4. Replace the generated yaml with yours, which is located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`.

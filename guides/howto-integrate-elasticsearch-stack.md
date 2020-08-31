@@ -22,8 +22,10 @@ Follow the instructions below to create a deployment for the hosted Elasticsearc
 2. Log into [Elastic Cloud](https://cloud.elastic.co/login) using your free trial account.
 3. Click **Create deployment**.
 4. **Name your deployment** > Select **Azure as cloud platform** > **Leave defaults for others** or customize per your needs > Click **Create deployment**.
+
    ![create-elasticsearch-service-deployment](./media/howto-integrate-elasticsearch-stack/create-elasticsearch-service-deployment.png)
 5. Wait until the deployment is created.
+
    ![elasticsearch-service-deployment-created](./media/howto-integrate-elasticsearch-stack/elasticsearch-service-deployment-created.png)
 6. Write down **User name**, **Password**, and **Cloud ID** for further usage.
 
@@ -104,12 +106,15 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 1. Log into [Elastic Cloud](https://cloud.elastic.co/login).
 2. Find your deployment from **Elasticsearch Service**, click **Kibana** to open its web console.
 3. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Stack Management** > **Index Patterns** > **Create index pattern**.
+
    ![create-index-pattern-define](./media/howto-integrate-elasticsearch-stack/create-index-pattern-define.png)
 4. Set **filebeat-\*** as index pattern. Click **Next step**.
+
    ![create-index-pattern-settings](./media/howto-integrate-elasticsearch-stack/create-index-pattern-settings.png)
 5. Select **@timestamp** as **Time Filter field name** > Click **Create index pattern**.
 6. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Discover**. Check index pattern **filebeat-\*** is selected.
 7. Add **host&#46;name**, **loglevel**, and **message** from **Available fields** into **Selected fields**. Discover application logs from the work area of the page.
+
    ![discover-application-logs](./media/howto-integrate-elasticsearch-stack/discover-application-logs.png)
 
 ## Distribute your application logs to EFK stack installed on ARO 4 cluster
@@ -203,9 +208,11 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
 3. In **Authorize Access** page, click **Allow selected permissions**. Wait until Kibana web console is displayed.
 4. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
+
    ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
 5. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
 6. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
+
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
 
 ## Next steps

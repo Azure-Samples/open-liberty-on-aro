@@ -23,13 +23,15 @@ Follow the instructions below to set up an Azure SQL Database single database fo
    >
    > * At **Basics** step, write down **Database name**, ***Server name**.database.windows.net*, **Server admin login** and **Password**.
    > * At **Networking** step, set **Connectivity method** to **Public endpoint**, **Allow Azure services and resources to access this server** to **Yes**, and **Add current client IP address** to **Yes**.
-   >   ![create-sql-database-networking](./media/howto-integrate-azure-managed-databases/create-sql-database-networking.png)
    >
+   >   ![create-sql-database-networking](./media/howto-integrate-azure-managed-databases/create-sql-database-networking.png)
    > * At **Additional settings** step, set **Enable advanced data security** to **Not now**.
 
 2. Once your database is created, open **your SQL server** > **Firewalls and virtual networks** > Set **Minimal TLS Version** to **>1.0** > Click **Save**.
+
    ![sql-database-minimum-TLS-version](./media/howto-integrate-azure-managed-databases/sql-database-minimum-TLS-version.png)
 3. Open **your SQL database** > **Connection strings** > Select **JDBC**. Write down the **Port number** following sql server address. For example, **1433** is the port number in the example below.
+
    ![sql-server-jdbc-connection-string](./media/howto-integrate-azure-managed-databases/sql-server-jdbc-connection-string.png)
 
 ### Prepare your application
@@ -188,8 +190,10 @@ Follow the instructions below to set up an Azure Database for PostgreSQL server 
    > [!NOTE]
    > At **Basics** step, write down **Admin username** and **Password**.
 2. Once your database is created, open **your Azure Database for PostgreSQL server** > **Connection security** > Set **Allow access to Azure services** to **Yes** > Click **+ Add current client IP address** > Click **Save**.
+
    ![postgres-connection-security](./media/howto-integrate-azure-managed-databases/postgres-connection-security.png)
 3. Open **your Azure Database for PostgreSQL server** > **Connection strings** > **JDBC**. Write down the **Server name** and **Port number** in ***Server name**.postgres.database.azure.com:**Port number*** format.
+
    ![postgre-server-jdbc-connection-string](./media/howto-integrate-azure-managed-databases/postgre-server-jdbc-connection-string.png)
 
 ### Prepare your application (PostgreSQL)
