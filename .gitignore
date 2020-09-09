@@ -16,3 +16,5 @@ buildNumber.properties
 *.jar
 *.crt
 *.key
+*.cer
+*.p12
