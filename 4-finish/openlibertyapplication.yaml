@@ -16,8 +16,6 @@ spec:
     termination: reencrypt
     certificateSecretRef: tls-crt-secret
   env:
-  - name: KEY_ALIAS
-    value: 'defaultkeystore'
   - name: CLIENT_ID
     valueFrom:
       secretKeyRef:
