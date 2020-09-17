@@ -11,12 +11,14 @@ This guide demonstrates how to run your Java, Java EE, [Jakarta EE](https://jaka
 Complete the following prerequisites to successfully walk through this guide.
 
 <!-- IMPORTANT: find a way to capture this activation action to count against our OKRs.  DO NOT PUBLISH without this. -->
-1. Install a Java SE implementation (for example, [AdoptOpenJDK OpenJDK 8 LTS/OpenJ9](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9)).
-2. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
-3. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
-4. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 2.0.75 or later.
-5. Register an Azure subscription. If you don't have one, you can get an [Azure subscription free for one year](https://azure.microsoft.com/free).
-6. Clone [this repository](https://github.com/Azure-Samples/open-liberty-on-aro) to your local file system.
+1. Prepare a local machine with Unix-like operating system installed (for example, Ubuntu, macOS).
+2. Install a Java SE implementation (for example, [AdoptOpenJDK OpenJDK 8 LTS/OpenJ9](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9)).
+3. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
+4. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
+5. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest) 2.0.75 or later.
+6. Check and install [`envsubst`](https://command-not-found.com/envsubst) if it's not pre-installed in your operating system. 
+7. Register an Azure subscription. If you don't have one, you can get an [Azure subscription free for one year](https://azure.microsoft.com/free).
+8. Clone [this repository](https://github.com/Azure-Samples/open-liberty-on-aro) to your local file system.
 
 ## Set up Azure Red Hat OpenShift cluster
 

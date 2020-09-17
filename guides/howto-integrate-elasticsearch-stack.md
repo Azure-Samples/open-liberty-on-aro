@@ -105,14 +105,14 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 1. Log into [Elastic Cloud](https://cloud.elastic.co/login).
 2. Find your deployment from **Elasticsearch Service**, click **Kibana** to open its web console.
-3. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Stack Management** > **Index Patterns** > **Create index pattern**.
+3. From the top-left of the Kibana home page, click menu icon to expand the top-level menu items. Click **Stack Management** > **Index Patterns** > **Create index pattern**.
 
    ![create-index-pattern-define](./media/howto-integrate-elasticsearch-stack/create-index-pattern-define.png)
 4. Set **filebeat-\*** as index pattern. Click **Next step**.
 
    ![create-index-pattern-settings](./media/howto-integrate-elasticsearch-stack/create-index-pattern-settings.png)
 5. Select **@timestamp** as **Time Filter field name** > Click **Create index pattern**.
-6. From the top-left of the home page, click menu icon to expand the top-level menu items. Click **Discover**. Check index pattern **filebeat-\*** is selected.
+6. From the top-left of the Kibana home page, click menu icon to expand the top-level menu items. Click **Discover**. Check index pattern **filebeat-\*** is selected.
 7. Add **host&#46;name**, **loglevel**, and **message** from **Available fields** into **Selected fields**. Discover application logs from the work area of the page.
 
    ![discover-application-logs](./media/howto-integrate-elasticsearch-stack/discover-application-logs.png)
@@ -133,7 +133,7 @@ Follow the instructions in these tutorials and then return here to continue.
    > [!NOTE]
    > To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
 
-After the newly created Cluster Logging instance is up and running, configure Fluentd to merge JSON log message body emitted by sample application.
+After the newly created Cluster Logging instance is up and running, configure Fluentd to merge the JSON log message bodies emitted by sample application.
 
 1. Switch to project `openshift-logging`:
 
