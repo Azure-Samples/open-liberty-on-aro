@@ -77,7 +77,7 @@ Follow steps below to build the application image:
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/mssql` of your local clone.
 2. Download [mssql-jdbc-8.2.2.jre8.jar](https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/8.2.2.jre8/mssql-jdbc-8.2.2.jre8.jar) and put it to current working directory.
-3. Run the following commands to build application image and push to your ACR instance.
+3. Run the following commands to build application image.
 
    ```bash
    # Build and tag application image
@@ -85,26 +85,7 @@ Follow steps below to build the application image:
    # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
    # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
    docker build -t javaee-cafe-connect-db-mssql:1.0.0 --pull --file=${Docker_File} .
-
-   # Create a new tag with your ACR instance info that refers to source image
-   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-   docker tag javaee-cafe-connect-db-mssql:1.0.0 ${Container_Registry_URL}/javaee-cafe-connect-db-mssql:1.0.0
-
-   # Log in to your ACR instance
-   # Note: replace "${Registry_Name}" with the name of your ACR instance
-   az acr login -n ${Registry_Name}
-
-   # Push image to your ACR instance
-   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-   docker push ${Container_Registry_URL}/javaee-cafe-connect-db-mssql:1.0.0
    ```
-
-   > [!NOTE]
-   >
-   > * Replace **${Docker_File}** with **Dockerfile** to build application image with **Open Liberty** base image.
-   > * Replace **${Docker_File}** with **Dockerfile-wlp** to build application image with **WebSphere Liberty** base image.
-   > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
-   > * Replace **${Registry_Name}** with the name of your ACR instance.
 
 After the application image is built, run with your local Docker to verify whether it works.
 
@@ -119,6 +100,26 @@ After the application image is built, run with your local Docker to verify wheth
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Liberty server.
 
+When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
+
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to push the application image to the registry.
+
+   ```bash
+   # Note: replace "<Container_Registry_URL>" with the fully qualified name of the registry
+   Container_Registry_URL=<Container_Registry_URL>
+
+   # Create a new tag with registry info that refers to source image
+   docker tag javaee-cafe-connect-db-mssql:1.0.0 ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-connect-db-mssql:1.0.0
+
+   # Log in to the built-in container image registry
+   docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+
+   # Push image to the built-in container image registry
+   docker push ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-connect-db-mssql:1.0.0
+   ```
+
 ### Deploy sample application
 
 To make the application connect to the Azure SQL Database for data persistence, a number of Kubernetes resource YAML files need to be updated or created:
@@ -130,53 +131,49 @@ To make the application connect to the Azure SQL Database for data persistence, 
 
 For reference, these changes have already been applied in `<path-to-repo>/3-integration/connect-db` of your local clone.
 
-Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
+Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-```bash
-# Change directory to "<path-to-repo>/3-integration/connect-db"
-cd <path-to-repo>/3-integration/connect-db
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to deploy the application.
 
-# Change project to "open-liberty-demo"
-oc project open-liberty-demo
+   ```bash
+   # Change directory to "<path-to-repo>/3-integration/connect-db"
+   cd <path-to-repo>/3-integration/connect-db
 
-# Create environment variables which will be passed to secret "db-secret-mssql"
-# Note: replace "<Server name>", "<Port number>", "<Database name>", "<Server admin login>", and "<Password>" with the ones you noted down before
-export DB_Type=mssql
-export DB_SERVER_NAME=<Server name>.database.windows.net
-export DB_PORT_NUMBER=<Port number>
-export DB_NAME=<Database name>
-export DB_USER=<Server admin login>@<Server name>
-export DB_PASSWORD=<Password>
+   # Change project to "open-liberty-demo"
+   oc project open-liberty-demo
 
-# Create secret "db-secret-mssql"
-envsubst < db-secret.yaml | oc create -f -
+   # Create environment variables which will be passed to secret "db-secret-mssql"
+   # Note: replace "<Server name>", "<Port number>", "<Database name>", "<Server admin login>", and "<Password>" with the ones you noted down before
+   export DB_Type=mssql
+   export DB_SERVER_NAME=<Server name>.database.windows.net
+   export DB_PORT_NUMBER=<Port number>
+   export DB_NAME=<Database name>
+   export DB_USER=<Server admin login>@<Server name>
+   export DB_PASSWORD=<Password>
 
-# Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-connect-db-mssql"
-# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
-export Container_Registry_URL=<Container_Registry_URL>
-export Image_Name=javaee-cafe-connect-db-mssql
+   # Create secret "db-secret-mssql"
+   envsubst < db-secret.yaml | oc create -f -
 
-# Create OpenLibertyApplication "javaee-cafe-connect-db-mssql"
-envsubst < openlibertyapplication.yaml | oc create -f -
+   # Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-connect-db-mssql"
+   export Image_Name=javaee-cafe-connect-db-mssql
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication javaee-cafe-connect-db-mssql
+   # Create OpenLibertyApplication "javaee-cafe-connect-db-mssql"
+   envsubst < openlibertyapplication.yaml | oc create -f -
 
-# Check if deployment created by Operator is ready
-oc get deployment javaee-cafe-connect-db-mssql
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication javaee-cafe-connect-db-mssql
 
-# Check if route is created by Operator
-oc get route javaee-cafe-connect-db-mssql
-```
+   # Check if deployment created by Operator is ready
+   oc get deployment javaee-cafe-connect-db-mssql
 
-> [!NOTE]
->
-> * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-> * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
-> * Replace **\<Server name>**, **\<Port number>**, **\<Database name>**, **\<Server admin login>**, and **\<Password>** with the ones you noted down before.
-> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
+   # Get host of the route
+   HOST=$(oc get route javaee-cafe-connect-db-mssql --template='{{ .spec.host }}')
+   echo "Route Host: $HOST"
+   ```
 
-Once the Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+Once the Liberty Application is up and running, open the output of **Route Host** in your browser to visit the application home page.
 
 ## Connect your application to Azure Database for PostgreSQL
 
@@ -239,7 +236,7 @@ Follow steps below to build the application image:
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/postgres` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
-3. Run the following commands to build application image and push to your ACR instance.
+3. Run the following commands to build application image.
 
    ```bash
    # Build and tag application image
@@ -247,26 +244,7 @@ Follow steps below to build the application image:
    # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
    # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
    docker build -t javaee-cafe-connect-db-postgres:1.0.0 --pull --file=${Docker_File} .
-
-   # Create a new tag with your ACR instance info that refers to source image
-   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-   docker tag javaee-cafe-connect-db-postgres:1.0.0 ${Container_Registry_URL}/javaee-cafe-connect-db-postgres:1.0.0
-
-   # Log in to your ACR instance
-   # Note: replace "${Registry_Name}" with the name of your ACR instance
-   az acr login -n ${Registry_Name}
-
-   # Push image to your ACR instance
-   # Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-   docker push ${Container_Registry_URL}/javaee-cafe-connect-db-postgres:1.0.0
    ```
-
-   > [!NOTE]
-   >
-   > * Replace **${Docker_File}** with **Dockerfile** to build application image with **Open Liberty** base image.
-   > * Replace **${Docker_File}** with **Dockerfile-wlp** to build application image with **WebSphere Liberty** base image.
-   > * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
-   > * Replace **${Registry_Name}** with the name of your ACR instance.
 
 After the application image is built, run with your local Docker to verify whether it works.
 
@@ -281,6 +259,26 @@ After the application image is built, run with your local Docker to verify wheth
 3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Liberty server.
 
+When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
+
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to push the application image to the registry.
+
+   ```bash
+   # Note: replace "<Container_Registry_URL>" with the fully qualified name of the registry
+   Container_Registry_URL=<Container_Registry_URL>
+
+   # Create a new tag with registry info that refers to source image
+   docker tag javaee-cafe-connect-db-postgres:1.0.0 ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-connect-db-postgres:1.0.0
+
+   # Log in to the built-in container image registry
+   docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+
+   # Push image to the built-in container image registry
+   docker push ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-connect-db-postgres:1.0.0
+   ```
+
 ### Deploy sample application (PostgreSQL)
 
 To make the application connect to the Azure Database for PostgreSQL for data persistence, a number of Kubernetes resource YAML files need to be updated or created:
@@ -292,53 +290,49 @@ To make the application connect to the Azure Database for PostgreSQL for data pe
 
 For reference, these changes have already been applied in `<path-to-repo>/3-integration/connect-db` of your local clone.
 
-Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
+Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-```bash
-# Change directory to "<path-to-repo>/3-integration/connect-db"
-cd <path-to-repo>/3-integration/connect-db
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to deploy the application.
 
-# Change project to "open-liberty-demo"
-oc project open-liberty-demo
+   ```bash
+   # Change directory to "<path-to-repo>/3-integration/connect-db"
+   cd <path-to-repo>/3-integration/connect-db
 
-# Create environment variables which will be passed to secret "db-secret-postgres"
-# Note: replace "<Server name>", "<Port number>", "<Admin username>", and "<Password>" with the ones you noted down before
-export DB_Type=postgres
-export DB_SERVER_NAME=<Server name>.postgres.database.azure.com
-export DB_PORT_NUMBER=<Port number>
-export DB_NAME=postgres
-export DB_USER=<Admin username>@<Server name>
-export DB_PASSWORD=<Password>
+   # Change project to "open-liberty-demo"
+   oc project open-liberty-demo
 
-# Create secret "db-secret-postgres"
-envsubst < db-secret.yaml | oc create -f -
+   # Create environment variables which will be passed to secret "db-secret-postgres"
+   # Note: replace "<Server name>", "<Port number>", "<Admin username>", and "<Password>" with the ones you noted down before
+   export DB_Type=postgres
+   export DB_SERVER_NAME=<Server name>.postgres.database.azure.com
+   export DB_PORT_NUMBER=<Port number>
+   export DB_NAME=postgres
+   export DB_USER=<Admin username>@<Server name>
+   export DB_PASSWORD=<Password>
 
-# Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-connect-db-postgres"
-# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
-export Container_Registry_URL=<Container_Registry_URL>
-export Image_Name=javaee-cafe-connect-db-postgres
+   # Create secret "db-secret-postgres"
+   envsubst < db-secret.yaml | oc create -f -
 
-# Create OpenLibertyApplication "javaee-cafe-connect-db-postgres"
-envsubst < openlibertyapplication.yaml | oc create -f -
+   # Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-connect-db-postgres"
+   export Image_Name=javaee-cafe-connect-db-postgres
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication javaee-cafe-connect-db-postgres
+   # Create OpenLibertyApplication "javaee-cafe-connect-db-postgres"
+   envsubst < openlibertyapplication.yaml | oc create -f -
 
-# Check if deployment created by Operator is ready
-oc get deployment javaee-cafe-connect-db-postgres
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication javaee-cafe-connect-db-postgres
 
-# Check if route is created by Operator
-oc get route javaee-cafe-connect-db-postgres
-```
+   # Check if deployment created by Operator is ready
+   oc get deployment javaee-cafe-connect-db-postgres
 
-> [!NOTE]
->
-> * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-> * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
-> * Replace **\<Server name>**, **\<Port number>**, **\<Admin username>**, and **\<Password>** with the ones you noted down before.
-> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
+   # Get host of the route
+   HOST=$(oc get route javaee-cafe-connect-db-postgres --template='{{ .spec.host }}')
+   echo "Route Host: $HOST"
+   ```
 
-Once the Liberty Application is up and running, open **HOST/PORT** of the route in your browser to visit the application home page.
+Once the Liberty Application is up and running, open the output of **Route Host** in your browser to visit the application home page.
 
 ## Next steps
 

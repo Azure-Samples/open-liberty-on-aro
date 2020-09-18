@@ -9,11 +9,9 @@ metadata:
 spec:
   replicas: 1
   # Note: 
-  # - replace "${Container_Registry_URL}" with your container registry URL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-mssql" for testing DB connection with Azure SQL
   # - replace "${Image_Name}" with "javaee-cafe-connect-db-postgres" for testing DB connection with Azure Database for PostgreSQL
-  applicationImage: ${Container_Registry_URL}/${Image_Name}:1.0.0
-  pullSecret: registry-secret
+  applicationImage: ${Image_Name}:1.0.0
   expose: true
   # Note:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL

@@ -14,16 +14,13 @@ In previous guide, a Java application, which is running inside Open Liberty/WebS
 
 ## Set up Azure Active Directory
 
-Azure Active Directory (Azure AD) implements OpenID Connect (OIDC), an authentication protocol built on OAuth 2.0, which lets you securely sign in a user from Azure AD to an application. Follow the steps below to set up your Azure AD.
+You've already set up an Azure Active Directory in the [previous guide](howto-deploy-java-openliberty-app.md#set-up-azure-active-directory), the **tenant ID**, Azure AD users, **client ID** and **client secret** you wrote down before will also be used in this guide. Furthermore, complete the following steps to set up additional configurations for your Azure Active Directory.
 
-1. [Get an Azure AD tenant](https://docs.microsoft.com/azure/active-directory/develop/quickstart-create-new-tenant). It is very likely your Azure account already has a tenant. Note down your **tenant ID**.
-2. [Create a few Azure AD users](https://docs.microsoft.com/azure/active-directory/fundamentals/add-users-azure-active-directory). You can use these accounts or your own to test the application. Note down email addresses and passwords for login.
-3. Create an **admin group** to enable JWT (Json Web Token) RBAC (role-based-access-control) functionality. Follow [create a basic group and add members using Azure Active Directory](https://docs.microsoft.com/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal) to create a group with type as **Security** and add one or more members. Note down the **group ID**.
-4. [Create a new application registration](https://docs.microsoft.com/azure/active-directory/develop/quickstart-register-app) in your Azure AD tenant. Specify **Redirect URI** to be [https://localhost:9443/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe](https://localhost:9443/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe). Note down the **client ID**.
+1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Input `https://localhost:9443/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe` > Click **Save**.
    > [!NOTE]
    > You need to come back later to add another **Redirect URI** after the sample application is deployed to the ARO 4 cluster.
-5. Create a new client secret. In the newly created application registration, click **Certificates & secrets** > Select **New client secret** > Provide **a description** and hit **Add**. Note down the generated **client secret** value.
-6. Add a **groups claim** into the ID token. In the newly created application registration, click **Token configuration** > Click **Add groups claim** > Select **Security groups** as group types to include in the ID token > Expand **ID** and select **Group ID** in the **Customize token properties by type** section.
+2. Create an **admin group** to enable JWT (Json Web Token) RBAC (role-based-access-control) functionality. Follow [create a basic group and add members using Azure Active Directory](https://docs.microsoft.com/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal) to create a group with type as **Security** and add one or more members. Note down the **group ID**.
+3. Add a **groups claim** into the ID token. In the application registration, click **Token configuration** > Click **Add groups claim** > Select **Security groups** as group types to include in the ID token > Expand **ID** and select **Group ID** in the **Customize token properties by type** section.
 
 ## Prepare your application
 
@@ -92,26 +89,7 @@ cd <path-to-repo>/3-integration/aad-oidc
 # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
 # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
 docker build -t javaee-cafe-aad-oidc:1.0.0 --pull --file=${Docker_File} .
-
-# Create a new tag with your ACR instance info that refers to source image
-# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-docker tag javaee-cafe-aad-oidc:1.0.0 ${Container_Registry_URL}/javaee-cafe-aad-oidc:1.0.0
-
-# Log in to your ACR instance
-# Note: replace "${Registry_Name}" with the name of your ACR instance
-az acr login -n ${Registry_Name}
-
-# Push image to your ACR instance
-# Note: replace "${Container_Registry_URL}" with the fully qualified name of your ACR instance
-docker push ${Container_Registry_URL}/javaee-cafe-aad-oidc:1.0.0
 ```
-
-> [!NOTE]
->
-> * Replace **${Docker_File}** with **Dockerfile** to build application image with **Open Liberty** base image.
-> * Replace **${Docker_File}** with **Dockerfile-wlp** to build application image with **WebSphere Liberty** base image.
-> * Replace **${Container_Registry_URL}** with the fully qualified name of your ACR instance.
-> * Replace **${Registry_Name}** with the name of your ACR instance.
 
 After the application image is built, run with your local Docker to verify whether it works.
 
@@ -122,6 +100,26 @@ After the application image is built, run with your local Docker to verify wheth
 2. Wait for Liberty to start and the application to deploy successfully.
 3. Open [https://localhost:9443/](https://localhost:9443/) in your browser to visit the application home page.
 4. Press **Control-C** to stop the application and Liberty server.
+
+When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
+
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to push the application image to the registry.
+
+   ```bash
+   # Note: replace "<Container_Registry_URL>" with the fully qualified name of the registry
+   Container_Registry_URL=<Container_Registry_URL>
+
+   # Create a new tag with registry info that refers to source image
+   docker tag javaee-cafe-aad-oidc:1.0.0 ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-aad-oidc:1.0.0
+
+   # Log in to the built-in container image registry
+   docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+
+   # Push image to the built-in container image registry
+   docker push ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-aad-oidc:1.0.0
+   ```
 
 ## Deploy sample application
 
@@ -135,65 +133,59 @@ To integrate the application with Azure AD OpenID Connect on the ARO 4 cluster, 
 
 For reference, these changes have already been applied in `<path-to-repo>/3-integration/aad-oidc` of your local clone.
 
-Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
+Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-```bash
-# Change directory to "<path-to-repo>/3-integration/aad-oidc"
-cd <path-to-repo>/3-integration/aad-oidc
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to deploy the application.
 
-# Change project to "open-liberty-demo"
-oc project open-liberty-demo
+   ```bash
+   # Change directory to "<path-to-repo>/3-integration/aad-oidc"
+   cd <path-to-repo>/3-integration/aad-oidc
 
-# Create environment variables which will be passed to secret "aad-oidc-secret"
-# Note: replace "<client ID>", "<client secret>", "<tenant ID>", and "<group ID>" with the ones you noted down before
-export CLIENT_ID=<client ID>
-export CLIENT_SECRET=<client secret>
-export TENANT_ID=<tenant ID>
-export ADMIN_GROUP_ID=<group ID>
+   # Change project to "open-liberty-demo"
+   oc project open-liberty-demo
 
-# Create secret "aad-oidc-secret"
-envsubst < aad-oidc-secret.yaml | oc create -f -
+   # Create environment variables which will be passed to secret "aad-oidc-secret"
+   # Note: replace "<client ID>", "<client secret>", "<tenant ID>", and "<group ID>" with the ones you noted down before
+   export CLIENT_ID=<client ID>
+   export CLIENT_SECRET=<client secret>
+   export TENANT_ID=<tenant ID>
+   export ADMIN_GROUP_ID=<group ID>
 
-# Create TLS private key and certificate, which is also used as CA certificate for testing purpose
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
+   # Create secret "aad-oidc-secret"
+   envsubst < aad-oidc-secret.yaml | oc create -f -
 
-# Create environment variables which will be passed to secret "tls-crt-secret"
-export CA_CRT=$(cat tls.crt | base64 -w 0)
-export DEST_CA_CRT=$(cat tls.crt | base64 -w 0)
-export TLS_CRT=$(cat tls.crt | base64 -w 0)
-export TLS_KEY=$(cat tls.key | base64 -w 0)
+   # Create TLS private key and certificate, which is also used as CA certificate for testing purpose
+   openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 
-# Create secret "tls-crt-secret"
-envsubst < tls-crt-secret.yaml | oc create -f -
+   # Create environment variables which will be passed to secret "tls-crt-secret"
+   export CA_CRT=$(cat tls.crt | base64 -w 0)
+   export DEST_CA_CRT=$(cat tls.crt | base64 -w 0)
+   export TLS_CRT=$(cat tls.crt | base64 -w 0)
+   export TLS_KEY=$(cat tls.key | base64 -w 0)
 
-# Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-aad-oidc"
-# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
-export Container_Registry_URL=<Container_Registry_URL>
+   # Create secret "tls-crt-secret"
+   envsubst < tls-crt-secret.yaml | oc create -f -
 
-# Create OpenLibertyApplication "javaee-cafe-aad-oidc"
-envsubst < openlibertyapplication.yaml | oc create -f -
+   # Create OpenLibertyApplication "javaee-cafe-aad-oidc"
+   oc create -f openlibertyapplication.yaml
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication javaee-cafe-aad-oidc
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication javaee-cafe-aad-oidc
 
-# Check if deployment created by Operator is ready
-oc get deployment javaee-cafe-aad-oidc
+   # Check if deployment created by Operator is ready
+   oc get deployment javaee-cafe-aad-oidc
 
-# Check if route is created by Operator
-oc get route javaee-cafe-aad-oidc
-```
+   # Get host of the route
+   HOST=$(oc get route javaee-cafe-aad-oidc --template='{{ .spec.host }}')
+   echo "Route Host: $HOST"
+   ```
 
-> [!NOTE]
->
-> * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-> * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
-> * Replace **\<client ID>**, **\<client secret>**, **\<tenant ID>**, and **\<group ID>** with the ones you noted down before.
-> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
+Once the Liberty Application is up and running, copy the value of **Route Host** from console output.
 
-Once the Liberty Application is up and running, copy **HOST/PORT** of the route from console output.
-
-1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Input ***https://<copied_HOST/PORT_value>/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe*** > Click **Save**.
-2. Open ***https://<copied_HOST/PORT_value>*** in your browser to visit the application home page.
+1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Replace **\<Route_Host>** with the value of **Route Host** for `https://<Route_Host>/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe`, and fill it into the text box > Click **Save**.
+2. Replace **\<Route_Host>** with the value of **Route Host** for `https://<Route_Host>`, and open it in your browser to visit the application home page.
 
 ## Next steps
 

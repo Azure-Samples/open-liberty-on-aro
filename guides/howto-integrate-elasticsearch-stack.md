@@ -44,64 +44,58 @@ To configure Filebeat as a side container to retrieve and ship application logs,
 
 For reference, you can find these deployment files from `<path-to-repo>/3-integration/elk-logging/hosted-elasticsearch` of your local clone.
 
-Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
+Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-```bash
-# Change directory to "<path-to-repo>/3-integration/elk-logging/hosted-elasticsearch"
-cd <path-to-repo>/3-integration/elk-logging/hosted-elasticsearch
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to deploy the application.
 
-# Change project to "open-liberty-demo"
-oc project open-liberty-demo
+   ```bash
+   # Change directory to "<path-to-repo>/3-integration/elk-logging/hosted-elasticsearch"
+   cd <path-to-repo>/3-integration/elk-logging/hosted-elasticsearch
 
-# Create ServiceAccount "filebeat-svc-account"
-oc create -f filebeat-svc-account.yaml
+   # Change project to "open-liberty-demo"
+   oc project open-liberty-demo
 
-# Grant the service account access to the privileged security context constraints
-oc adm policy add-scc-to-user privileged -n open-liberty-demo -z filebeat-svc-account
+   # Create ServiceAccount "filebeat-svc-account"
+   oc create -f filebeat-svc-account.yaml
 
-# Create ConfigMap "filebeat-config"
-oc create -f filebeat-config.yaml
+   # Grant the service account access to the privileged security context constraints
+   oc adm policy add-scc-to-user privileged -n open-liberty-demo -z filebeat-svc-account
 
-# Create environment variables which will be passed to secret "elastic-cloud-secret"
-# Note: replace "<Cloud ID>", "<User name>", and "<Password>" with the ones you noted down before
-export ELASTIC_CLOUD_ID=<Cloud ID>
-export ELASTIC_CLOUD_AUTH=<User name>:<Password>
+   # Create ConfigMap "filebeat-config"
+   oc create -f filebeat-config.yaml
 
-# Create secret "elastic-cloud-secret"
-envsubst < elastic-cloud-secret.yaml | oc create -f -
+   # Create environment variables which will be passed to secret "elastic-cloud-secret"
+   # Note: replace "<Cloud ID>", "<User name>", and "<Password>" with the ones you noted down before
+   export ELASTIC_CLOUD_ID=<Cloud ID>
+   export ELASTIC_CLOUD_AUTH=<User name>:<Password>
 
-# Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-elk-hosted-elasticsearch"
-# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
-export Container_Registry_URL=<Container_Registry_URL>
+   # Create secret "elastic-cloud-secret"
+   envsubst < elastic-cloud-secret.yaml | oc create -f -
 
-# Create OpenLibertyApplication "javaee-cafe-elk-hosted-elasticsearch"
-envsubst < openlibertyapplication.yaml | oc create -f -
+   # Create OpenLibertyApplication "javaee-cafe-elk-hosted-elasticsearch"
+   oc create -f openlibertyapplication.yaml
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication javaee-cafe-elk-hosted-elasticsearch
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication javaee-cafe-elk-hosted-elasticsearch
 
-# Check if deployment created by Operator is ready
-oc get deployment javaee-cafe-elk-hosted-elasticsearch
+   # Check if deployment created by Operator is ready
+   oc get deployment javaee-cafe-elk-hosted-elasticsearch
 
-# Check if route is created by Operator
-oc get route javaee-cafe-elk-hosted-elasticsearch
-```
-
-> [!NOTE]
->
-> * Refer to [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) on how to connect to the cluster.
-> * **open-liberty-demo** is already created in the [previous guide](howto-deploy-java-openliberty-app.md).
-> * Replace **\<Cloud ID>**, **\<User name>**, and **\<Password>** with the ones you noted down before.
-> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
+   # Get host of the route
+   HOST=$(oc get route javaee-cafe-elk-hosted-elasticsearch --template='{{ .spec.host }}')
+   echo "Route Host: $HOST"
+   ```
 
 Once the Liberty Application is up and running:
 
-1. Open **HOST/PORT** of the route in your browser to visit the application home page.
+1. Open the output of **Route Host** in your browser to visit the application home page.
 2. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
 
 ### Visualize your application logs in Kibana
 
-As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kinaba web console.
+As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kibana web console.
 
 1. Log into [Elastic Cloud](https://cloud.elastic.co/login).
 2. Find your deployment from **Elasticsearch Service**, click **Kibana** to open its web console.
@@ -127,9 +121,10 @@ Another option is to install EFK (Elasticsearch, Fluentd, and Kibana) stack on t
 
 Follow the instructions in these tutorials and then return here to continue.
 
-1. [Connect to the cluster](https://docs.microsoft.com/azure/openshift/tutorial-connect-cluster).
-2. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
-3. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
+1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
+2. [Log in to the OpenShift CLI with the token for `kubeadmin`](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
+4. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
    > [!NOTE]
    > To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
 
@@ -165,48 +160,45 @@ To distribute your application logs to EFK stack, a number of Kubernetes resourc
 
 For reference, you can find these deployment files from `<path-to-repo>/3-integration/elk-logging/cluster-logging` of your local clone.
 
-Now we can deploy the sample Liberty application to the ARO 4 cluster, by executing the following commands.
+Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-```bash
-# Change directory to "<path-to-repo>/3-integration/elk-logging/cluster-logging"
-cd <path-to-repo>/3-integration/elk-logging/cluster-logging
+1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
+2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Run the following commands to deploy the application.
 
-# Change project to "open-liberty-demo"
-oc project open-liberty-demo
+   ```bash
+   # Change directory to "<path-to-repo>/3-integration/elk-logging/cluster-logging"
+   cd <path-to-repo>/3-integration/elk-logging/cluster-logging
 
-# Create environment variables which will be passed to OpenLibertyApplication "javaee-cafe-elk-cluster-logging"
-# Note: replace "<Container_Registry_URL>" with the fully qualified name of your ACR instance
-export Container_Registry_URL=<Container_Registry_URL>
+   # Change project to "open-liberty-demo"
+   oc project open-liberty-demo
 
-# Create OpenLibertyApplication "javaee-cafe-elk-cluster-logging"
-envsubst < openlibertyapplication.yaml | oc create -f -
+   # Create OpenLibertyApplication "javaee-cafe-elk-cluster-logging"
+   oc create -f openlibertyapplication.yaml
 
-# Check if OpenLibertyApplication instance is created
-oc get openlibertyapplication javaee-cafe-elk-cluster-logging
+   # Check if OpenLibertyApplication instance is created
+   oc get openlibertyapplication javaee-cafe-elk-cluster-logging
 
-# Check if deployment created by Operator is ready
-oc get deployment javaee-cafe-elk-cluster-logging
+   # Check if deployment created by Operator is ready
+   oc get deployment javaee-cafe-elk-cluster-logging
 
-# Check if route is created by Operator
-oc get route javaee-cafe-elk-cluster-logging
-```
-
-> [!NOTE]
->
-> * Replace **\<Container_Registry_URL>** with the fully qualified name of your ACR instance.
+   # Get host of the route
+   HOST=$(oc get route javaee-cafe-elk-cluster-logging --template='{{ .spec.host }}')
+   echo "Route Host: $HOST"
+   ```
 
 Once the Liberty Application is up and running:
 
-1. Open **HOST/PORT** of the route in your browser to visit the application home page.
+1. Open the output of **Route Host** in your browser to visit the application home page.
 2. To generate application logs, **Create a new coffee** and **Delete an existing coffee** in the application home page.
 
 ### Visualize your application logs in Kibana (EFK)
 
-As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kinaba web console.
+As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kibana web console.
 
-1. Log into ARO web console. Click **Monitoring** > **Logging**.
-2. In the new opened window, click **Log in with OpenShift**. Log in with user **kubeadmin**.
-3. In **Authorize Access** page, click **Allow selected permissions**. Wait until Kibana web console is displayed.
+1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials. Click **Monitoring** > **Logging**.
+2. In the new opened window, click **Log in with OpenShift**. Log in with `kubeadmin` if required.
+3. In **Authorize Access** page, click **Allow selected permissions**. Wait until the Kibana web console is displayed.
 4. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
 
    ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
@@ -214,6 +206,8 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 6. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
 
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
+
+If you want to log in using the administrator to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
 
 ## Next steps
 

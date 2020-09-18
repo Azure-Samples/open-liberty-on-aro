@@ -5,9 +5,7 @@ metadata:
   namespace: open-liberty-demo
 spec:
   replicas: 1
-  # Note: replace "${Container_Registry_URL}" with your container registry URL
-  applicationImage: ${Container_Registry_URL}/javaee-cafe-all-in-one:1.0.0
-  pullSecret: registry-secret
+  applicationImage: javaee-cafe-all-in-one:1.0.0
   expose: true
   service:
     port: 9443
