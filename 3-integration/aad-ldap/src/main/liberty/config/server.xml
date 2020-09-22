@@ -70,9 +70,9 @@
     </ldapRegistry>
 
     <!-- JWT builder -->
-    <jwtBuilder id="jwtAuthUserBuilder" 
-        keyStoreRef="defaultKeyStore" keyAlias="default" 
-        issuer="https://example.com" expiresInSeconds="600" />
+    <jwtBuilder id="jwtAuthUserBuilder" keyStoreRef="defaultKeyStore" 
+        keyAlias="${key.alias}" issuer="https://example.com" expiresInSeconds="600" />
+    <variable name="key.alias" defaultValue="default"/>
 
     <!-- JWT consumer -->
     <mpJwt id="jwtUserConsumer" 

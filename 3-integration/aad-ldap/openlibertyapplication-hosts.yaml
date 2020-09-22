@@ -1,0 +1,81 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-aad-ldap
+  namespace: open-liberty-demo
+spec:
+  replicas: 1
+  applicationImage: javaee-cafe-aad-ldap:1.0.0
+  expose: true
+  service:
+    port: 9443
+    certificateSecretRef: tls-crt-secret
+  route:
+    termination: reencrypt
+    certificateSecretRef: tls-crt-secret
+  env:
+  - name: KEY_ALIAS
+    value: 'defaultkeystore'
+  - name: LDAP_SERVER_HOST
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: ldap.server.host
+  - name: LDAP_SERVER_PORT
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: ldap.server.port
+  - name: LDAP_SERVER_BASEDN
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: ldap.server.baseDN
+  - name: LDAP_SERVER_BINDDN
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: ldap.server.bindDN
+  - name: LDAP_SERVER_BINDPASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: ldap.server.bindPassword
+  - name: KEYSTORE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: keystore.name
+  - name: KEYSTORE_PASS
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: keystore.pass
+  - name: ADMIN_GROUP_NAME
+    valueFrom:
+      secretKeyRef:
+        name: aad-ldap-secret
+        key: admin.group.name
+  initContainers:
+  - name: add-hostname
+    image: busybox
+    command: ['sh', '-c', 'cp /etc/hosts /hostsconfig && echo "${LDAP_SERVER_IP_ADDRESS} ${LDAP_SERVER_HOST}" >> /hostsconfig/hosts']
+    volumeMounts:
+    - name: hostsconfig
+      mountPath: /hostsconfig
+  volumeMounts:
+  - name: config
+    mountPath: /config/${KEYSTORE_NAME}
+    readOnly: true
+    subPath: ${KEYSTORE_NAME}
+  - name: hostsconfig
+    mountPath: /etc/hosts
+    readOnly: true
+    subPath: hosts
+  volumes:
+  - name: config
+    configMap:
+      defaultMode: 0600
+      name: keystore-config
+  - name: hostsconfig
+    emptyDir: {}
