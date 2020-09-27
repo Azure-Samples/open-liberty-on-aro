@@ -231,6 +231,17 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
 
 Once the Liberty Application is up and running, replace **\<Route_Host>** with the console output of **Route Host** for `https://<Route_Host>`, and open it in your browser to visit the application home page.
 
+### Lock down and secure LDAP access over the internet
+
+While standing up the secure LDAP in the preceding steps, we had set the source as **Any** for the `AllowLDAPS` rule in the network security group.  Now that the Liberty application has been deployed and connected to LDAP, obtain the public IP address of `ingressProfile` for the ARO 4 cluster.
+
+1. Log in to Azure CLI by running `az login` using your subscription in the console.
+2. Run `az aro list -o table` to get list of deployed ARO 4 clusters. Find resource group name and cluster name from your specific ARO 4 cluster.
+3. Run `az resource show -g <resource-group-name> -n <cluster-name> --resource-type "Microsoft.RedHatOpenShift/openShiftClusters` to get resource details of your ARO 4 cluster.
+4. Write down the public IP address of `ingressProfile` from the output JSON body by following the JSON path `properties.ingressProfiles[0].ip`.
+
+Revisit [Lock down secure LDAP access over the internet](https://docs.microsoft.com/azure/active-directory-domain-services/tutorial-configure-ldaps#lock-down-secure-ldap-access-over-the-internet) and change **Any** to the IP address of `ingressProfile` for the ARO 4 cluster.
+
 ## Next steps
 
 In this guide, you learned how to:
