@@ -84,7 +84,7 @@ public class Cafe implements Serializable {
     }
 
     public String getPodName() {
-        return "true".equals(System.getenv("SHOW_POD_NAME")) ? "Pod name: " + System.getenv("HOSTNAME") : "";
+        return "true".equals(System.getenv("SHOW_POD_NAME")) ? System.getenv("HOSTNAME") : "";
     }
 
 	@PostConstruct
