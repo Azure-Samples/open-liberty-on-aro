@@ -60,9 +60,14 @@ public class Cafe implements Serializable {
 	}
 
 	public List<Coffee> getCoffeeList() {
+	    this.getAllCoffees();
 		return coffeeList;
 	}
 
+    public String getPodName() {
+        return "true".equals(System.getenv("SHOW_POD_NAME")) ? "Pod name: " + System.getenv("HOSTNAME") : "";
+    }
+	
 	@PostConstruct
 	private void init() {
 		try {
@@ -97,11 +102,9 @@ public class Cafe implements Serializable {
 		this.client.target(baseUri).request(MediaType.APPLICATION_JSON).post(Entity.json(coffee));
 		this.name = null;
 		this.price = null;
-		this.getAllCoffees();
 	}
 
 	public void removeCoffee(String coffeeId) {
 		this.client.target(baseUri).path(coffeeId).request().delete();
-		this.getAllCoffees();
 	}
 }
