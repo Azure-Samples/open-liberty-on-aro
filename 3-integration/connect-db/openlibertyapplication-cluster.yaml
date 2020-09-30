@@ -18,7 +18,7 @@ spec:
   # - replace "${DB_Type}" with "mssql" for testing DB connection with Azure SQL
   # - replace "${DB_Type}" with "postgres" for testing DB connection with Azure Database for PostgreSQL
   env:
-  - name: SHOW_POD_NAME
+  - name: SHOW_HOST_NAME
     value: 'true'
   - name: DB_SERVER_NAME
     valueFrom:

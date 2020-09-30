@@ -1,5 +1,6 @@
 package cafe.web.view;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.net.InetAddress;
@@ -68,6 +69,7 @@ public class Cafe implements Serializable {
 	}
 
 	public List<Coffee> getCoffeeList() {
+		this.getAllCoffees();
 		return coffeeList;
 	}
 
@@ -77,6 +79,10 @@ public class Cafe implements Serializable {
 
     public boolean isDisabledForDeletion() {
         return !securityContext.isCallerInRole("admin");
+    }
+
+    public String getHostName() {
+        return "true".equals(System.getenv("SHOW_HOST_NAME")) ? System.getenv("HOSTNAME") : "";
     }
 
 	@PostConstruct
@@ -94,8 +100,7 @@ public class Cafe implements Serializable {
 				public boolean verify(String hostname, SSLSession session) {
 					return true;
 				}
-            }).build().register(filter);
-			this.getAllCoffees();
+			}).build().register(filter);
 		} catch (IllegalArgumentException | NullPointerException | WebApplicationException | UnknownHostException ex) {
 			logger.severe("Processing of HTTP response failed.");
 			ex.printStackTrace();
@@ -108,16 +113,16 @@ public class Cafe implements Serializable {
 				});
 	}
 
-	public void addCoffee() {
+	public void addCoffee() throws IOException {
 		Coffee coffee = new Coffee(this.name, this.price);
 		this.client.target(baseUri).request(MediaType.APPLICATION_JSON).post(Entity.json(coffee));
 		this.name = null;
 		this.price = null;
-		this.getAllCoffees();
+		FacesContext.getCurrentInstance().getExternalContext().redirect("/");
 	}
 
-	public void removeCoffee(String coffeeId) {
+	public void removeCoffee(String coffeeId) throws IOException {
 		this.client.target(baseUri).path(coffeeId).request().delete();
-		this.getAllCoffees();
+		FacesContext.getCurrentInstance().getExternalContext().redirect("/");
 	}
 }
