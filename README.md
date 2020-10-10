@@ -34,10 +34,10 @@ Below table shows the list of samples available in this repository.
 |----------------------------------|--------------------------------------------|----------------------------------|
 | [`1-start`](1-start) | Basic Java EE application with Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). | |
 | [`2-simple`](2-simple) | Migrate [`1-start`](1-start) sample to Open/WebSphere Liberty with minimum configurations. | [howto-guide](guides/howto-deploy-java-openliberty-app.md) |
+| [`3-integration/elk-logging`](3-integration/elk-logging) | Extend [`2-simple`](2-simple) sample by integrating with Elasticsearch stack for distributed logging. | [howto-guide](guides/howto-integrate-elasticsearch-stack.md) |
+| [`3-integration/connect-db`](3-integration/connect-db) | Extend [`2-simple`](2-simple) sample by integrating with Azure managed databases for data persistence. | [howto-guide](guides/howto-integrate-azure-managed-databases.md) |
 | [`3-integration/aad-oidc`](3-integration/aad-oidc) | Extend [`2-simple`](2-simple) sample by integrating with Azure Active Directory OpenID Connect for security. | [howto-guide](guides/howto-integrate-aad-oidc.md) |
 | [`3-integration/aad-ldap`](3-integration/aad-ldap) | Extend [`2-simple`](2-simple) sample by integrating with Azure Active Directory Domain Service via Secure LDAP for security. | [howto-guide](guides/howto-integrate-aad-ldap.md) |
-| [`3-integration/connect-db`](3-integration/connect-db) | Extend [`2-simple`](2-simple) sample by integrating with Azure managed databases for data persistence. | [howto-guide](guides/howto-integrate-azure-managed-databases.md) |
-| [`3-integration/elk-logging`](3-integration/elk-logging) | Extend [`2-simple`](2-simple) sample by integrating with Elasticsearch stack for distributed logging. | [howto-guide](guides/howto-integrate-elasticsearch-stack.md) |
 | [`4-finish`](4-finish) | A complete sample with all services integration including security, data persistence & distributed logging. | [howto-guide](guides/howto-integrate-all.md) |
 
 ## Contributing
