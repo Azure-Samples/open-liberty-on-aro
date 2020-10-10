@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 import cafe.model.entity.Coffee;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class Cafe implements Serializable {
 
 	private static final long serialVersionUID = 1L;
