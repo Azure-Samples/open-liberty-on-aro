@@ -46,8 +46,8 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -162,8 +162,8 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -207,7 +207,7 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
 
-If you want to log in using the administrator to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
+If you want to log in using the Azure AD user to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
 
 ## Next steps
 

@@ -1,10 +1,10 @@
 # Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster
 
-This guide demonstrates how to run your Java, Java EE, [Jakarta EE](https://jakarta.ee/), or [MicroProfile](https://microprofile.io/) application on the Open Liberty/WebSphere Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing an Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.  The foundational elements of technology in this article include the following:
+This guide demonstrates how to run your Java, Java EE, [Jakarta EE](https://jakarta.ee/), or [MicroProfile](https://microprofile.io/) application on the Open Liberty/WebSphere Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing a Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.  The foundational elements of technology in this article include the following:
 
 * [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
 * [WebSphere Liberty](https://www.ibm.com/cloud/websphere-liberty): IBM WebSphere Liberty architecture shares the same code base as the open sourced Open Liberty server runtime, which provides additional benefits such as low-cost experimentation, customization and seamless migration from open source to production.
-* [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides a flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
+* [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
 
 ## Prerequisites
 
@@ -117,7 +117,7 @@ OpenShift Container Platform provides a built-in container image registry which 
 
 ### Create an administrator for the demo project
 
-Besides image management, the **aad-user** will also be granted administrative permissions for managing resource in the demo project of the ARO 4 cluster.
+Besides image management, the **aad-user** will also be granted administrative permissions for managing resources in the demo project of the ARO 4 cluster.
 
 1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
 2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
@@ -156,7 +156,7 @@ We will use a Java EE 8 application as our example in this guide. Open Liberty i
 
 ### Sample application
 
-Within the git repo you cloned in the Prerequisites section, change directory to `1-start`. The sample application uses Maven at build time and only Java EE 8 APIs (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation) at runtime. This standard Java EE app will be used as a starting point to demonstrate the ease of migration to Liberty runtime. Here is the project structure:
+Within the git repo you cloned in the Prerequisites section, change directory to `1-start`. The sample application uses Maven at build time and only Java EE 8 APIs (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation) at runtime. This standard Java EE app will be used as a starting point to demonstrate the ease of migration to the Liberty runtime. Here is the project structure:
 
 ```Text
 ├── pom.xml                                         # Maven POM file
@@ -259,8 +259,8 @@ Before deploying the containerized application to a remote cluster, run with you
 
 When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. [Log in to the OpenShift CLI with the token for the administrator](#log-in-to-the-openshift-cli-with-the-token).
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](#log-in-to-the-openshift-cli-with-the-token).
 3. Execute the following commands to push the image:
 
    ```bash
@@ -285,14 +285,15 @@ Now you can deploy the sample Liberty application to the Azure Red Hat OpenShift
 
 Because we use the Open Liberty Operator to manage Liberty applications, we need to create an instance of its *Custom Resource Definition*, of type "OpenLibertyApplication". The Operator will then take care of all aspects of managing the OpenShift resources required for deployment.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. Expand **Home**, Select **Projects** > **open-liberty-demo**.
+3. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
 
    ![ARO Java Containment](./media/howto-deploy-java-openliberty-app/aro-java-containment.png)
-3. Select **Create OpenLibertyApplication**
-4. Replace the generated yaml with yours, which is located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`.
-5. Select **Create**.
-6. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
+4. Select **Create OpenLibertyApplication**
+5. Replace the generated yaml with yours, which is located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`.
+6. Select **Create**.
+7. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and click the link below **Location**.
 
 You'll see the application home page opened in the browser.
 
@@ -300,8 +301,8 @@ You'll see the application home page opened in the browser.
 
 Instead of using the web console GUI, you can deploy the application from the command-line. If you have not already done so, download and install the `oc` command-line tool by following Red Hat documentation [Getting Started with the CLI](https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html).
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. [Log in to the OpenShift CLI with the token for the administrator](#log-in-to-the-openshift-cli-with-the-token).
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](#log-in-to-the-openshift-cli-with-the-token).
 3. Change directory to `2-simple` of your local clone, and run the following commands to deploy your Liberty application to the ARO 4 cluster.
 
    ```bash

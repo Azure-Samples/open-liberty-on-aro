@@ -68,8 +68,8 @@ Follow steps below to build the application image and push it to the built-in co
 
 1. Change directory to `<path-to-repo>/4-finish` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
-3. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-4. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+3. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+4. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 5. Run the following commands to build application image and push it to the registry.
 
    ```bash
@@ -107,8 +107,8 @@ For reference, these changes have already been applied in `<path-to-repo>/4-fini
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the administrator.
-2. [Log in to the OpenShift CLI with the token for the administrator](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -187,7 +187,7 @@ The application logs are shipped to the Elasticsearch cluster, and can be visual
 4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
 5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
 
-If you want to log in using the administrator to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
+If you want to log in using the Azure AD user to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
 
 ## Next steps
 
