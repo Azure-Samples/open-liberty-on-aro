@@ -36,7 +36,7 @@ Follow the instructions below to set up an Azure SQL Database single database fo
 
 ### Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) has no database connectivity. To make it connect to Azure SQL Database, a number of files need to be updated or created:.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) has no database connectivity. To make it connect to Azure SQL Database, a number of files need to be updated or created:.
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -197,7 +197,7 @@ Follow the instructions below to set up an Azure Database for PostgreSQL server 
 
 ### Prepare your application (PostgreSQL)
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) has no database connectivity. To make it connect to Azure Database for PostgreSQL, a number of files need to be updated or created:.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) has no database connectivity. To make it connect to Azure Database for PostgreSQL, a number of files need to be updated or created:.
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  

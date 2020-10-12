@@ -24,7 +24,7 @@ You've already set up an Azure Active Directory in the [previous guide](howto-de
 
 ## Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) hasn't enabled authentication and authorization for security. To make it being protected by Azure AD, a number of files need to be updated or created:
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) hasn't enabled authentication and authorization for security. To make it being protected by Azure AD, a number of files need to be updated or created:
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  

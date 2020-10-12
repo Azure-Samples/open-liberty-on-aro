@@ -31,7 +31,7 @@ Follow the instructions below to create a deployment for the hosted Elasticsearc
 
 ### Use Filebeat to retrieve and ship application logs
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
 
 To configure Filebeat as a side container to retrieve and ship application logs, a number of Kubernetes resource YAML files need to be updated or created.
 
@@ -150,7 +150,7 @@ After the newly created Cluster Logging instance is up and running, configure Fl
 
 ### Deploy sample application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
 
 To distribute your application logs to EFK stack, a number of Kubernetes resource YAML files need to be updated or created.
 
