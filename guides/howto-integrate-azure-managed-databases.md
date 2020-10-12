@@ -344,6 +344,9 @@ In this guide, you learned how to:
 
 Advance to these guides, which integrate Liberty application with other Azure services:
 > [!div class="nextstepaction"]
+> [Set up your Liberty application in a multi-node stateless cluster with load balancing](howto-setup-stateless-cluster.md)
+
+> [!div class="nextstepaction"]
 > [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 
 > [!div class="nextstepaction"]

@@ -359,6 +359,9 @@ Advance to one of the next guides, which integrate Liberty applications with dif
 > [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
 
 > [!div class="nextstepaction"]
+> [Set up your Liberty application in a multi-node stateless cluster with load balancing](howto-setup-stateless-cluster.md)
+
+> [!div class="nextstepaction"]
 > [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
 
 > [!div class="nextstepaction"]
