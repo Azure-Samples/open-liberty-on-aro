@@ -10,11 +10,11 @@ In this guide, you will integrate your Liberty application with Azure Active Dir
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md) and return here to continue.
 
 ### Set up Azure Active Directory
 
-You've already set up an Azure Active Directory in the [previous guide](howto-deploy-java-openliberty-app.md#set-up-azure-active-directory), complete the section [Azure Active Directory configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
+You've already set up an Azure Active Directory in the [previous guide](howto-deploy-java-liberty-app.md#set-up-azure-active-directory), complete the section [Azure Active Directory configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
 
 ### Trust singer certificate of the LDAP server
 
@@ -51,7 +51,7 @@ Besides the trust store generated above, collect other parameter values from the
 
 ## Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) hasn't enabled authentication and authorization for security. To make it being protected by Azure AD, a number of files need to be updated or created:
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) hasn't enabled authentication and authorization for security. To make it being protected by Azure AD, a number of files need to be updated or created:
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -135,7 +135,7 @@ After the application image is built, run with your local Docker to verify wheth
 When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to push the application image to the registry.
 
    ```bash
@@ -168,7 +168,7 @@ For reference, these changes have already been applied in `<path-to-repo>/3-inte
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash

@@ -8,7 +8,7 @@
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md) and return here to continue.
 
 ## Connect your application to Azure SQL Database
 
@@ -36,7 +36,7 @@ Follow the instructions below to set up an Azure SQL Database single database fo
 
 ### Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) has no database connectivity. To make it connect to Azure SQL Database, a number of files need to be updated or created:.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) has no database connectivity. To make it connect to Azure SQL Database, a number of files need to be updated or created:.
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -105,7 +105,7 @@ After the application image is built, run with your local Docker to verify wheth
 When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to push the application image to the registry.
 
    ```bash
@@ -136,7 +136,7 @@ For reference, these changes have already been applied in `<path-to-repo>/3-inte
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -197,7 +197,7 @@ Follow the instructions below to set up an Azure Database for PostgreSQL server 
 
 ### Prepare your application (PostgreSQL)
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) has no database connectivity. To make it connect to Azure Database for PostgreSQL, a number of files need to be updated or created:.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) has no database connectivity. To make it connect to Azure Database for PostgreSQL, a number of files need to be updated or created:.
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -266,7 +266,7 @@ After the application image is built, run with your local Docker to verify wheth
 When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to push the application image to the registry.
 
    ```bash
@@ -297,7 +297,7 @@ For reference, these changes have already been applied in `<path-to-repo>/3-inte
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -352,6 +352,9 @@ Advance to these guides, which integrate Liberty application with other Azure se
 
 > [!div class="nextstepaction"]
 > [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
+
+> [!div class="nextstepaction"]
+> [Integrate your Liberty application with Azure Active Directory Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]

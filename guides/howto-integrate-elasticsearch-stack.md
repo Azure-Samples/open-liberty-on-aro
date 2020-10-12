@@ -8,7 +8,7 @@ In this guide, you will integrate your Liberty application with Elasticsearch st
 
 ## Before you begin
 
-In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md) and return here to continue.
+In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md) and return here to continue.
 
 ## Distribute your application logs to hosted Elasticsearch on Microsoft Azure
 
@@ -31,7 +31,7 @@ Follow the instructions below to create a deployment for the hosted Elasticsearc
 
 ### Use Filebeat to retrieve and ship application logs
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With logging in `JSON` format is configured, Filebeat can run as a side-container to collect and ship logs from `messages.log` file to the hosted Elasticsearch service on Microsoft Azure.
 
 To configure Filebeat as a side container to retrieve and ship application logs, a number of Kubernetes resource YAML files need to be updated or created.
 
@@ -47,7 +47,7 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -115,14 +115,14 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 Another option is to install EFK (Elasticsearch, Fluentd, and Kibana) stack on the ARO 4 cluster, which aggregates log data from all containers running on the cluster. The steps below describe the process of deploying EFK stack using the **Elasticsearch Operator** and the **Cluster Logging Operator**.
 > [!NOTE]
-> Elasticsearch is a memory-intensive application. Refer to section [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster) from the previous guide to learn how to specify appropriate virtual machine size for the worker nodes when creating the cluster.
+> Elasticsearch is a memory-intensive application. Refer to section [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-liberty-app.md#set-up-azure-red-hat-openshift-cluster) from the previous guide to learn how to specify appropriate virtual machine size for the worker nodes when creating the cluster.
 
 ### Deploy cluster logging
 
 Follow the instructions in these tutorials and then return here to continue.
 
 1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-2. [Log in to the OpenShift CLI with the token for `kubeadmin`](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for `kubeadmin`](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
 4. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
    > [!NOTE]
@@ -150,7 +150,7 @@ After the newly created Cluster Logging instance is up and running, configure Fl
 
 ### Deploy sample application
 
-The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-openliberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
+The application `<path-to-repo>/2-simple` used in the [previous guide](howto-deploy-java-liberty-app.md) is ready to write logs to `messages.log` file, using Java Logging API `java.util.logging`. With the **Open Liberty Operator**, which sets JSON as console log format and includes message as one of log sources, the application logs will be parsed by Fluentd and posted to Elasticsearch cluster.
 
 To distribute your application logs to EFK stack, a number of Kubernetes resource YAML files need to be updated or created.
 
@@ -163,7 +163,7 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
@@ -223,6 +223,9 @@ Advance to these guides, which integrate Liberty application with other Azure se
 
 > [!div class="nextstepaction"]
 > [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
+
+> [!div class="nextstepaction"]
+> [Integrate your Liberty application with Azure Active Directory Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]

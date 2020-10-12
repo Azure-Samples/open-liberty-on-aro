@@ -12,7 +12,7 @@ In this guide, you will integrate your Liberty application with different Azure 
 
 In previous guides, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these guides, walk them through with the following links and return here to continue.
 
-* [Deploy a Java application inside Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-openliberty-app.md)
+* [Deploy a Java application inside Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md)
 * [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 * [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
 * [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
@@ -21,14 +21,14 @@ In previous guides, a Java application, which is running inside Open Liberty/Web
 
 When you complete all of previous guides, different services used for this guide have already set up. Let's recap them one by one.
 
-1. [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-openliberty-app.md#set-up-azure-red-hat-openshift-cluster).
+1. [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-liberty-app.md#set-up-azure-red-hat-openshift-cluster).
 2. [Set up Azure Active Directory](howto-integrate-aad-oidc.md#set-up-azure-active-directory).
 3. [Create an Azure Database for PostgreSQL server](howto-integrate-azure-managed-databases.md#create-an-azure-database-for-postgresql-server).
 4. [Deploy cluster logging](howto-integrate-elasticsearch-stack.md#deploy-cluster-logging).
 
 ## Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the previous [basic guide](howto-deploy-java-openliberty-app.md) hasn't enabled security, data persistence or distributed logging. To make it integrate with different services, a number of files need to be updated or created:
+The application `<path-to-repo>/2-simple` used in the previous [basic guide](howto-deploy-java-liberty-app.md) hasn't enabled security, data persistence or distributed logging. To make it integrate with different services, a number of files need to be updated or created:
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -69,7 +69,7 @@ Follow steps below to build the application image and push it to the built-in co
 1. Change directory to `<path-to-repo>/4-finish` of your local clone.
 2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
 3. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-4. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+4. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 5. Run the following commands to build application image and push it to the registry.
 
    ```bash
@@ -108,7 +108,7 @@ For reference, these changes have already been applied in `<path-to-repo>/4-fini
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
 1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-openliberty-app.md#log-in-to-the-openshift-cli-with-the-token).
+2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 3. Run the following commands to deploy the application.
 
    ```bash
