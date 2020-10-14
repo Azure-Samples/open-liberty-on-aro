@@ -28,7 +28,7 @@ When you complete all of previous guides, different services used for this guide
 
 ## Prepare your application
 
-The application `<path-to-repo>/2-simple` used in the previous [basic guide](howto-deploy-java-liberty-app.md) hasn't enabled security, data persistence or distributed logging. To make it integrate with different services, a number of files need to be updated or created:
+The application `<path-to-repo>/2-simple` used in the previous [basic guide](howto-deploy-java-liberty-app.md#prepare-the-liberty-application) hasn't enabled security, data persistence or distributed logging. To make it integrate with different services, a number of files need to be updated or created:
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
