@@ -102,11 +102,11 @@ public class Cafe implements Serializable {
 		this.client.target(baseUri).request(MediaType.APPLICATION_JSON).post(Entity.json(coffee));
 		this.name = null;
 		this.price = null;
-		FacesContext.getCurrentInstance().getExternalContext().redirect("/");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("");
 	}
 
 	public void removeCoffee(String coffeeId) throws IOException {
 		this.client.target(baseUri).path(coffeeId).request().delete();
-		FacesContext.getCurrentInstance().getExternalContext().redirect("/");
+		FacesContext.getCurrentInstance().getExternalContext().redirect("");
 	}
 }
