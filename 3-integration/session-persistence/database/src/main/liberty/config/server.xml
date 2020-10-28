@@ -31,7 +31,7 @@
             databaseName="${db.name}"
             user="${db.user}"
             password="${db.password}"
-            ssl="true" />
+            ssl="${db.ssl}" />
     </dataSource>
     <httpSessionDatabase id="SessionDB" dataSourceRef="SessionDS" />
     <httpSession storageRef="SessionDB" />
@@ -44,8 +44,9 @@
             databaseName="${db.name}"
             user="${db.user}"
             password="${db.password}"
-            ssl="true" />
+            ssl="${db.ssl}" />
     </dataSource>
+    <variable name="db.ssl" defaultValue="true"/>
 
     <library id="driver-library">
         <fileset dir="${shared.resource.dir}" includes="*.jar" />
