@@ -20,7 +20,9 @@
 	<h:form>
 		<div class="container">
 			<h2>
-				<h:outputText value="#{messages.welcome}" />
+				<h:outputFormat value="#{messages.welcome}">
+					<f:param value="#{cafe.loggedOnUser}" />
+				</h:outputFormat>
 			</h2>
 			<h3>
 				<h:outputText value="#{messages.ourMenu}" />
@@ -46,7 +48,7 @@
 					<h:outputText value="#{coffee.price}" />
 				</h:column>
 				<h:column>
-					<h:commandLink value="#{messages.delete}"
+					<h:commandLink value="#{messages.delete}" disabled="#{cafe.disabledForDeletion}"
 						action="#{cafe.removeCoffee(coffee.id)}" immediate="true" />
 				</h:column>
 			</h:dataTable>

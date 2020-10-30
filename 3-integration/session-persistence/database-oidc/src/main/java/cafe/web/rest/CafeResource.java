@@ -9,7 +9,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import cafe.model.CafeRepository;
 import cafe.model.entity.Coffee;
@@ -19,6 +24,13 @@ public class CafeResource {
 
 	@Inject
 	private CafeRepository cafeRepository;
+
+	@Inject
+    @ConfigProperty(name = "admin.group.id")
+    private String ADMIN_GROUP_ID;
+
+    @Inject
+    private JsonWebToken jwtPrincipal;
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -43,6 +55,10 @@ public class CafeResource {
 	@DELETE
 	@Path("{id}")
 	public void deleteCoffee(@PathParam("id") Long coffeeId) {
+        if (!this.jwtPrincipal.getGroups().contains(ADMIN_GROUP_ID)) {
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+        
 		this.cafeRepository.removeCoffeeById(coffeeId);
 	}
 }

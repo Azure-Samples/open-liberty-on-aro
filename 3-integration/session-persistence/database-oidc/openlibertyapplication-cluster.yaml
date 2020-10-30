@@ -1,16 +1,42 @@
 apiVersion: openliberty.io/v1beta1
 kind: OpenLibertyApplication
 metadata:
-  name: javaee-cafe-cluster-session-persistence-db
+  name: javaee-cafe-cluster-session-persistence-db-oidc
   namespace: open-liberty-demo
 spec:
   # Note: replace "${REPLICAS}" with number of pods to be created
   replicas: ${REPLICAS}
-  applicationImage: javaee-cafe-session-persistence-db:1.0.0
+  applicationImage: javaee-cafe-session-persistence-db-oidc:1.0.0
   expose: true
+  service:
+    port: 9443
+    certificateSecretRef: tls-crt-secret
+  route:
+    termination: reencrypt
+    certificateSecretRef: tls-crt-secret
   env:
   - name: SHOW_HOST_NAME
     value: 'true'
+  - name: CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: aad-oidc-secret
+        key: client.id
+  - name: CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: aad-oidc-secret
+        key: client.secret
+  - name: TENANT_ID
+    valueFrom:
+      secretKeyRef:
+        name: aad-oidc-secret
+        key: tenant.id
+  - name: ADMIN_GROUP_ID
+    valueFrom:
+      secretKeyRef:
+        name: aad-oidc-secret
+        key: admin.group.id  
   - name: DB_SERVER_NAME
     valueFrom:
       secretKeyRef:

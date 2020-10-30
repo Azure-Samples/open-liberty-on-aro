@@ -17,6 +17,10 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <failOnMissingWebXml>false</failOnMissingWebXml>
+    <client.id></client.id>
+    <client.secret></client.secret>
+    <tenant.id></tenant.id>
+    <admin.group.id></admin.group.id>
     <db.server.name></db.server.name>
     <db.port.number></db.port.number>
     <db.name></db.name>
@@ -34,6 +38,25 @@
       <groupId>javax.xml.bind</groupId>
       <artifactId>jaxb-api</artifactId>
       <version>2.3.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.websphere.appserver.api</groupId>
+      <artifactId>com.ibm.websphere.appserver.api.social</artifactId>
+      <version>1.0.42</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.websphere.appserver.api</groupId>
+      <artifactId>com.ibm.websphere.appserver.api.jwt</artifactId>
+      <version>1.0.16</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.microprofile</groupId>
+      <artifactId>microprofile</artifactId>
+      <version>3.2</version>
+      <type>pom</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -72,6 +95,10 @@
                   <libertyRuntimeVersion>[20.0.0.1,)</libertyRuntimeVersion>
                   <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
                   <bootstrapProperties>
+                    <client.id>${client.id}</client.id>
+                    <client.secret>${client.secret}</client.secret>
+                    <tenant.id>${tenant.id}</tenant.id>
+                    <admin.group.id>${admin.group.id}</admin.group.id>
                     <db.server.name>${db.server.name}</db.server.name>
                     <db.port.number>${db.port.number}</db.port.number>
                     <db.name>${db.name}</db.name>

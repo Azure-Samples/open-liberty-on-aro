@@ -2,28 +2,23 @@ package cafe.web.view;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.invoke.MethodHandles;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.logging.Logger;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
+import javax.security.enterprise.SecurityContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import cafe.model.entity.Coffee;
 
@@ -32,11 +27,22 @@ import cafe.model.entity.Coffee;
 public class Cafe implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
-
 	private String baseUri;
 	private transient Client client;
 
+    @Inject
+    private transient SecurityContext securityContext;
+
+    @Inject
+    private transient CafeJwtUtil jwtUtil;
+
+    @Inject
+    private transient CafeRequestFilter filter;
+
+    @Inject
+    @ConfigProperty(name = "admin.group.id")
+    private transient String ADMIN_GROUP_ID;
+    
 	@NotNull
 	@NotEmpty
 	protected String name;
@@ -65,33 +71,29 @@ public class Cafe implements Serializable {
 		return coffeeList;
 	}
 
+    public String getLoggedOnUser() {
+        return securityContext.getCallerPrincipal().getName();
+    }
+
+    public boolean isDisabledForDeletion() {
+        List<String> groups = jwtUtil != null ? jwtUtil.getJwtGroupsClaim() : CafeJwtUtil.getJwtGroupsClaimAttr();
+        return !groups.contains(ADMIN_GROUP_ID);
+    }
+
     public String getHostName() {
         return "true".equals(System.getenv("SHOW_HOST_NAME")) ? System.getenv("HOSTNAME") : "";
     }
 
-	@PostConstruct
-	private void init() {
-		try {
-			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-					.getRequest();
-			name = (String) request.getSession().getAttribute("coffeeName");
-			price = (Double) request.getSession().getAttribute("coffeePrice");
+    @PostConstruct
+    private void init() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+        name = (String) request.getSession().getAttribute("coffeeName");
+        price = (Double) request.getSession().getAttribute("coffeePrice");
 
-			InetAddress inetAddress = InetAddress.getByName(request.getServerName());
-
-            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-            baseUri = context.getRequestScheme() + "://" + inetAddress.getHostName() + ":"
-                    + context.getRequestServerPort() + request.getContextPath() + "/rest/coffees";
-            this.client = ClientBuilder.newBuilder().hostnameVerifier(new HostnameVerifier() {
-				public boolean verify(String hostname, SSLSession session) {
-					return true;
-				}
-			}).build();
-		} catch (IllegalArgumentException | NullPointerException | WebApplicationException | UnknownHostException ex) {
-			logger.severe("Processing of HTTP response failed.");
-			ex.printStackTrace();
-		}
-	}
+        baseUri = "http://localhost:9080" + request.getContextPath() + "/rest/coffees";
+        this.client = ClientBuilder.newBuilder().build().register(filter);
+    }
 
 	private void getAllCoffees() {
 		this.coffeeList = this.client.target(this.baseUri).path("/").request(MediaType.APPLICATION_JSON)

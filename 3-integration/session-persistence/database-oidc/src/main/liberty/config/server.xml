@@ -8,6 +8,12 @@
         <feature>jaxrs-2.1</feature>
         <feature>ejbLite-3.2</feature>
         <feature>jpa-2.2</feature>
+        <feature>socialLogin-1.0</feature>
+        <feature>transportSecurity-1.0</feature>
+        <feature>appSecurity-3.0</feature>
+        <feature>jwt-1.0</feature>
+        <feature>mpJwt-1.1</feature>
+        <feature>mpConfig-1.3</feature>
         <feature>sessionDatabase-1.0</feature>
     </featureManager>
 
@@ -21,7 +27,37 @@
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
         location="${server.config.dir}/apps/javaee-cafe.war">
+        <!-- Grant role "users" to all authenticated users -->
+        <application-bnd>
+            <security-role name="users">
+                <special-subject type="ALL_AUTHENTICATED_USERS" />
+            </security-role>
+        </application-bnd>
     </webApplication>
+
+    <!-- trust JDK’s default truststore -->
+    <ssl id="defaultSSLConfig"  trustDefaultCerts="true" />
+
+    <!-- Add your tenant id, client ID and secret from AAD -->
+    <oidcLogin
+        id="liberty-aad-oidc-javaeecafe" clientId="${client.id}"
+        clientSecret="${client.secret}"
+        discoveryEndpoint="https://login.microsoftonline.com/${tenant.id}/v2.0/.well-known/openid-configuration"
+        signatureAlgorithm="RS256"
+        userNameAttribute="preferred_username" />
+
+    <!-- JWT consumer -->
+    <mpJwt id="jwtUserConsumer" 
+        jwksUri="https://login.microsoftonline.com/${tenant.id}/discovery/v2.0/keys" 
+        issuer="https://login.microsoftonline.com/${tenant.id}/v2.0"
+        audiences="${client.id}"
+        userNameAttribute="preferred_username" 
+        authFilterRef="mpJwtAuthFilter" />
+
+    <!-- JWT auth filter -->
+    <authFilter id="mpJwtAuthFilter">
+        <requestUrl id="myRequestUrl" urlPattern="/rest" matchType="contains"/>
+    </authFilter>
 
     <dataSource id="SessionDS">
         <jdbcDriver libraryRef="driver-library" />
