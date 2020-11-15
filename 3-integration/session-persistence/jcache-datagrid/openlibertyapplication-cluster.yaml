@@ -1,0 +1,86 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-cluster-session-jcache-datagrid
+  namespace: open-liberty-demo
+spec:
+  # Note: replace "${REPLICAS}" with number of pods to be created
+  replicas: ${REPLICAS}
+  applicationImage: javaee-cafe-session-persistence-jcache-datagrid:1.0.0
+  expose: true
+  service:
+    port: 9443
+    certificateSecretRef: tls-crt-secret
+  route:
+    termination: reencrypt
+    certificateSecretRef: tls-crt-secret
+  env:
+  - name: SHOW_HOST_NAME
+    value: 'true'
+  - name: SASL_MECHANISM
+    value: DIGEST-MD5
+  - name: INFINISPAN_HOST
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: infinispan.host
+  - name: INFINISPAN_PORT
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: infinispan.port
+  - name: INFINISPAN_USER
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: infinispan.user
+  - name: INFINISPAN_PASS
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: infinispan.pass
+  - name: KEYSTORE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: keystore.name
+  - name: KEYSTORE_PASS
+    valueFrom:
+      secretKeyRef:
+        name: infinispan-secret
+        key: keystore.pass
+  - name: DB_SERVER_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-postgres
+        key: db.server.name
+  - name: DB_PORT_NUMBER
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-postgres
+        key: db.port.number
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-postgres
+        key: db.name
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-postgres
+        key: db.user
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-postgres
+        key: db.password
+  volumeMounts:
+  - name: config
+    mountPath: /config/${KEYSTORE_NAME}
+    readOnly: true
+    subPath: ${KEYSTORE_NAME}
+  volumes:
+  - name: config
+    configMap:
+      defaultMode: 0600
+      name: keystore-config
