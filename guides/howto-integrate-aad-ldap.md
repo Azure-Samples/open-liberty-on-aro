@@ -21,8 +21,8 @@ You've already set up an Azure Active Directory in the [previous guide](howto-de
 For SSL communication with an LDAP server to succeed, the signer certificate for the LDAP server must be added to the trust store that is referenced by the Liberty server. Execute the following commands to complete this step.
 
 ```bash
-# Change directory to "<path-to-repo>/3-integration/aad-ldap"
-cd <path-to-repo>/3-integration/aad-ldap
+# Change directory to "<path-to-repo>/3-integration/aad-ldap/src/main/liberty/config"
+cd <path-to-repo>/3-integration/aad-ldap/src/main/liberty/config
 
 # Generate a key store file with additional user inputs
 # Note: write down the specified key store name and key store password
