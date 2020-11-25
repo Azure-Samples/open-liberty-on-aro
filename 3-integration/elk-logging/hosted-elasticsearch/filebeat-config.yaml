@@ -9,7 +9,7 @@ data:
     - type: log
       paths:
         - /logs/messages*.log
-      json.message_key: ibm_datetime
+      json.message_key: message
       json.keys_under_root: true
       json.add_error_key: true
     cloud.id: ${ELASTIC_CLOUD_ID}
