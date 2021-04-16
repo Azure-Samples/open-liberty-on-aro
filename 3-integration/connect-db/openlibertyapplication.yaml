@@ -17,12 +17,12 @@ spec:
   # - replace "${DB_SERVER_NAME}", "${DB_PORT_NUMBER}", "${DB_NAME}", "${DB_USER}" and "${DB_PASSWORD}" with the database server name, port, database name, username and password.
   env:
     - name: DB_SERVER_NAME
-      value: ${DB_SERVER_NAME}
+      value: "${DB_SERVER_NAME}"
     - name: DB_PORT_NUMBER
-      value: ${DB_PORT_NUMBER}
+      value: "${DB_PORT_NUMBER}"
     - name: DB_NAME
-      value: ${DB_NAME}
+      value: "${DB_NAME}"
     - name: DB_USER
-      value: ${DB_USER}
+      value: "${DB_USER}"
     - name: DB_PASSWORD
-      value: ${DB_PASSWORD}
+      value: "${DB_PASSWORD}"
