@@ -1,0 +1,32 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: vs2017-win2016
+
+steps:
+- task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
+  inputs:
+    toolMajorVersion: 'V2'
+    verboseOutput: true
+- task: PostAnalysis@1
+  inputs:
+    AllTools: false
+    APIScan: false
+    BinSkim: false
+    CodesignValidation: false
+    CredScan: true
+    FortifySCA: false
+    FxCop: false
+    ModernCop: false
+    PoliCheck: false
+    RoslynAnalyzers: false
+    SDLNativeRules: false
+    Semmle: false
+    TSLint: false
+    ToolLogsNotFoundAction: 'Standard'
