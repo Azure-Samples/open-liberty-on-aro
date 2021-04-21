@@ -10,7 +10,7 @@ urlFragment: "open-liberty-on-aro"
 
 # Open/WebSphere Liberty on Azure Red Hat OpenShift Samples
 
-<!-- 
+<!--
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
 
 Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
