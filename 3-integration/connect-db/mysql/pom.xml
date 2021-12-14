@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>javaee-cafe</artifactId>
+  <artifactId>javaee-cafe-mysql</artifactId>
   <groupId>javaee-cafe</groupId>
-  <version>0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>war</packaging>
   <name>${project.artifactId}</name>
   <description>This is the basic Java EE application used in the demo.
@@ -13,6 +13,7 @@
   <properties>
     <javaee.api.version>8.0</javaee.api.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
     <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -27,6 +28,13 @@
     <liberty.bootstrap.db.name>${db.name}</liberty.bootstrap.db.name>
     <liberty.bootstrap.db.user>${db.user}</liberty.bootstrap.db.user>
     <liberty.bootstrap.db.password>${db.password}</liberty.bootstrap.db.password>
+    <param.replicas>3</param.replicas>
+    <param.db.server.name>${env.DB_SERVER_NAME}</param.db.server.name>
+    <param.db.port.number>${env.DB_PORT_NUMBER}</param.db.port.number>
+    <param.db.name>${env.DB_NAME}</param.db.name>
+    <param.db.user>${env.DB_USER}</param.db.user>
+    <param.db.password>${env.DB_PASSWORD}</param.db.password>
+    <param.namespace>${env.NAMESPACE}</param.namespace>
   </properties>
   <dependencies>
     <dependency>
@@ -87,7 +95,7 @@
                 </configuration>
               </execution>
               <execution>
-                <id>02-aks-config</id>
+                <id>02-aro-config</id>
                 <phase>validate</phase>
                 <goals>
                   <goal>copy-resources</goal>
@@ -96,7 +104,7 @@
                   <outputDirectory>${basedir}/target</outputDirectory>
                   <resources>
                     <resource>
-                      <directory>src/main/aks</directory>
+                      <directory>src/main/aro</directory>
                       <filtering>true</filtering>
                     </resource>
                   </resources>

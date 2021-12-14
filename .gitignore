@@ -18,3 +18,4 @@ buildNumber.properties
 *.key
 *.cer
 *.p12
+.vscode/
