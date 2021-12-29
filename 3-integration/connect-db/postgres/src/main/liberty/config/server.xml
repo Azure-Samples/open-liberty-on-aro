@@ -19,7 +19,7 @@
 
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
-        location="${server.config.dir}/apps/javaee-cafe.war">
+        location="${server.config.dir}/apps/javaee-cafe-postgres.war">
     </webApplication>
 
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
