@@ -1,0 +1,183 @@
+name: ARO Update Cafe App with PostgreSQL DB connection
+
+on:
+  workflow_dispatch:
+    inputs:
+      clusterRGName: 
+        description: "ARO cluster resource group name"
+        required: true
+      clusterName: 
+        description: "ARO cluster name"
+        required: true
+      containerRegistryUrl: 
+        description: "Container Registry URL"
+        required: true
+      projMgrUsername:
+        description: "Project manager username"
+        required: true
+      appProjectName:
+        description: "Existing Open Liberty Project Name"
+        required: true
+  repository_dispatch:
+
+env:
+    azCliVersion: 2.23.0
+    azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+    dbAdminUser: ${{ secrets.DB_ADMIN_USER }}
+    dbPassword: ${{ secrets.DB_PASSWORD }}
+    dbServerName: ${{ secrets.DB_SERVER_NAME }}
+    location: eastus
+
+jobs:
+    deploy-app:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Set up JDK 1.8
+              uses: actions/setup-java@v1
+              with:
+                java-version: 1.8
+            - name: Install oc
+              run: |
+                cd ~
+                wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+                mkdir openshift
+                tar -zxvf openshift-client-linux.tar.gz -C openshift
+                echo 'export PATH=$PATH:~/openshift' >> ~/.bashrc && source ~/.bashrc
+            - name: Install xmlstarlet
+              run: |
+                sudo apt-get install -y xmlstarlet
+            - name: Install Docker
+              run: |
+                # Install docker
+                sudo apt-get -q update
+                sudo apt-get -y -q install apt-transport-https
+                curl -m 120 -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+                echo \
+                    "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+                sudo apt-get -q update
+                sudo apt-get -y -q install docker-ce docker-ce-cli containerd.io
+
+                echo "docker version"
+                sudo docker --version
+                sudo systemctl start docker
+            - uses: azure/login@v1
+              id: azure-login
+              with:
+                creds: ${{ env.azureCredentials }}
+            - name: Login with oc and docker
+              run: |
+                oc version
+                apiServer=$(az aro show --name ${{ github.event.inputs.clusterName }} --resource-group ${{ github.event.inputs.clusterRGName }} --query apiserverProfile.url -o tsv)
+                projMgrUsername=$(echo ${{ github.event.inputs.projMgrUsername }} | cut -d',' -f1)
+                oc login $apiServer -u ${projMgrUsername} -p ${{ secrets.ARO_PASSWORD }}
+                Container_Registry_URL=${{ github.event.inputs.containerRegistryUrl }}
+                docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+            - name: Checkout open-liberty-on-aks
+              uses: actions/checkout@v2
+            - name: Setup environment variables
+              run: |
+                echo "DB_SERVER_NAME"=${{ env.dbServerName }} >> $GITHUB_ENV
+                echo "DB_PORT_NUMBER"=5432 >> $GITHUB_ENV
+                echo "DB_NAME"=postgres >> $GITHUB_ENV
+                echo "DB_USER"=${{ env.dbAdminUser }} >> $GITHUB_ENV
+                echo "DB_PASSWORD"=${{ env.dbPassword }} >> $GITHUB_ENV
+                echo "NAMESPACE"=${{ github.event.inputs.appProjectName }} >> $GITHUB_ENV
+            - name: Build the app
+              run: |
+                echo "build the Cafe web app"
+                cd 3-integration/connect-db/postgres
+                
+                export DB_SERVER_NAME=$DB_SERVER_NAME
+                export DB_PORT_NUMBER=$DB_PORT_NUMBER
+                export DB_NAME=$DB_NAME
+                export DB_USER=$DB_USER
+                export DB_PASSWORD=$DB_PASSWORD
+                export NAMESPACE=$NAMESPACE
+
+                mvn clean install
+            - name: Archive server.xml
+              uses: actions/upload-artifact@v1
+              with:
+                name: archivefiles
+                path: 3-integration/connect-db/postgres/target/liberty/wlp/usr/servers/defaultServer/server.xml
+            - name: Archive Dockerfile
+              uses: actions/upload-artifact@v1
+              with:
+                name: archivefiles
+                path: 3-integration/connect-db/postgres/target/Dockerfile
+            - name: Build image
+              run: |
+                cd 3-integration/connect-db/postgres
+                IMAGE_NAME=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)
+                IMAGE_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+
+                echo $IMAGE_NAME $IMAGE_VERSION
+                echo "IMAGE_NAME"=$IMAGE_NAME >> $GITHUB_ENV
+                echo "IMAGE_VERSION"=$IMAGE_VERSION >> $GITHUB_ENV
+
+                cd target
+                docker build -t ${IMAGE_NAME}:${IMAGE_VERSION} --pull --file=Dockerfile .
+            - name: Push image
+              run: |
+                Container_Registry_URL=${{ github.event.inputs.containerRegistryUrl }}
+                docker tag ${IMAGE_NAME}:${IMAGE_VERSION} ${Container_Registry_URL}/${NAMESPACE}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}
+                docker push ${Container_Registry_URL}/${NAMESPACE}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}
+            - name: Archive db-secret.yaml
+              uses: actions/upload-artifact@v1
+              with:
+                name: archivefiles
+                path: 3-integration/connect-db/postgres/target/db-secret.yaml
+            - name: Update image path and place in values
+              run: |
+                cd 3-integration/connect-db/postgres/target
+                Container_Registry_URL=${{ github.event.inputs.containerRegistryUrl }}
+                sed -i "/applicationImage/d" openlibertyapplication.yaml
+                lineNumber=$(grep -n 'replicas' openlibertyapplication.yaml | grep -Eo '^[^:]+')
+                sed -i "$lineNumber a \  applicationImage: ${Container_Registry_URL}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}" openlibertyapplication.yaml
+            - name: Archive openlibertyapplication.yaml
+              uses: actions/upload-artifact@v1
+              with:
+                name: archivefiles
+                path: 3-integration/connect-db/postgres/target/openlibertyapplication.yaml
+            - name: Connect to ARO cluster
+              run: |
+                cd 3-integration/connect-db/postgres/target
+                oc apply -f db-secret.yaml
+
+                timestampBeforeDeployment=$(date +%s)
+                echo "timestampBeforeDeployment=${timestampBeforeDeployment}" >> $GITHUB_ENV
+                sleep 5
+
+                oc apply -f openlibertyapplication.yaml
+            - name: Verify pods are restarted
+              run: |
+                # interval of checking pod status.
+                checkPodStatusInterval=20
+                # max attempt to check pod status.
+                checkPodStatusMaxAttempts=30
+                # other variables
+                updatedPodNum=0
+                attempt=0
+                appReplicas=3
+                echo $timestampBeforeDeployment $appReplicas $checkPodStatusMaxAttempts $checkPodStatusInterval
+                while [[ ${updatedPodNum} -lt ${appReplicas} ]] && [[ $attempt -le ${checkPodStatusMaxAttempts} ]]; do
+                    echo "attempts ${attempt}"
+                    ret=$(oc get pods -n ${NAMESPACE} -o json | jq '.items[] | .metadata.creationTimestamp' | tr -d "\"")
+                    counter=0
+                    for item in $ret; do
+                        podCreateTimeStamp=$(date -u -d "${item}" +"%s")
+                        echo "pod create time: $podCreateTimeStamp, base time: ${timestampBeforeDeployment}"
+                        if [[ ${podCreateTimeStamp} -gt ${timestampBeforeDeployment} ]]; then
+                            counter=$((counter + 1))
+                        fi
+                    done
+                    updatedPodNum=$counter
+                    echo "Number of new pod: ${updatedPodNum}"
+                    attempt=$((attempt + 1))
+                    sleep ${checkPodStatusInterval}
+                done
+                if [[ ${attempt} -gt ${checkPodStatusMaxAttempts} ]]; then
+                    echo "Failed to restart all pods. "
+                    exit 1
+                fi
