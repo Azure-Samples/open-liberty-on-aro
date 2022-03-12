@@ -1,0 +1,15 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-ssl
+  namespace: open-liberty-demo
+spec:
+  replicas: 1
+  applicationImage: javaee-cafe-ssl:1.0.0
+  expose: true
+  service:
+    port: 9443
+    certificateSecretRef: tls-crt-secret
+  route:
+    termination: reencrypt
+    certificateSecretRef: tls-crt-secret
