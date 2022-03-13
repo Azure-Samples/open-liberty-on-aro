@@ -98,3 +98,4 @@ oc delete imagestream javaee-cafe-ssl
 See the following references for more information.
 
 * [Specify your own certificates for the Service and Route](https://github.com/application-stacks/runtime-component-operator/blob/main/doc/user-guide-v1beta2.adoc#certificates)
+* [TLS certificate configuration](https://github.com/OpenLiberty/ci.docker/blob/master/SECURITY.md#tls-certificate-configuration)
