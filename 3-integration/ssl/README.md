@@ -69,9 +69,9 @@ export CA_CRT=$(cat tls.crt | base64 -w 0)
 export DEST_CA_CRT=$(cat tls.crt | base64 -w 0)
 export TLS_CRT=$(cat tls.crt | base64 -w 0)
 export TLS_KEY=$(cat tls.key | base64 -w 0)
-envsubst < tls-crt-secret.yaml | oc create -f -
+envsubst < tls-crt-secret.yaml | oc apply -f -
 
-envsubst < openlibertyapplication.yaml | oc create -f -
+oc apply -f openlibertyapplication.yaml
 ```
 
 To test the deployment, copy the value of `HOST/PORT` of the route which routes traffic to/from the application:
@@ -81,6 +81,36 @@ oc get route javaee-cafe-ssl
 ```
 
 Open `https://<copied-value>` in the browser to test the application.
+
+### Automatically roll the new image out to the deployment
+
+When an image stream tag is updated to point to a new image, OpenShift Container Platform can automatically take action to roll the new image out to resources that were using the old image, e.g,  OpenShift Container Platform resources including deployment configurations and build configurations.
+
+For CRD OpenLibertyApplication supported by the Open Liberty Operator, it's tested and verified that it can also be automatically triggered by changes to image stream tags.
+
+Follow steps below to automatically roll the new image out to the deployment.
+
+1. Open a new command terminal, sign in with the user, then watch the status of the pod of the deployment to monitor the rolling out progress:
+
+   ```
+   oc get pod -w
+   ```
+
+1. Make some code changes that are visible in the UI.
+1. Switch to the original command terminal, build and run locally to verify if it works:
+
+   ```
+   mvn clean package
+   mvn liberty:dev
+   ```
+
+1. start a new build using the same build configuration creatd before:
+
+   ```
+   oc start-build javaee-cafe-ssl --from-dir . --follow
+   ```
+
+1. Once the build completes and new image rolling out is done, refresh the UI of the sample app to check if the changes take effect. Press "Ctrl+C" in the new command terminal to stop the monitoring of pod status.
 
 ### Clean up
 
@@ -99,3 +129,4 @@ See the following references for more information.
 
 * [Specify your own certificates for the Service and Route](https://github.com/application-stacks/runtime-component-operator/blob/main/doc/user-guide-v1beta2.adoc#certificates)
 * [TLS certificate configuration](https://github.com/OpenLiberty/ci.docker/blob/master/SECURITY.md#tls-certificate-configuration)
+* [Triggering updates on image stream changes](https://docs.openshift.com/container-platform/4.9/openshift_images/triggering-updates-on-imagestream-changes.html)
