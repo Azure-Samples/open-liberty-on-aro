@@ -6,6 +6,7 @@ metadata:
 spec:
   replicas: 1
   applicationImage: javaee-cafe-ssl:1.0.0
+  pullPolicy: Always
   expose: true
   service:
     port: 9443
