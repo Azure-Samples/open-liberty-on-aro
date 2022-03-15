@@ -61,6 +61,26 @@ oc start-build javaee-cafe-ssl --from-dir . --follow
 
 Finally, deploy the sample to the ARO 4 cluster:
 
+### Option 1: create a passthrough route
+
+You can configure a secure route using passthrough termination. With passthrough termination, encrypted traffic is sent straight to the destination without the router providing TLS termination. Therefore no key or certificate is required on the route.
+
+```
+oc apply -f openlibertyapplication-passthrough.yaml
+```
+
+To test the deployment, copy the value of `HOST/PORT` of the route which routes traffic to/from the application:
+
+```
+oc get route javaee-cafe-ssl-passthrough
+```
+
+Open `https://<copied-value>` in the browser to test the application.
+
+### Option 2: create a re-encrypt route with a custom certificate
+
+You can also configure a secure route using reencrypt TLS termination with a custom certificate.
+
 ```
 # Create secret "tls-crt-secret"
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
@@ -71,18 +91,18 @@ export TLS_CRT=$(cat tls.crt | base64 -w 0)
 export TLS_KEY=$(cat tls.key | base64 -w 0)
 envsubst < tls-crt-secret.yaml | oc apply -f -
 
-oc apply -f openlibertyapplication.yaml
+oc apply -f openlibertyapplication-reencrypt.yaml
 ```
 
 To test the deployment, copy the value of `HOST/PORT` of the route which routes traffic to/from the application:
 
 ```
-oc get route javaee-cafe-ssl
+oc get route javaee-cafe-ssl-reencrypt
 ```
 
 Open `https://<copied-value>` in the browser to test the application.
 
-### Automatically roll the new image out to the deployment
+## Automatically roll the new image out to the deployment
 
 When an image stream tag is updated to point to a new image, OpenShift Container Platform can automatically take action to roll the new image out to resources that were using the old image, e.g,  OpenShift Container Platform resources including deployment configurations and build configurations.
 
@@ -117,7 +137,8 @@ Follow steps below to automatically roll the new image out to the deployment.
 To clean up all resources deployed to the ARO 4 cluster:
 
 ```
-oc delete openlibertyapplication javaee-cafe-ssl
+oc delete openlibertyapplication javaee-cafe-ssl-passthrough
+oc delete openlibertyapplication javaee-cafe-ssl-reencrypt
 oc delete secret tls-crt-secret
 oc delete buildconfig javaee-cafe-ssl
 oc delete imagestream javaee-cafe-ssl
@@ -129,4 +150,5 @@ See the following references for more information.
 
 * [Specify your own certificates for the Service and Route](https://github.com/application-stacks/runtime-component-operator/blob/main/doc/user-guide-v1beta2.adoc#certificates)
 * [TLS certificate configuration](https://github.com/OpenLiberty/ci.docker/blob/master/SECURITY.md#tls-certificate-configuration)
+* [Secured routes](https://docs.openshift.com/container-platform/4.9/networking/routes/secured-routes.html)
 * [Triggering updates on image stream changes](https://docs.openshift.com/container-platform/4.9/openshift_images/triggering-updates-on-imagestream-changes.html)

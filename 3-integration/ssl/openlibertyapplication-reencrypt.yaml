@@ -1,7 +1,7 @@
 apiVersion: apps.openliberty.io/v1beta2
 kind: OpenLibertyApplication
 metadata:
-  name: javaee-cafe-ssl
+  name: javaee-cafe-ssl-reencrypt
   namespace: open-liberty-demo
 spec:
   replicas: 1

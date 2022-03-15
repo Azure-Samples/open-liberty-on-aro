@@ -1,0 +1,14 @@
+apiVersion: apps.openliberty.io/v1beta2
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe-ssl-passthrough
+  namespace: open-liberty-demo
+spec:
+  replicas: 1
+  applicationImage: javaee-cafe-ssl:1.0.0
+  pullPolicy: Always
+  expose: true
+  service:
+    port: 9443
+  route:
+    termination: passthrough
