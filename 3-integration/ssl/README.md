@@ -152,6 +152,7 @@ oc delete imagestream javaee-cafe-ssl
 
 See the following references for more information.
 
+* [Building and pushing the images](https://openliberty.io/guides/cloud-openshift-operator.html#building-and-pushing-the-images)
 * [Specify your own certificates for the Service and Route](https://github.com/application-stacks/runtime-component-operator/blob/main/doc/user-guide-v1beta2.adoc#certificates)
 * [TLS certificate configuration](https://github.com/OpenLiberty/ci.docker/blob/master/SECURITY.md#tls-certificate-configuration)
 * [Secured routes](https://docs.openshift.com/container-platform/4.9/networking/routes/secured-routes.html)
