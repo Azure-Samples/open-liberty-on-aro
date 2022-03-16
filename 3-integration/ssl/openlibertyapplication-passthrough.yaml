@@ -10,5 +10,10 @@ spec:
   expose: true
   service:
     port: 9443
+    ports:
+      - port: 9080
+        targetPort: 9080
+        name: http
   route:
     termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect

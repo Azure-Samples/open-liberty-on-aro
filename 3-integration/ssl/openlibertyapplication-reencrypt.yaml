@@ -10,7 +10,12 @@ spec:
   expose: true
   service:
     port: 9443
+    ports:
+      - port: 9080
+        targetPort: 9080
+        name: http
     certificateSecretRef: tls-crt-secret
   route:
     termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect
     certificateSecretRef: tls-crt-secret
