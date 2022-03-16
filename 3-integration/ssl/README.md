@@ -77,6 +77,8 @@ oc get route javaee-cafe-ssl-passthrough
 
 Open `https://<copied-value>` in the browser to test the application.
 
+Alternatively, you can also open the copied value in the browser, and it's expected to be automatically redirected to `https` endpoint accordingly. However, the fix for the open issue [insecureEdgeTerminationPolicy not set to redirect on passthrough route](https://github.com/OpenLiberty/open-liberty-operator/issues/297#issuecomment-996787319) seems not released to Open Liberty Operator 0.8.0 yet, so redirect won't work now.
+
 ### Option 2: create a re-encrypt route with a custom certificate
 
 You can also configure a secure route using reencrypt TLS termination with a custom certificate.
@@ -101,6 +103,8 @@ oc get route javaee-cafe-ssl-reencrypt
 ```
 
 Open `https://<copied-value>` in the browser to test the application.
+
+Alternatively, you can just open the copied value in the browser, it will be automatically redirected to `https` endpoint accordingly.
 
 ## Automatically roll the new image out to the deployment
 
