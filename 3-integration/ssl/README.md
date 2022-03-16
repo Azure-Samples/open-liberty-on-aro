@@ -77,7 +77,7 @@ oc get route javaee-cafe-ssl-passthrough
 
 Open `https://<copied-value>` in the browser to test the application.
 
-Alternatively, you can also open the copied value in the browser, and it's expected to be automatically redirected to `https` endpoint accordingly. However, the fix for the open issue [insecureEdgeTerminationPolicy not set to redirect on passthrough route](https://github.com/OpenLiberty/open-liberty-operator/issues/297#issuecomment-996787319) seems not released to Open Liberty Operator 0.8.0 yet, so redirect won't work now.
+Alternatively, you can also open the copied value in the browser, and it's expected to be automatically redirected to `https` endpoint accordingly. However, the fix for the open issue [insecureEdgeTerminationPolicy not set to redirect on passthrough route](https://github.com/OpenLiberty/open-liberty-operator/issues/297#issuecomment-996787319) seems not released in Open Liberty Operator 0.8.0 which is currently available from the OperatorHub, so redirect won't work now.
 
 ### Option 2: create a re-encrypt route with a custom certificate
 
@@ -155,4 +155,5 @@ See the following references for more information.
 * [Specify your own certificates for the Service and Route](https://github.com/application-stacks/runtime-component-operator/blob/main/doc/user-guide-v1beta2.adoc#certificates)
 * [TLS certificate configuration](https://github.com/OpenLiberty/ci.docker/blob/master/SECURITY.md#tls-certificate-configuration)
 * [Secured routes](https://docs.openshift.com/container-platform/4.9/networking/routes/secured-routes.html)
+* [Secured routes in OpenShift 3.7](https://docs.openshift.com/container-platform/3.7/architecture/networking/routes.html#secured-routes)
 * [Triggering updates on image stream changes](https://docs.openshift.com/container-platform/4.9/openshift_images/triggering-updates-on-imagestream-changes.html)
