@@ -235,7 +235,7 @@ To build the application image, Dockerfile needs to be prepared in advance:
 Follow steps below to build the application image:
 
 1. Change directory to `<path-to-repo>/3-integration/connect-db/postgres` of your local clone.
-2. Download [postgresql-42.2.4.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar) and put it to current working directory.
+2. Download [postgresql-42.3.3.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.3/postgresql-42.3.3.jar) and put it to current working directory.
 3. Run the following commands to build application image.
 
    ```bash
