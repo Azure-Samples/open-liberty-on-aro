@@ -56,7 +56,7 @@
             password="${db.password}"
             ssl="${db.ssl}" />
     </dataSource>
-    <variable name="db.ssl" defaultValue="true"/>
+    <variable name="db.ssl" defaultValue="false"/>
 
     <library id="driver-library">
         <fileset dir="${shared.resource.dir}" includes="*.jar" />
