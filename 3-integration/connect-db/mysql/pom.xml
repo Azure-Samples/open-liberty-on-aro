@@ -11,7 +11,7 @@
     It is a simple CRUD application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation, JPA).
   </description>
   <properties>
-    <javaee.api.version>8.0</javaee.api.version>
+    <jakartaee.api.version>8.0.0</jakartaee.api.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -38,9 +38,9 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>${javaee.api.version}</version>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>${jakartaee.api.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
