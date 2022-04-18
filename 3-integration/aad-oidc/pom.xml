@@ -12,7 +12,7 @@
     It is a simple CRUD application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation).
   </description>
   <properties>
-    <javaee.api.version>8.0</javaee.api.version>
+    <jakartaee.api.version>8.0.0</jakartaee.api.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -24,9 +24,9 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-api</artifactId>
-      <version>${javaee.api.version}</version>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-api</artifactId>
+      <version>${jakartaee.api.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>com.ibm.websphere.appserver.api</groupId>
       <artifactId>com.ibm.websphere.appserver.api.jwt</artifactId>
-      <version>1.0.16</version>
+      <version>1.1.63</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -53,6 +53,12 @@
       <version>3.2</version>
       <type>pom</type>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.json.bind</groupId>
+          <artifactId>javax.json.bind-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <build>
