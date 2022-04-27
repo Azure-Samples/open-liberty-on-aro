@@ -4,10 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- master
 
 pool:
-  vmImage: vs2017-win2016
+  vmImage: windows-latest
 
 steps:
 - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredScan@2
