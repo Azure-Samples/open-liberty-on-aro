@@ -67,7 +67,7 @@ To build the application image, Dockerfile needs to be prepared in advance:
 Follow steps below to build the application image and push it to the built-in container image registry:
 
 1. Change directory to `<path-to-repo>/4-finish` of your local clone.
-2. Download [postgresql-42.3.3.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.3/postgresql-42.3.3.jar) and put it to current working directory.
+2. Download [postgresql-42.4.1.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.4.1/postgresql-42.4.1.jar) and put it to current working directory.
 3. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
 4. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
 5. Run the following commands to build application image and push it to the registry.
