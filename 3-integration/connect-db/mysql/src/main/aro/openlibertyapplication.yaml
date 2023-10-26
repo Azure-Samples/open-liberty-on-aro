@@ -1,4 +1,4 @@
-apiVersion: apps.openliberty.io/v1beta2
+apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
   name: ${project.artifactId}
@@ -6,6 +6,7 @@ metadata:
 spec:
   replicas: ${param.replicas}
   applicationImage: ${project.artifactId}:${project.version}
+  pullPolicy: Always
   expose: true
   env:
     - name: DB_SERVER_NAME
