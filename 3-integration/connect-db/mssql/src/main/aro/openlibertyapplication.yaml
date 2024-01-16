@@ -1,0 +1,30 @@
+apiVersion: apps.openliberty.io/v1
+kind: OpenLibertyApplication
+metadata:
+  name: javaee-cafe
+spec:
+  replicas: 3
+  applicationImage: javaee-cafe:v1
+  pullPolicy: Always
+  expose: true
+  env:
+  - name: DB_SERVER_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.server.name
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.name
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.user
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.password
