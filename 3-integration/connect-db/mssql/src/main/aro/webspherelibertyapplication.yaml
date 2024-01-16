@@ -1,0 +1,44 @@
+apiVersion: liberty.websphere.ibm.com/v1
+kind: WebSphereLibertyApplication
+metadata:
+  name: javaee-cafe
+spec:
+  license:
+    accept: true
+    edition: IBM WebSphere Application Server
+    metric: Processor Value Unit (PVU)
+    productEntitlementSource: Standalone
+  replicas: 3
+  applicationImage: javaee-cafe:v1
+  pullPolicy: Always
+  expose: true
+  service:
+    port: 9443
+    ports:
+      - port: 9080
+        targetPort: 9080
+        name: http
+  route:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect
+  env:
+  - name: DB_SERVER_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.server.name
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.name
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.user
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-secret-mssql
+        key: db.password
