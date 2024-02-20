@@ -16,14 +16,14 @@
 
     <!-- Define http & https endpoints -->
     <httpEndpoint id="defaultHttpEndpoint" host="*"
-        httpPort="9080" httpsPort="9443" />
+                  httpPort="9080" httpsPort="9443" />
 
     <!-- Automatically expand WAR files and EAR files -->
     <applicationManager autoExpand="true" />
 
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
-        location="${server.config.dir}/apps/javaee-cafe.war">
+                    location="${server.config.dir}/apps/javaee-cafe.war">
         <!-- Grant role "users" to all authenticated users -->
         <application-bnd>
             <security-role name="users">
@@ -44,40 +44,40 @@
     <!-- SSL configuration for LDAP -->>
     <ssl id="LDAPSSLSettings" keyStoreRef="LDAPKeyStore" />
     <keyStore id="LDAPKeyStore" 
-        location="${server.config.dir}/${keystore.name}"
-        type="PKCS12" password="${keystore.pass}" />
+              location="${server.config.dir}/${keystore.name}"
+              type="PKCS12" password="${keystore.pass}" />
 
     <!-- Add your tenant id, client ID and secret from AAD -->
     <ldapRegistry
-        id="liberty-aad-ldap-javaeecafe"
-        ldapType="Microsoft Active Directory"
-        ignoreCase="true"
-        realm="myRealm"
-        host="${ldap.server.host}"
-        port="${ldap.server.port}"
-        baseDN="${ldap.server.baseDN}"
-        bindDN="${ldap.server.bindDN}"
-        bindPassword="${ldap.server.bindPassword}"
-        sslEnabled="true"
-        sslRef="LDAPSSLSettings">
+      id="liberty-aad-ldap-javaeecafe"
+      ldapType="Microsoft Active Directory"
+      ignoreCase="true"
+      realm="myRealm"
+      host="${ldap.server.host}"
+      port="${ldap.server.port}"
+      baseDN="${ldap.server.baseDN}"
+      bindDN="${ldap.server.bindDN}"
+      bindPassword="${ldap.server.bindPassword}"
+      sslEnabled="true"
+      sslRef="LDAPSSLSettings">
         <activedFilters
-            userFilter="(&amp;(sAMAccountName=%v)(objectcategory=user))"
-            groupFilter="(&amp;(cn=%v)(objectcategory=group))"
-            userIdMap="user:sAMAccountName"
-            groupIdMap="*:cn"
-            groupMemberIdMap="memberOf:member">
+          userFilter="(&amp;(sAMAccountName=%v)(objectcategory=user))"
+          groupFilter="(&amp;(cn=%v)(objectcategory=group))"
+          userIdMap="user:sAMAccountName"
+          groupIdMap="*:cn"
+          groupMemberIdMap="memberOf:member">
         </activedFilters>
     </ldapRegistry>
 
     <!-- JWT builder -->
     <jwtBuilder id="jwtAuthUserBuilder" keyStoreRef="defaultKeyStore" 
-        keyAlias="${key.alias}" issuer="https://example.com" expiresInSeconds="600" />
+                keyAlias="${key.alias}" issuer="https://example.com" expiresInSeconds="600" />
     <variable name="key.alias" defaultValue="default"/>
 
     <!-- JWT consumer -->
     <mpJwt id="jwtUserConsumer" 
-        jwksUri="https://localhost:9443/jwt/ibm/api/jwtAuthUserBuilder/jwk"  
-        issuer="https://example.com" authFilterRef="mpJwtAuthFilter" />
+           jwksUri="https://localhost:9443/jwt/ibm/api/jwtAuthUserBuilder/jwk"  
+           issuer="https://example.com" authFilterRef="mpJwtAuthFilter" />
 
     <!-- JWT auth filter -->
     <authFilter id="mpJwtAuthFilter">

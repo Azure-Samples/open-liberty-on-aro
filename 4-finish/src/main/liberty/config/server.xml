@@ -18,14 +18,14 @@
 
     <!-- Define http & https endpoints -->
     <httpEndpoint id="defaultHttpEndpoint" host="*"
-        httpPort="9080" httpsPort="9443" />
+                  httpPort="9080" httpsPort="9443" />
 
     <!-- Automatically expand WAR files and EAR files -->
     <applicationManager autoExpand="true" />
 
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
-        location="${server.config.dir}/apps/javaee-cafe.war">
+                    location="${server.config.dir}/apps/javaee-cafe.war">
         <!-- Grant role "users" to all authenticated users -->
         <application-bnd>
             <security-role name="users">
@@ -39,19 +39,19 @@
 
     <!-- Add your tenant id, client ID and secret from AAD -->
     <oidcLogin
-        id="liberty-aad-oidc-javaeecafe" clientId="${client.id}"
-        clientSecret="${client.secret}"
-        discoveryEndpoint="https://login.microsoftonline.com/${tenant.id}/v2.0/.well-known/openid-configuration"
-        signatureAlgorithm="RS256"
-        userNameAttribute="preferred_username" />
+      id="liberty-aad-oidc-javaeecafe" clientId="${client.id}"
+      clientSecret="${client.secret}"
+      discoveryEndpoint="https://login.microsoftonline.com/${tenant.id}/v2.0/.well-known/openid-configuration"
+      signatureAlgorithm="RS256"
+      userNameAttribute="preferred_username" />
 
     <!-- JWT consumer -->
     <mpJwt id="jwtUserConsumer" 
-        jwksUri="https://login.microsoftonline.com/${tenant.id}/discovery/v2.0/keys" 
-        issuer="https://login.microsoftonline.com/${tenant.id}/v2.0"
-        audiences="${client.id}"
-        userNameAttribute="preferred_username" 
-        authFilterRef="mpJwtAuthFilter" />
+           jwksUri="https://login.microsoftonline.com/${tenant.id}/discovery/v2.0/keys" 
+           issuer="https://login.microsoftonline.com/${tenant.id}/v2.0"
+           audiences="${client.id}"
+           userNameAttribute="preferred_username" 
+           authFilterRef="mpJwtAuthFilter" />
 
     <!-- JWT auth filter -->
     <authFilter id="mpJwtAuthFilter">
@@ -61,12 +61,12 @@
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
         <jdbcDriver libraryRef="driver-library" />
         <properties.postgresql
-            serverName="${db.server.name}"
-            portNumber="${db.port.number}"
-            databaseName="${db.name}"
-            user="${db.user}"
-            password="${db.password}"
-            ssl="${db.ssl}" />
+          serverName="${db.server.name}"
+          portNumber="${db.port.number}"
+          databaseName="${db.name}"
+          user="${db.user}"
+          password="${db.password}"
+          ssl="${db.ssl}" />
     </dataSource>
     <variable name="db.ssl" defaultValue="false"/>
 

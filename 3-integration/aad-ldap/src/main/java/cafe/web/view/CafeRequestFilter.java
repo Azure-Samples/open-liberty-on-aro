@@ -28,12 +28,12 @@ public class CafeRequestFilter implements Serializable, ClientRequestFilter {
     public CafeRequestFilter() {
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                    .getRequest();
+                .getRequest();
 
             jwtTokenString = JwtBuilder.create("jwtAuthUserBuilder").claim(Claims.SUBJECT, "javaee-cafe-rest-endpoints")
-                    .claim("upn", request.getUserPrincipal().getName())
-                    .claim("groups", request.isUserInRole("admin") ? "admin" : Collections.emptyList()).buildJwt()
-                    .compact();
+                .claim("upn", request.getUserPrincipal().getName())
+                .claim("groups", request.isUserInRole("admin") ? "admin" : Collections.emptyList()).buildJwt()
+                .compact();
         } catch (JwtException | InvalidBuilderException | InvalidClaimException e) {
             logger.severe("Creating JWT token failed.");
             e.printStackTrace();

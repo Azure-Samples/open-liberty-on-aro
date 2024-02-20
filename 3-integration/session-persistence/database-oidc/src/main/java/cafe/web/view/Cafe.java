@@ -87,7 +87,7 @@ public class Cafe implements Serializable {
     @PostConstruct
     private void init() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
         name = (String) request.getSession().getAttribute("coffeeName");
         price = (Double) request.getSession().getAttribute("coffeePrice");
 
@@ -97,7 +97,7 @@ public class Cafe implements Serializable {
 
 	private void getAllCoffees() {
 		this.coffeeList = this.client.target(this.baseUri).path("/").request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Coffee>>() {
+            .get(new GenericType<List<Coffee>>() {
 				});
 	}
 
@@ -105,7 +105,7 @@ public class Cafe implements Serializable {
 		Coffee coffee = new Coffee(this.name, this.price);
 		this.client.target(baseUri).request(MediaType.APPLICATION_JSON).post(Entity.json(coffee));
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 		request.getSession().setAttribute("coffeeName", this.name);
 		request.getSession().setAttribute("coffeePrice", this.price);
 		FacesContext.getCurrentInstance().getExternalContext().redirect("");

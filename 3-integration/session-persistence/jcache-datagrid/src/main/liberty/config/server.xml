@@ -14,14 +14,14 @@
 
     <!-- Define http & https endpoints -->
     <httpEndpoint id="defaultHttpEndpoint" host="*"
-        httpPort="9080" httpsPort="9443" />
+                  httpPort="9080" httpsPort="9443" />
 
     <!-- Automatically expand WAR files and EAR files -->
     <applicationManager autoExpand="true" />
 
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
-        location="${server.config.dir}/apps/javaee-cafe.war">
+                    location="${server.config.dir}/apps/javaee-cafe.war">
     </webApplication>
 
     <!-- trust JDK’s default truststore -->
@@ -49,12 +49,12 @@
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
         <jdbcDriver libraryRef="driver-library" />
         <properties.postgresql
-            serverName="${db.server.name}"
-            portNumber="${db.port.number}"
-            databaseName="${db.name}"
-            user="${db.user}"
-            password="${db.password}"
-            ssl="${db.ssl}" />
+          serverName="${db.server.name}"
+          portNumber="${db.port.number}"
+          databaseName="${db.name}"
+          user="${db.user}"
+          password="${db.password}"
+          ssl="${db.ssl}" />
     </dataSource>
     <variable name="db.ssl" defaultValue="false"/>
 

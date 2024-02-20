@@ -42,28 +42,28 @@ public class CafeJwtUtil implements Serializable {
 
     public static void setJwtAttr(String jwtString) {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 
         request.getSession().setAttribute("jwtToken", jwtString);
     }
 
     public static String getJwtAttr() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 
         return (String) request.getSession().getAttribute("jwtToken");
     }
 
     public static void setJwtGroupsClaimAttr(List<String> groups) {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 
         request.getSession().setAttribute("groups", String.join(",", groups));
     }
 
     public static List<String> getJwtGroupsClaimAttr() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 
         return Arrays.asList(((String) request.getSession().getAttribute("groups")).split(","));
     }

@@ -61,7 +61,7 @@ public class Cafe implements Serializable {
 	@PostConstruct
 	private void init() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
 
         baseUri = "http://localhost:9080" + request.getContextPath() + "/rest/coffees";
         this.client = ClientBuilder.newBuilder().build();
@@ -69,7 +69,7 @@ public class Cafe implements Serializable {
 
 	private void getAllCoffees() {
 		this.coffeeList = this.client.target(this.baseUri).path("/").request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Coffee>>() {
+            .get(new GenericType<List<Coffee>>() {
 				});
 	}
 

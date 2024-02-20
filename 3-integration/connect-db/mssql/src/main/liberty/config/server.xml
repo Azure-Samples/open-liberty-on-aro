@@ -13,7 +13,7 @@
 
     <!-- Define http & https endpoints -->
     <httpEndpoint id="defaultHttpEndpoint" host="*"
-        httpPort="9080" httpsPort="9443" />
+                  httpPort="9080" httpsPort="9443" />
 
     <!-- trust JDK’s default truststore -->
     <ssl id="defaultSSLConfig"  trustDefaultCerts="true" />
@@ -23,18 +23,18 @@
 
     <!-- Define web application with its context root and location -->
     <webApplication id="javaee-cafe" contextRoot="/"
-        location="${server.config.dir}/apps/javaee-cafe.war">
+                    location="${server.config.dir}/apps/javaee-cafe.war">
     </webApplication>
 
     <variable name="db.port.number" defaultValue="1433"/>
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
         <jdbcDriver libraryRef="driver-library" />
         <properties.microsoft.sqlserver
-            serverName="${db.server.name}"
-            portNumber="${db.port.number}"
-            databaseName="${db.name}"
-            user="${db.user}"
-            password="${db.password}" />
+          serverName="${db.server.name}"
+          portNumber="${db.port.number}"
+          databaseName="${db.name}"
+          user="${db.user}"
+          password="${db.password}" />
     </dataSource>
 
     <library id="driver-library">

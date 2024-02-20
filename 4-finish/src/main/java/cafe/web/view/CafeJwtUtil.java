@@ -23,8 +23,8 @@ public class CafeJwtUtil implements Serializable {
 
     public boolean isUserInAdminGroup() {
         @SuppressWarnings("unchecked")
-        List<String> groups = UserProfileManager.getUserProfile().getIdToken().getClaims().getClaim("groups",
-                List.class);
+            List<String> groups = UserProfileManager.getUserProfile().getIdToken().getClaims().getClaim("groups",
+                                                                                                        List.class);
 
         return groups != null && groups.contains(ADMIN_GROUP_ID);
     }
