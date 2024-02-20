@@ -92,18 +92,18 @@ public class Cafe implements Serializable {
 	private void init() {
 		try {
 			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-					.getRequest();
+                .getRequest();
 
 			InetAddress inetAddress = InetAddress.getByName(request.getServerName());
 
             ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
             baseUri = context.getRequestScheme() + "://" + inetAddress.getHostName() + ":"
-                    + context.getRequestServerPort() + request.getContextPath() + "/rest/coffees";
+                + context.getRequestServerPort() + request.getContextPath() + "/rest/coffees";
             this.client = ClientBuilder.newBuilder().hostnameVerifier(new HostnameVerifier() {
-				public boolean verify(String hostname, SSLSession session) {
-					return true;
-				}
-			}).build().register(filter);
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                }).build().register(filter);
 		} catch (IllegalArgumentException | NullPointerException | WebApplicationException | UnknownHostException ex) {
 			logger.severe("Processing of HTTP response failed.");
 			ex.printStackTrace();
@@ -112,7 +112,7 @@ public class Cafe implements Serializable {
 
 	private void getAllCoffees() {
 		this.coffeeList = this.client.target(this.baseUri).path("/").request(MediaType.APPLICATION_JSON)
-				.get(new GenericType<List<Coffee>>() {
+            .get(new GenericType<List<Coffee>>() {
 				});
 	}
 

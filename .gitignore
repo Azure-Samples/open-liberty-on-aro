@@ -19,3 +19,4 @@ buildNumber.properties
 *.cer
 *.p12
 .vscode/
+message.txt

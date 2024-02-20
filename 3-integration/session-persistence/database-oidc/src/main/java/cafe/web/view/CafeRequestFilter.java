@@ -17,6 +17,6 @@ public class CafeRequestFilter implements Serializable, ClientRequestFilter {
     @Override
     public void filter(ClientRequestContext requestContext) {        
         requestContext.getHeaders().putSingle(HttpHeaders.AUTHORIZATION,
-                "Bearer " + (jwtUtil != null ? jwtUtil.getJwt() : CafeJwtUtil.getJwtAttr()));
+                                              "Bearer " + (jwtUtil != null ? jwtUtil.getJwt() : CafeJwtUtil.getJwtAttr()));
     }
 }
