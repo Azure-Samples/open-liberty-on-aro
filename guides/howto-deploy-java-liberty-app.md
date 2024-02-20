@@ -1,8 +1,8 @@
 # Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster
 
-This guide demonstrates how to run your Java, Java EE, [Jakarta EE](https://jakarta.ee/), or [MicroProfile](https://microprofile.io/) application on the Open Liberty/WebSphere Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing a Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.  The foundational elements of technology in this article include the following:
+This guide demonstrates how to run your Jakarta EE, [Jakarta EE](https://jakarta.ee/), or [MicroProfile](https://microprofile.io/) application on the Open Liberty/WebSphere Liberty runtime and then deploy the containerized application to an Azure Red Hat OpenShift (ARO) 4 cluster using the Open Liberty Operator. This article will walk you through preparing a Liberty application, building the application Docker image and running the containerized application on an ARO 4 cluster.  The foundational elements of technology in this article include the following:
 
-* [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Java/Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Java/Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
+* [Open Liberty](https://openliberty.io): Open Liberty is an IBM Open Source project that implements the Eclipse MicroProfile specifications and is also Jakarta EE compatible. Open Liberty is fast to start up with a low memory footprint and supports live reloading for quick iterative development. It is simple to add and remove features from the latest versions of MicroProfile and Jakarta EE. Zero migration lets you focus on what's important, not the APIs changing under you.
 * [WebSphere Liberty](https://www.ibm.com/cloud/websphere-liberty): IBM WebSphere Liberty architecture shares the same code base as the open sourced Open Liberty server runtime, which provides additional benefits such as low-cost experimentation, customization and seamless migration from open source to production.
 * [Azure Red Hat OpenShift](https://azure.microsoft.com/services/openshift/): Azure Red Hat OpenShift provides flexible, self-service deployment of fully managed OpenShift clusters. Maintain regulatory compliance and focus on your application development, while your master, infrastructure, and application nodes are patched, updated, and monitored by both Microsoft and Red Hat.
 
@@ -152,11 +152,11 @@ After creating and connecting to the cluster, install the [Open Liberty Operator
 
 ## Prepare the Liberty application
 
-We will use a Java EE 8 application as our example in this guide. Open Liberty is a [Java EE 8 full profile](https://javaee.github.io/javaee-spec/javadocs/) compatible server, so it can easily run the application.  Open Liberty is also [Jakarta EE 8 full profile compatible](https://jakarta.ee/specifications/platform/8/apidocs/).  If you already have a Java EE, Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Application Server, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Liberty runtime.
+We will use a Jakarta EE 10 application as our example in this guide. Open Liberty is a [Jakarta EE 10 full profile](https://javaee.github.io/javaee-spec/javadocs/) compatible server, so it can easily run the application.  Open Liberty is also [Jakarta EE 10 full profile compatible](https://jakarta.ee/specifications/platform/8/apidocs/).  If you already have a Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Application Server, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Liberty runtime.
 
 ### Sample application
 
-Within the git repo you cloned in the Prerequisites section, change directory to `1-start`. The sample application uses Maven at build time and only Java EE 8 APIs (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation) at runtime. This standard Java EE app will be used as a starting point to demonstrate the ease of migration to the Liberty runtime. Here is the project structure:
+Within the git repo you cloned in the Prerequisites section, change directory to `1-start`. The sample application uses Maven at build time and only Jakarta EE 10 APIs (Jakarta REST, EJB, CDI, JSON-B, Faces, Bean Validation) at runtime. This standard Jakarta EE app will be used as a starting point to demonstrate the ease of migration to the Liberty runtime. Here is the project structure:
 
 ```Text
 ├── pom.xml                                         # Maven POM file
@@ -190,7 +190,7 @@ Within the git repo you cloned in the Prerequisites section, change directory to
 
 To run the application on Open Liberty, you need to create an Open Liberty server configuration file so that the [Liberty Maven plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) can package the application for deployment. The Liberty Maven plugin is not required to deploy the application to OpenShift but we will use it in this example with Open Liberty’s developer (dev) mode to easily run the application locally. Complete the following steps on your local computer:
 
-1. Copy `2-simple/src/main/liberty/config/server.xml` to `1-start/src/main/liberty/config`, overwriting the existing zero-length file. This `server.xml` configures the Open Liberty server with Java EE features.
+1. Copy `2-simple/src/main/liberty/config/server.xml` to `1-start/src/main/liberty/config`, overwriting the existing zero-length file. This `server.xml` configures the Open Liberty server with Jakarta EE features.
 2. Replace `1-start/pom.xml` with `2-simple/pom.xml` to add the `liberty-maven-plugin` to the pom.
 3. Change directory to `1-start` of your local clone.
 4. Run `mvn clean package` in a console to generate a war package `javaee-cafe.war` in the directory `./target`.
