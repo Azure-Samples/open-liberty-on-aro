@@ -15,7 +15,7 @@ Complete the following prerequisites to successfully walk through this guide.
    > [!NOTE]
    > Azure Red Hat OpenShift requires a minimum of 40 cores to create and run an OpenShift cluster. The default Azure resource quota for a new Azure subscription does not meet this requirement. To request an increase in your resource limit, see [Standard quota: Increase limits by VM series](https://docs.microsoft.com/azure/azure-portal/supportability/per-vm-quota-requests). Note that the free trial subscription isn't eligible for a quota increase, [upgrade to a Pay-As-You-Go subscription](https://docs.microsoft.com/azure/cost-management-billing/manage/upgrade-azure-subscription) before requesting a quota increase.
 2. Prepare a local machine with Unix-like operating system installed (for example, Ubuntu, macOS).
-3. Install a Java SE implementation (for example, [AdoptOpenJDK OpenJDK 8 LTS/OpenJ9](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=openj9)).
+3. Install a Java SE implementation, version 17 or later (for example, [Eclipse Open J9](https://www.eclipse.org/openj9/)).
 4. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
 5. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
 6. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest&preserve-view=true) 2.0.75 or later.
@@ -26,7 +26,7 @@ Complete the following prerequisites to successfully walk through this guide.
 
 Follow the instructions in these two tutorials and then return here to continue.
 
-1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](https://learn.microsoft.com/en-us/azure/openshift/tutorial-create-cluster).
+1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](https://learn.microsoft.com/azure/openshift/tutorial-create-cluster).
    > [!NOTE]
    > Though the "Get a Red Hat pull secret" step is labeled as optional, **it is required for this article**.  The pull secret enables your Azure Red Hat OpenShift cluster to find the Open Liberty Operator.
    >
@@ -36,123 +36,21 @@ Follow the instructions in these two tutorials and then return here to continue.
    > * [Supported virtual machine sizes for memory optimized](/azure/openshift/support-policies-v4#memory-optimized)
    > * [Prerequisites to install the Elasticsearch Operator](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying)
 
-2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-connect-cluster).
+2. Connect to the cluster by following the steps in [Connect to an Azure Red Hat OpenShift 4 cluster](https://learn.microsoft.comazure/openshift/tutorial-connect-cluster).
    > [!NOTE]
    >
    > * Be sure to follow the steps in "Install the OpenShift CLI" because we will use the `oc` command later in this article.
    > * Write down the cluster console URL which looks like `https://console-openshift-console.apps.<random>.<region>.aroapp.io/`.
    > * Write down the `kubeadmin` credentials.
-
-Then verify you can log in to the OpenShift CLI with the token for user `kubeadmin`.
-
-#### Log in to the OpenShift CLI with the token
-
-Before executing the following steps, be sure to log in to the OpenShift web console from your browser.
-
-1. At the right-top of the web console, expand the context menu of the logged-in user, then select "Copy Login Command".
-2. Log in to a new tab window with the same user if necessary.
-3. Select "Display Token".
-4. Copy the value listed below "Log in with this token" to the clipboard and run it in a shell, as shown here.
-
-   ```bash
-   oc login --token=XOdASlzeT7BHT0JZW6Fd4dl5EwHpeBlN27TAdWHseob --server=https://api.aqlm62xm.rnfghf.aroapp.io:6443
-   Logged into "https://api.aqlm62xm.rnfghf.aroapp.io:6443" as "kube:admin" using the token provided.
-
-   You have access to 57 projects, the list has been suppressed. You can list all projects with 'oc projects'
-
-   Using project "default".
-   ```
-
-### Set up Azure Active Directory
-
-Azure Active Directory (Azure AD) implements OpenID Connect (OIDC), an authentication protocol built on OAuth 2.0, which lets you securely sign in a user from Azure AD to the ARO 4 cluster. Follow the steps below to set up your Azure AD.
-
-1. [Get an Azure AD tenant](https://docs.microsoft.com/azure/active-directory/develop/quickstart-create-new-tenant). It is very likely your Azure account already has a tenant. Write down your **tenant ID**.
-2. [Create a few Azure AD users](https://docs.microsoft.com/azure/active-directory/fundamentals/add-users-azure-active-directory). You can use these accounts or your own to test the application. Write down email addresses and passwords for login.
-3. [Create a new application registration](https://docs.microsoft.com/azure/active-directory/develop/quickstart-register-app) in your Azure AD tenant. Specify **Redirect URI** to be `https://oauth-openshift.apps.<random>.<region>.aroapp.io/oauth2callback/openid`. The value of **\<random>** and **\<region>** is same as the one from the cluster console URL. Write down the **client ID**.
-4. Create a new client secret. In the newly created application registration, select **Certificates & secrets** > Select **New client secret** > Provide **a description** and hit **Add**. Write down the generated **client secret** value.
-
-### Add OpenID Connect identity provider
-
-To access the built-in container image registry provided by the ARO 4 cluster, an identity provider (IDP) needs to be configured using Azure Active Directory OpenID Connect.
-
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-2. Open **Administration** > **Cluster Settings** > **Global Configuration** > **OAuth** > **Identity Providers** > **Add** > **OpenID Connect**.
-3. Specify **Client ID** and **Client Secret** as the ones you wrote down before. Specify **Name** as **openid**.
-4. Replace **\<tenant-id>** with the one you wrote down before for the URL `https://login.microsoftonline.com/<tenant-id>/v2.0/.well-known/openid-configuration` > Open the URL in your browser > Copy the value of property **issuer** in the returned JSON body and paste it to textbox **Issuer URL**.
-5. Select **Add**.
-
-### Access the built-in container image registry
-
-OpenShift Container Platform provides a built-in container image registry which runs as a standard workload on the ARO 4 cluster. The registry provides an out of the box solution for users to manage the images that run their workloads, and runs on top of the existing cluster infrastructure. Follow the instructions below to enable the access of the built-in registry.
-
-1. Log in to the OpenShift web console from your browser using the credentials of an Azure AD user.
-   > [!NOTE]
-   > Write down the user name and password for this Azure AD user, as it will be used as **the administrator** for the demo project throughout this guide and subsequent ones.
-2. [Log in to the OpenShift CLI with the token for this Azure AD user](#log-in-to-the-openshift-cli-with-the-token).
-3. Run `oc whoami` in the console and write down its output as **\<aad-user>**.
-4. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-5. [Log in to the OpenShift CLI with the token for `kubeadmin`](#log-in-to-the-openshift-cli-with-the-token).
-6. Execute the following commands to enable the access to the built-in registry for the **aad-user**.
-
-   ```bash
-   # Switch to project "openshift-image-registry"
-   oc project openshift-image-registry
-
-   # Expose the registry using "DefaultRoute"
-   oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
-
-   # Note: write down the value of "Container Registry URL" in the output, which is the fully qualified registry name
-   HOST=$(oc get route default-route --template='{{ .spec.host }}')
-   echo "Container Registry URL: $HOST"
-
-   # Add roles to "aad-user" for pulling and pushing images
-   # Note: replace "<aad-user>" with the one you wrote down before
-   oc policy add-role-to-user registry-viewer <aad-user>
-   oc policy add-role-to-user registry-editor <aad-user>
-   ```
-
-   > [!NOTE]
-   > Write down the console output of **Container Registry URL**. It will be used as the fully qualified registry name for this guide and subsequent ones.
-
-### Create an administrator for the demo project
-
-Besides image management, the **aad-user** will also be granted administrative permissions for managing resources in the demo project of the ARO 4 cluster.
-
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-2. Navigate to **Administration** > **Namespaces** > **Create Namespace**.
-3. Fill in "open-liberty-demo" for **Name** and select **Create**, as shown next.
-
-   ![create namespace](./media/howto-deploy-java-liberty-app/create-namespace.png)
-
-4. [Log in to the OpenShift CLI with the token for `kubeadmin`](#log-in-to-the-openshift-cli-with-the-token).
-5. Execute the following commands to grant `admin` role to the **aad-user** in namespace `open-liberty-demo`.
-
-   ```bash
-   # Switch to project "open-liberty-demo"
-   oc project open-liberty-demo
-
-   # Note: replace "<aad-user>" with the one you wrote down before
-   oc adm policy add-role-to-user admin <aad-user>
-   ```
+   > * Be sure to follow the steps in "Connect using the OpenShift CLI" with the `kubeadmin` credentials.
 
 ### Install the Open Liberty OpenShift Operator
 
-After creating and connecting to the cluster, install the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator).
+After creating and connecting to the cluster, install the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator) by following the steps in [Install the Open Liberty OpenShift Operator](https://learn.microsoft.com/azure/developer/java/ee/liberty-on-aro?tabs=without-mysql-dev%2Cwithout-mysql-mage%2Cwithout-mysql-deploy-cli#install-the-open-liberty-openshift-operator), then return here to continue.
 
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-2. Navigate to **Operators** > **OperatorHub** and search for **Open Liberty Operator**.
-3. Select **Open Liberty Operator** from the search results.
-4. Select **Install**.
-5. In the popup **Create Operator Subscription**, check **All namespaces on the cluster (default)** for **Installation Mode**, **beta** for **Update Channel**, and **Automatic** for **Approval Strategy**:
+### Create an OpenShift namespace for the Java app
 
-   ![create operator subscription for Open Liberty Operator](./media/howto-deploy-java-liberty-app/install-operator.png)
-6. Select **Subscribe** and wait a minute or two until the Open Liberty Operator is displayed.
-7. Observe the Open Liberty Operator with status of "Succeeded".  If you do not, trouble shoot and resolve the problem before continuing.
-
-## Prepare the Liberty application
-
-We will use a Jakarta EE 10 application as our example in this guide. Open Liberty is a [Jakarta EE 10 full profile](https://javaee.github.io/javaee-spec/javadocs/) compatible server, so it can easily run the application.  Open Liberty is also [Jakarta EE 10 full profile compatible](https://jakarta.ee/specifications/platform/8/apidocs/).  If you already have a Jakarta EE or MicroProfile application running on an existing server (for example, IBM WebSphere Application Server, Oracle WebLogic Server, WildFly, JBoss EAP, and so on), only minimal changes should be necessary to make the application run on Liberty runtime.
+Now create an OpenShift namespace `open-liberty-demo` by following the steps in [Create an OpenShift namespace for the Java app](https://learn.microsoft.com/azure/developer/java/ee/liberty-on-aro?tabs=without-mysql-dev%2Cwithout-mysql-mage%2Cwithout-mysql-deploy-cli#create-an-openshift-namespace-for-the-java-app), then return here to continue.
 
 ### Sample application
 
@@ -225,13 +123,13 @@ The directory `2-simple` of your local clone shows the Maven project with the ab
 
 To deploy and run your Liberty application on an ARO 4 cluster, containerize your application as a Docker image using [Open Liberty container images](https://github.com/OpenLiberty/ci.docker) or [WebSphere Liberty container images](https://github.com/WASdev/ci.docker).
 
-### Build application image
+### Build and run the application locally with Docker
 
-Complete the following steps to build the application image:
+Before deploying the containerized application to a remote cluster, build and run with your local Docker to verify whether it works:
 
 1. Change directory to `2-simple` of your local clone.
-2. Run `mvn clean package` to package the application.
-3. Run one of the following commands to build the application image.
+1. Run `mvn clean package` to package the application.
+1. Run one of the following commands to build the application image.
    * Build with Open Liberty base image:
 
      ```bash
@@ -246,35 +144,50 @@ Complete the following steps to build the application image:
      docker build -t javaee-cafe-simple:1.0.0 --pull --file=Dockerfile-wlp .
      ```
 
-### Run the application locally with Docker
-
-Before deploying the containerized application to a remote cluster, run with your local Docker to verify whether it works:
-
 1. Run `docker run -it --rm -p 9080:9080 javaee-cafe-simple:1.0.0` in your console.
-2. Wait for Liberty server to start and the application to deploy successfully.
-3. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
-4. Press **Control-C** to stop the application and Liberty server.
+1. Wait for Liberty server to start and the application to deploy successfully.
+1. Open [http://localhost:9080/](http://localhost:9080/) in your browser to visit the application home page.
+1. Press **Control-C** to stop the application and Liberty server.
 
-### Push the image to the container image registry
+### Build the application and push to the image stream
 
-When you're satisfied with the state of the application, push it to the built-in container image registry by following the instructions below:
+When you're satisfied with the state of the application, you're going to build the image remotely on the cluster by executing the following commands.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](#log-in-to-the-openshift-cli-with-the-token).
-3. Execute the following commands to push the image:
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials.
+1. Identity the source directory and the Dockerfile.
 
    ```bash
-   # Note: replace "<Container_Registry_URL>" with the fully qualified name of the registry
-   Container_Registry_URL=<Container_Registry_URL>
+   cd <path-to-your-repo>/open-liberty-on-aro/2-simple
 
-   # Create a new tag with registry info that refers to source image
-   docker tag javaee-cafe-simple:1.0.0 ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-simple:1.0.0
+   # If you are building with Open Liberty base image, the existing Dockerfile is ready for you
 
-   # Log in to the built-in container image registry
-   docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+   # If you are building with WebSphere Liberty base image, uncomment and execute the following two commands to rename Dockerfile-wlp to Dockerfile
+   # mv Dockerfile Dockerfile.backup
+   # mv Dockerfile-wlp Dockerfile
+   ```
 
-   # Push image to the built-in container image registry
-   docker push ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-simple:1.0.0
+1. Change project to `open-liberty-demo`.
+
+   ```bash
+   oc project open-liberty-demo
+   ```
+
+1. Create an image stream.
+
+   ```bash
+   oc create imagestream javaee-cafe-simple
+   ```
+
+1. Create a build configuration that specifies the image stream tag of the build output.
+
+   ```bash
+   oc new-build --name javaee-cafe-simple-config --binary --strategy docker --to javaee-cafe-simple:1.0.0
+   ```
+
+1. Start the build to upload local contents, containerize, and output to the image stream tag specified before.
+
+   ```bash
+   oc start-build javaee-cafe-simple-config --from-dir . --follow
    ```
 
 ## Deploy application on the ARO 4 cluster
