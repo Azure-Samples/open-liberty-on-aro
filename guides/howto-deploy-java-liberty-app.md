@@ -127,6 +127,7 @@ To deploy and run your Liberty application on an ARO 4 cluster, containerize you
 
 Before deploying the containerized application to a remote cluster, build and run with your local Docker to verify whether it works:
 
+1. Ensure Docker is running.
 1. Change directory to `2-simple` of your local clone.
 1. Run `mvn clean package` to package the application.
 1. Run one of the following commands to build the application image.
@@ -189,6 +190,8 @@ When you're satisfied with the state of the application, you're going to build t
    ```bash
    oc start-build javaee-cafe-simple-config --from-dir . --follow
    ```
+   
+   Successful output ends with the text `Push successful`. If you do not see this text, troubleshoot and resolve the problem before continuing.
 
 ## Deploy application on the ARO 4 cluster
 
@@ -203,10 +206,11 @@ Because we use the Open Liberty Operator to manage Liberty applications, we need
 3. Navigate to **Operators** > **Installed Operators** > **Open Liberty Operator** > **Open Liberty Application**.  The navigation of items in the user interface mirrors the actual containment hierarchy of technologies in use.
 
    ![ARO Java Containment](./media/howto-deploy-java-liberty-app/aro-java-containment.png)
-4. Select **Create OpenLibertyApplication**
+4. Select **Create OpenLibertyApplication**.
+4. Select the radio button next to **YAML view**.
 5. Replace the generated yaml with yours, which is located at `<path-to-repo>/2-simple/openlibertyapplication.yaml`.
-6. Select **Create**.
-7. You'll be returned to the list of OpenLibertyApplications.  Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and select the link below **Location**.
+6. Select **Create**. You'll be returned to the list of OpenLibertyApplications.  
+7. Select **javaee-cafe-simple** > **Resources** > **javaee-cafe-simple (Route)** and select the link below **Location**.
 
 You'll see the application home page opened in the browser.
 
@@ -214,8 +218,7 @@ You'll see the application home page opened in the browser.
 
 Instead of using the web console GUI, you can deploy the application from the command-line. If you have not already done so, download and install the `oc` command-line tool by following Red Hat documentation [Getting Started with the CLI](https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html).
 
-1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](#log-in-to-the-openshift-cli-with-the-token).
+1. Ensure that the `oc login` you performed when you executed [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) is still active.
 3. Change directory to `2-simple` of your local clone, and run the following commands to deploy your Liberty application to the ARO 4 cluster.
 
    ```bash
