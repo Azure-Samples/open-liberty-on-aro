@@ -26,7 +26,7 @@ Complete the following prerequisites to successfully walk through this guide.
 
 Follow the instructions in these two tutorials and then return here to continue.
 
-1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](/azure/openshift/tutorial-create-cluster).  
+1. Create the cluster by following the steps in [Create an Azure Red Hat OpenShift 4 cluster](https://learn.microsoft.com/en-us/azure/openshift/tutorial-create-cluster).
    > [!NOTE]
    > Though the "Get a Red Hat pull secret" step is labeled as optional, **it is required for this article**.  The pull secret enables your Azure Red Hat OpenShift cluster to find the Open Liberty Operator.
    >
