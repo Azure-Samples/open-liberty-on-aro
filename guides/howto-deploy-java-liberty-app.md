@@ -89,7 +89,7 @@ Within the git repo you cloned in the Prerequisites section, change directory to
 To run the application on Open Liberty, you need to create an Open Liberty server configuration file so that the [Liberty Maven plugin](https://github.com/OpenLiberty/ci.maven#liberty-maven-plugin) can package the application for deployment. The Liberty Maven plugin is not required to deploy the application to OpenShift but we will use it in this example with Open Liberty’s developer (dev) mode to easily run the application locally. Complete the following steps on your local computer:
 
 1. Copy `2-simple/src/main/liberty/config/server.xml` to `1-start/src/main/liberty/config`, overwriting the existing zero-length file. This `server.xml` configures the Open Liberty server with Jakarta EE features.
-2. Replace `1-start/pom.xml` with `2-simple/pom.xml` to add the `liberty-maven-plugin` to the pom.
+2. Copy `2-simple/pom.xml` over `1-start/pom.xml` to add the `liberty-maven-plugin` to the pom.
 3. Change directory to `1-start` of your local clone.
 4. Run `mvn clean package` in a console to generate a war package `javaee-cafe.war` in the directory `./target`.
 5. Run `mvn liberty:dev` to start Open Liberty in dev mode.
