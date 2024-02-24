@@ -1,9 +1,9 @@
-# Integrate your Liberty application with Azure Active Directory Domain Service via Secure LDAP
+# Integrate your Liberty application with Microsoft Entra Domain Service via Secure LDAP
 
-In this guide, you will integrate your Liberty application with Azure Active Directory Domain Service (Azure AD DS) via Secure LDAP for security. The Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
+In this guide, you will integrate your Liberty application with Microsoft Entra Domain Services (Azure AD DS) via Secure LDAP for security. The Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
 >
-> * Set up Azure Active Directory
+> * Set up Microsoft Entra
 > * Prepare your application
 > * Prepare application image
 > * Deploy sample application
@@ -12,9 +12,9 @@ In this guide, you will integrate your Liberty application with Azure Active Dir
 
 In previous guide, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md) and return here to continue.
 
-### Set up Azure Active Directory
+### Set up Microsoft Entra
 
-You've already set up an Azure Active Directory in the [previous guide](howto-deploy-java-liberty-app.md#set-up-azure-active-directory), complete the section [Azure Active Directory configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
+You've already set up Microsoft Entra in the [previous guide](howto-deploy-java-liberty-app.md#set-up-azure-active-directory), complete the section [Microsoft Entra configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
 
 ### Trust singer certificate of the LDAP server
 
@@ -29,7 +29,7 @@ cd <path-to-repo>/3-integration/aad-ldap/src/main/liberty/config
 keytool -genkeypair -keyalg RSA -storetype pkcs12 -keystore <KEYSTORE_NAME> -storepass <KEYSTORE_PASS>
 
 # Import singer certificate of the LDAP server
-# Note: "<path-to-ldap-server-certificate>" is the *.cer* file you were asked to save aside in section "Set up Azure Active Directory"
+# Note: "<path-to-ldap-server-certificate>" is the *.cer* file you were asked to save aside in section "Set up Microsoft Entra"
 keytool -keystore <KEYSTORE_NAME> -storepass <KEYSTORE_PASS> -import -file <path-to-ldap-server-certificate> -alias ldap -trustcacerts -noprompt
 ```
 
@@ -247,7 +247,7 @@ Revisit [Lock down secure LDAP access over the internet](https://docs.microsoft.
 In this guide, you learned how to:
 > [!div class="checklist"]
 >
-> * Set up Azure Active Directory
+> * Set up Microsoft Entra
 > * Prepare your application
 > * Prepare application image
 > * Deploy sample application
@@ -263,7 +263,7 @@ Advance to these guides, which integrate Liberty application with other Azure se
 > [Set up your Liberty application in a multi-node stateless cluster with load balancing](howto-setup-stateless-cluster.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-ldap.md)
+> [Integrate your Liberty application with Microsoft Entra OpenID Connect](howto-integrate-aad-ldap.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]
@@ -271,7 +271,7 @@ If you've finished all of above guides, advance to the complete guide, which inc
 
 Here are references used in this guide:
 
-* [Azure Active Directory configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration)
+* [Microsoft Entra configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration)
 * [Configuring LDAP user registries in Liberty](https://www.ibm.com/support/knowledgecenter/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/twlp_sec_ldap.html)
 * [SSL configuration attributes](https://www.ibm.com/support/knowledgecenter/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/rwlp_ssl.html)
 * [Configuring the MicroProfile JSON Web Token](https://www.ibm.com/support/knowledgecenter/SSEQTP_liberty/com.ibm.websphere.wlp.doc/ae/twlp_sec_json.html)

@@ -32,7 +32,7 @@ Below table shows the list of samples available in this repository.
 
 | Sample                           | Description                                | Guide                            |
 |----------------------------------|--------------------------------------------|----------------------------------|
-| [`1-start`](1-start) | Basic Java EE application with Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation). | |
+| [`1-start`](1-start) | Basic Java EE application with Jakarta EE 10 (Jakarta RESTful Web Services, Jakarta Enterprise Beans, Jakrta CDI, JSON-B, Jakarta Faces, Bean Validation). | |
 | [`2-simple`](2-simple) | Migrate [`1-start`](1-start) sample to Open/WebSphere Liberty with minimum configurations. | [howto-guide](guides/howto-deploy-java-liberty-app.md) |
 | [`3-integration/elk-logging`](3-integration/elk-logging) | Extend [`2-simple`](2-simple) sample by integrating with Elasticsearch stack for distributed logging. | [howto-guide](guides/howto-integrate-elasticsearch-stack.md) |
 | [`3-integration/connect-db/mysql`](3-integration/connect-db/mysql) | Extend [`2-simple`](2-simple) sample by integrating with an Azure Database for MySQL - Flexible Server for data persistence. | [Deploy a Java application with Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift cluster](https://learn.microsoft.com/azure/developer/java/ee/liberty-on-aro?tabs=with-mysql-devc%2Cwith-mysql-image%2Cwith-mysql-deploy-console) |

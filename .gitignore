@@ -20,3 +20,4 @@ buildNumber.properties
 *.p12
 .vscode/
 message.txt
+pull-secret.txt
