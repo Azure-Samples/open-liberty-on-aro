@@ -18,7 +18,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <jakartaee.api.version>8.0.0</jakartaee.api.version>
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
-        <param.replicas>3</param.replicas>
         <param.db.server.name>${env.DB_SERVER_NAME}</param.db.server.name>
         <param.db.port.number>${env.DB_PORT_NUMBER}</param.db.port.number>
         <param.db.name>${env.DB_NAME}</param.db.name>
