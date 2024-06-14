@@ -1,11 +1,11 @@
 apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
-  name: ${project.artifactId}
-  namespace: ${param.namespace}
+  name: javaee-cafe-mysql
+  namespace: open-liberty-demo
 spec:
-  replicas: ${param.replicas}
-  applicationImage: ${project.artifactId}:${project.version}
+  replicas: 3
+  applicationImage: javaee-cafe-mysql:v1
   pullPolicy: Always
   expose: true
   env:
