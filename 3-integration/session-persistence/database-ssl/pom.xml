@@ -9,19 +9,19 @@
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
     <description>This is the basic Java EE application used in the demo.
-    It is a simple CRUD application. It uses Maven and Java EE 8 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation, JPA).
+    It is a simple CRUD application. It uses Maven and Jakarta EE 10 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation).
     </description>
     <properties>
-        <jakartaee.api.version>8.0.0</jakartaee.api.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <db.server.name></db.server.name>
-        <db.port.number></db.port.number>
         <db.name></db.name>
-        <db.user></db.user>
         <db.password></db.password>
+        <db.port.number></db.port.number>
+        <db.server.name></db.server.name>
+        <db.user></db.user>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <jakartaee.api.version>10.0.0</jakartaee.api.version>
+        <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -31,9 +31,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -45,6 +45,41 @@
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>17</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>        
+        </plugins>
     </build>
     <profiles>
         <profile>
@@ -69,7 +104,7 @@
                                     <goal>deploy</goal>
                                 </goals>
                                 <configuration>
-                                    <libertyRuntimeVersion>[20.0.0.1,)</libertyRuntimeVersion>
+                                    <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
                                     <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
                                     <bootstrapProperties>
                                         <db.server.name>${db.server.name}</db.server.name>
