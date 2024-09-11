@@ -12,27 +12,16 @@
     It is a simple CRUD application. It uses Maven and Jakarta EE 10 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation).
     </description>
     <properties>
-        <db.name></db.name>
-        <db.password></db.password>
-        <db.port.number></db.port.number>
-        <db.server.name></db.server.name>
-        <db.user></db.user>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee.api.version>10.0.0</jakartaee.api.version>
-        <liberty.bootstrap.artifactId>${project.artifactId}</liberty.bootstrap.artifactId>
-        <liberty.bootstrap.db.name>${db.name}</liberty.bootstrap.db.name>
-        <liberty.bootstrap.db.password>${db.password}</liberty.bootstrap.db.password>
-        <liberty.bootstrap.db.port.number>${db.port.number}</liberty.bootstrap.db.port.number>
-        <liberty.bootstrap.db.server.name>${db.server.name}</liberty.bootstrap.db.server.name>
-        <liberty.bootstrap.db.user>${db.user}</liberty.bootstrap.db.user>
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
         <maven.compiler.release>17</maven.compiler.release>
         <param.db.name>${env.DB_NAME}</param.db.name>
         <param.db.password>${env.DB_PASSWORD}</param.db.password>
+        <param.db.port.number>${env.DB_PORT_NUMBER}</param.db.port.number>
         <param.db.server.name>${env.DB_SERVER_NAME}</param.db.server.name>
         <param.db.user>${env.DB_USER}</param.db.user>
         <param.namespace>${env.NAMESPACE}</param.namespace>
-        <param.replicas>3</param.replicas>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -54,144 +43,112 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version>
             <type>jar</type>
-        </dependency>    
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
-    </build>
-    <profiles>
-        <profile>
-            <id>liberty</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources</directory>
-                        <filtering>true</filtering>
-                    </resource>
-                </resources>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
                         <configuration>
-                            <release>17</release>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>17</version>
+                                </requireJavaVersion>
+                            </rules>
                         </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.0.0-M3</version>
-                        <executions>
-                            <execution>
-                                <id>enforce-java</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireJavaVersion>
-                                            <version>17</version>
-                                        </requireJavaVersion>
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>        
-                    <plugin>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>01-dockerfile</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/docker</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>02-aro-config</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${basedir}/target</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>src/main/aro</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- Enable liberty-maven-plugin -->
-                    <plugin>
-                        <groupId>io.openliberty.tools</groupId>
-                        <artifactId>liberty-maven-plugin</artifactId>
-                        <version>3.9</version>
-                        <executions>
-                            <execution>
-                                <id>package-server</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>create</goal>
-                                    <goal>install-feature</goal>
-                                    <goal>deploy</goal>
-                                </goals>
-                                <configuration>
-                                    <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
-                                    <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
-                                    <bootstrapProperties>
-                                        <db.server.name>${db.server.name}</db.server.name>
-                                        <db.port.number>${db.port.number}</db.port.number>
-                                        <db.name>${db.name}</db.name>
-                                        <db.user>${db.user}</db.user>
-                                        <db.password>${db.password}</db.password>
-                                    </bootstrapProperties>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.1.2</version>
-                        <executions>
-                            <execution>
-                                <id>copy-jdbc-driver</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>copy-dependencies</goal>
-                                </goals>
-                                <configuration>
-                                    <includeArtifactIds>postgresql</includeArtifactIds>
-                                    <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven-war-plugin.version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+                    </execution>
+                </executions>
+            </plugin>        
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>01-aro-config</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/aro</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Enable liberty-maven-plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.9</version>
+                <executions>
+                    <execution>
+                        <id>package-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>install-feature</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
+                            <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-jdbc-driver</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>postgresql</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
