@@ -134,9 +134,8 @@ For reference, these changes have already been applied in `<path-to-repo>/3-inte
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
-3. Run the following commands to deploy the application.
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+1. Run the following commands to deploy the application.
 
    ```bash
    # Change directory to "<path-to-repo>/3-integration/connect-db/postgres/target"
