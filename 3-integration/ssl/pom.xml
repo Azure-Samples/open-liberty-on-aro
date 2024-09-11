@@ -68,39 +68,27 @@
                     </execution>
                 </executions>
             </plugin>        
+            <!-- Enable liberty-maven-plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.9</version>
+                <executions>
+                    <execution>
+                        <id>package-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>install-feature</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
+                            <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>liberty</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Enable liberty-maven-plugin -->
-                    <plugin>
-                        <groupId>io.openliberty.tools</groupId>
-                        <artifactId>liberty-maven-plugin</artifactId>
-                        <version>3.2</version>
-                        <executions>
-                            <execution>
-                                <id>package-server</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>create</goal>
-                                    <goal>install-feature</goal>
-                                    <goal>deploy</goal>
-                                </goals>
-                                <configuration>
-                                    <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
-                                    <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
