@@ -179,7 +179,7 @@ Once the Liberty Application is up and running, open the output of **Route Host*
 
 [Azure Database for PostgreSQL](https://azure.microsoft.com/services/postgresql/) is another fully managed database service from Microsoft Azure, based on community [PostgreSQL](https://docs.microsoft.com/azure/postgresql/concepts-supported-versions). Using Azure Database for PostgreSQL, developers can build or migrate their workloads with confidence.
 
-### Create an Azure Database for PostgreSQL server
+### Create an Azure Database for PostgreSQL Flexible Server
 
 Follow the instructions below to set up an Azure Database for PostgreSQL server for data persistence.
 

@@ -14,7 +14,7 @@ In previous guides, a Java application, which is running inside Open Liberty/Web
 
 * [Deploy a Java application inside Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md)
 * [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
-* [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
+* [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 * [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
 
 ## Set up different services
@@ -23,7 +23,7 @@ When you complete all of previous guides, different services used for this guide
 
 1. [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-liberty-app.md#set-up-azure-red-hat-openshift-cluster).
 2. [Set up Azure Active Directory](howto-integrate-aad-oidc.md#set-up-azure-active-directory).
-3. [Create an Azure Database for PostgreSQL server](howto-integrate-azure-managed-databases.md#create-an-azure-database-for-postgresql-server).
+3. [Create an Azure Database for PostgreSQL Flexible server](howto-integrate-azure-database-for-postgres.md#create-an-azure-database-for-postgresql-flexible-server).
 4. [Deploy cluster logging](howto-integrate-elasticsearch-stack.md#deploy-cluster-logging).
 
 ## Prepare your application

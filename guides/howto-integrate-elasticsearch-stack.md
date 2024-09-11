@@ -219,7 +219,7 @@ In this guide, you learned how to:
 
 Advance to these guides, which integrate Liberty application with other Azure services:
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
+> [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 
 > [!div class="nextstepaction"]
 > [Set up your Liberty application in a multi-node stateless cluster with load balancing](howto-setup-stateless-cluster.md)

@@ -7,7 +7,7 @@ When traffic increases, you will need to scale the Liberty application to keep u
 
 ## Before you begin
 
-In previous guide, a stateless Java application, which is running inside Open Liberty/WebSphere Liberty runtime and connects to an Azure managed database, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md) and return here to continue.
+In previous guide, a stateless Java application, which is running inside Open Liberty/WebSphere Liberty runtime and connects to an Azure managed database, is deployed to an ARO 4 cluster. If you have not done these steps, start with [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md) and return here to continue.
 
 ## Deploy sample application in a multi-node stateless cluster
 
