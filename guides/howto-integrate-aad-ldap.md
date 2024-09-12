@@ -14,7 +14,9 @@ In previous guide, a Java application, which is running inside Open Liberty/WebS
 
 ### Set up Microsoft Entra
 
-You've already set up Microsoft Entra in the [previous guide](howto-deploy-java-liberty-app.md#set-up-azure-active-directory), complete the section [Microsoft Entra configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
+You need to have a Microsoft Entra tenant. If you don't have an existing tenant, see [Quickstart: Set up a tenant](https://learn.microsoft.com/entra/identity-platform/quickstart-create-new-tenant). 
+
+Then complete the section [Microsoft Entra configuration](https://docs.microsoft.com/azure/developer/java/migration/migrate-weblogic-with-aad-ldap#azure-active-directory-configuration) to configure secure LDAP for an Azure AD DS managed domain.
 
 ### Trust singer certificate of the LDAP server
 
