@@ -2,25 +2,17 @@ package cafe.web.view;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.invoke.MethodHandles;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.logging.Logger;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 import jakarta.security.enterprise.SecurityContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -34,7 +26,6 @@ import cafe.model.entity.Coffee;
 public class Cafe implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
 	private String baseUri;
 	private transient Client client;
@@ -87,24 +78,11 @@ public class Cafe implements Serializable {
 
 	@PostConstruct
 	private void init() {
-		try {
-			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+            .getRequest();
 
-			InetAddress inetAddress = InetAddress.getByName(request.getServerName());
-
-            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-            baseUri = context.getRequestScheme() + "://" + inetAddress.getHostName() + ":"
-                + context.getRequestServerPort() + request.getContextPath() + "/rest/coffees";
-            this.client = ClientBuilder.newBuilder().hostnameVerifier(new HostnameVerifier() {
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                }).build().register(filter);
-		} catch (IllegalArgumentException | NullPointerException | WebApplicationException | UnknownHostException ex) {
-			logger.severe("Processing of HTTP response failed.");
-			ex.printStackTrace();
-		}
+        baseUri = "http://localhost:9080" + request.getContextPath() + "/rest/coffees";
+        this.client = ClientBuilder.newBuilder().build();
 	}
 
 	private void getAllCoffees() {
