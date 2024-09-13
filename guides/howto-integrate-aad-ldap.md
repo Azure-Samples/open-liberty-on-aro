@@ -1,5 +1,8 @@
 # Integrate your Liberty application with Microsoft Entra Domain Service via Secure LDAP
 
+> [!NOTE]
+> Once the Multiple Factor Authentication (MFA) is enabled/enforced for the Microsoft Entra tenant, the integration between your Liberty application and Microsoft Entra Domain Services (Azure AD DS) via Secure LDAP for security may not work as described in this guide.
+
 In this guide, you will integrate your Liberty application with Microsoft Entra Domain Services via Secure LDAP for security. The Liberty application is running on an Azure Red Hat OpenShift (ARO) 4 cluster. You learn how to:
 > [!div class="checklist"]
 >
