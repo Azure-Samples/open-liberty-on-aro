@@ -26,8 +26,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
