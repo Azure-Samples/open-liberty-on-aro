@@ -321,10 +321,9 @@ While standing up the secure LDAP in the preceding steps, you had set the source
 
 1. Log in to Azure CLI by running `az login` using your subscription in the console.
 2. Run `az aro list -o table` to get list of deployed ARO 4 clusters. Find resource group name and cluster name from your specific ARO 4 cluster.
-3. Run `az resource show -g <resource-group-name> -n <cluster-name> --resource-type "Microsoft.RedHatOpenShift/openShiftClusters` to get resource details of your ARO 4 cluster.
-4. Write down the public IP address of `ingressProfile` from the output JSON body by following the JSON path `properties.ingressProfiles[0].ip`.
+3. Run `az resource show -g <resource-group-name> -n <cluster-name> --resource-type "Microsoft.RedHatOpenShift/openShiftClusters --query "properties.apiserverProfile.ip" -o tsv` to get the IP address of `apiserverProfile` for your ARO 4 cluster.
 
-Revisit [Lock down secure LDAP access over the internet](https://learn.microsoft.com/azure/active-directory-domain-services/tutorial-configure-ldaps#lock-down-secure-ldap-access-over-the-internet) and change **Any** to the IP address of `ingressProfile` for the ARO 4 cluster.
+Revisit [Lock down secure LDAP access over the internet](https://learn.microsoft.com/azure/active-directory-domain-services/tutorial-configure-ldaps#lock-down-secure-ldap-access-over-the-internet) and change **Any** to the IP address of `apiserverProfile` for the ARO 4 cluster.
 
 ## Next steps
 
