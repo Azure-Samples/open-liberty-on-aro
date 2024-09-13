@@ -42,7 +42,7 @@
     <!-- trust JDK’s default truststore -->
     <ssl id="defaultSSLConfig"  trustDefaultCerts="true" />
 
-    <!-- SSL configuration for LDAP -->>
+    <!-- SSL configuration for LDAP -->
     <ssl id="LDAPSSLSettings" keyStoreRef="LDAPKeyStore" />
     <keyStore id="LDAPKeyStore" 
               location="${server.config.dir}/${keystore.name}"
