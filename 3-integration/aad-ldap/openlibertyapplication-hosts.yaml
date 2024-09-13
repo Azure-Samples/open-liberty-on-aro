@@ -14,6 +14,9 @@ spec:
     termination: reencrypt
     certificateSecretRef: tls-crt-secret
   env:
+  # Set WLP_LOGGING_CONSOLE_FORMAT to SIMPLE to output logs in a human-readable format instead of the default JSON logging format
+  - name: WLP_LOGGING_CONSOLE_FORMAT
+    value: SIMPLE
   - name: KEY_ALIAS
     value: 'defaultkeystore'
   - name: LDAP_SERVER_HOST

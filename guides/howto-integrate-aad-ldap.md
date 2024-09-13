@@ -278,7 +278,8 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    oc create configmap keystore-config --from-file=src/main/liberty/config/${KEYSTORE_NAME}
 
    # Create TLS private key and certificate, which is also used as CA certificate for testing purpose
-   openssl req -x509 -subj "/C=US/ST=majguo/L=OpenLiberty/O=demo/CN=www.example.com" -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
+   # Note that the CN is set to "localhost" as the view will invoke the REST API with "localhost" as the host
+   openssl req -x509 -subj "/C=US/ST=majguo/L=OpenLiberty/O=demo/CN=localhost" -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 
    # Create environment variables which will be passed to secret "tls-crt-secret"
    export CA_CRT=$(cat tls.crt | base64 -w 0)
