@@ -82,7 +82,7 @@ public class Cafe implements Serializable {
             .getRequest();
 
         baseUri = "http://localhost:9080" + request.getContextPath() + "/rest/coffees";
-        this.client = ClientBuilder.newBuilder().build();
+        this.client = ClientBuilder.newBuilder().build().register(filter);
 	}
 
 	private void getAllCoffees() {
