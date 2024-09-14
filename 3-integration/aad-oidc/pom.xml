@@ -12,17 +12,11 @@
     It is a simple CRUD application. It uses Maven and Jakarta EE 10 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation).
     </description>
     <properties>
-        <admin.group.id></admin.group.id>
-        <admin.group.name></admin.group.name>
-        <client.id></client.id>
-        <client.secret></client.secret>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee.api.version>10.0.0</jakartaee.api.version>
-        <keystore.pass></keystore.pass>
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tenant.id></tenant.id>
     </properties>
     <dependencies>
         <dependency>
@@ -40,27 +34,21 @@
         <dependency>
             <groupId>com.ibm.websphere.appserver.api</groupId>
             <artifactId>com.ibm.websphere.appserver.api.social</artifactId>
-            <version>1.0.42</version>
+            <version>1.0.92</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ibm.websphere.appserver.api</groupId>
             <artifactId>com.ibm.websphere.appserver.api.jwt</artifactId>
-            <version>1.1.63</version>
+            <version>1.1.92</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
-            <version>3.2</version>
+            <version>6.1</version>
             <type>pom</type>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.json.bind</groupId>
-                    <artifactId>javax.json.bind-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <build>
@@ -99,45 +87,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Enable liberty-maven-plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.9</version>
+                <executions>
+                    <execution>
+                        <id>package-server</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>install-feature</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>liberty</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Enable liberty-maven-plugin -->
-                    <plugin>
-                        <groupId>io.openliberty.tools</groupId>
-                        <artifactId>liberty-maven-plugin</artifactId>
-                        <version>3.9</version>
-                        <executions>
-                            <execution>
-                                <id>package-server</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>create</goal>
-                                    <goal>install-feature</goal>
-                                    <goal>deploy</goal>
-                                </goals>
-                                <configuration>
-                                    <libertyRuntimeVersion>[20.0.0.1,)</libertyRuntimeVersion>
-                                    <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
-                                    <bootstrapProperties>
-                                        <client.id>${client.id}</client.id>
-                                        <client.secret>${client.secret}</client.secret>
-                                        <tenant.id>${tenant.id}</tenant.id>
-                                        <admin.group.id>${admin.group.id}</admin.group.id>
-                                    </bootstrapProperties>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>         
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
