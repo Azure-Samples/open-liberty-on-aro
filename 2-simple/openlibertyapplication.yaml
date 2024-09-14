@@ -4,7 +4,7 @@ metadata:
   name: javaee-cafe-simple
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-simple:1.0.0
   pullPolicy: Always
   expose: true

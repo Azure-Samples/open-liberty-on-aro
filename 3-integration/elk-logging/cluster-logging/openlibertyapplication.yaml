@@ -4,6 +4,6 @@ metadata:
   name: javaee-cafe-elk-cluster-logging
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-simple:1.0.0
   expose: true

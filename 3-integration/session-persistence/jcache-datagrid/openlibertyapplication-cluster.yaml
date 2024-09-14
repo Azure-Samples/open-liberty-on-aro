@@ -4,8 +4,7 @@ metadata:
   name: javaee-cafe-cluster-session-jcache-datagrid
   namespace: open-liberty-demo
 spec:
-  # Note: replace "${REPLICAS}" with number of pods to be created
-  replicas: ${REPLICAS}
+  replicas: 3
   applicationImage: javaee-cafe-session-persistence-jcache-datagrid:1.0.0
   expose: true
   service:

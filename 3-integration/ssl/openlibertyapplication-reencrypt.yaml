@@ -4,7 +4,7 @@ metadata:
   name: javaee-cafe-ssl-reencrypt
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-ssl:1.0.0
   pullPolicy: Always
   expose: true
