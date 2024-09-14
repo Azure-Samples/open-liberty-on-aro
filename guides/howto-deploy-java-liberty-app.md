@@ -16,9 +16,9 @@ Complete the following prerequisites to successfully walk through this guide.
    > Azure Red Hat OpenShift requires a minimum of 40 cores to create and run an OpenShift cluster. The default Azure resource quota for a new Azure subscription does not meet this requirement. To request an increase in your resource limit, see [Standard quota: Increase limits by VM series](https://docs.microsoft.com/azure/azure-portal/supportability/per-vm-quota-requests). Note that the free trial subscription isn't eligible for a quota increase, [upgrade to a Pay-As-You-Go subscription](https://docs.microsoft.com/azure/cost-management-billing/manage/upgrade-azure-subscription) before requesting a quota increase.
 2. Prepare a local machine with Unix-like operating system installed (for example, Ubuntu, macOS).
 3. Install a Java SE implementation, version 17 or later (for example, [Eclipse Open J9](https://www.eclipse.org/openj9/)).
-4. Install [Maven](https://maven.apache.org/download.cgi) 3.5.0 or higher.
+4. Install [Maven](https://maven.apache.org/download.cgi) 3.9.8 or higher.
 5. Install [Docker](https://docs.docker.com/get-docker/) for your OS.
-6. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest&preserve-view=true) 2.0.75 or later.
+6. Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest&preserve-view=true) 2.61.0 or later.
 7. Check and install [`envsubst`](https://command-not-found.com/envsubst) if it's not pre-installed in your operating system.
 8. Clone [this repository](https://github.com/Azure-Samples/open-liberty-on-aro) to your local file system.
 
