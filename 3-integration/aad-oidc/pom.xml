@@ -101,6 +101,10 @@
                             <goal>install-feature</goal>
                             <goal>deploy</goal>
                         </goals>
+                        <configuration>
+                            <libertyRuntimeVersion>[23.0.0.10,)</libertyRuntimeVersion>
+                            <outputDirectory>${project.build.directory}/wlp-package</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
