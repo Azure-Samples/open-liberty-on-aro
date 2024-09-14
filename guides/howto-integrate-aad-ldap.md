@@ -17,7 +17,7 @@ In previous guide, a Java application, which is running inside Open Liberty/WebS
 
 ### Create and configure a Microsoft Entra Domain Services managed domain
 
-You need to have a Microsoft Entra tenant. If you don't have an existing tenant, see [Quickstart: Set up a tenant](https://learn.microsoft.com/entra/identity-platform/quickstart-create-new-tenant). 
+You need to have a Microsoft Entra tenant. If you don't have an existing tenant, set it up by following [Quickstart: Set up a tenant](https://learn.microsoft.com/entra/identity-platform/quickstart-create-new-tenant). 
 
 Complete the tutorial [Create and configure a Microsoft Entra Domain Services managed domain](https://learn.microsoft.com/azure/active-directory-domain-services/tutorial-create-instance) up to but not including the section [Enable user accounts for Domain Services](https://learn.microsoft.com/en-us/azure/active-directory-domain-services/tutorial-create-instance#enable-user-accounts-for-azure-ad-ds). That section requires special treatment in the context of this tutorial, as described in the next section. Be sure to complete the DNS actions completely and correctly.
 
@@ -281,7 +281,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    oc create configmap keystore-config --from-file=src/main/liberty/config/${KEYSTORE_NAME}
 
    # Create TLS private key and certificate, which is also used as CA certificate for testing purpose
-   # Note that the CN is set to "localhost" as the view will invoke the REST API with "localhost" as the host
+   # Note that the CN is set to "localhost" as the certificate is used for generating JWT token in the view, and the view will invoke the REST API with "localhost" as the host
    openssl req -x509 -subj "/C=US/ST=majguo/L=OpenLiberty/O=demo/CN=localhost" -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 
    # Create environment variables which will be passed to secret "tls-crt-secret"
@@ -316,7 +316,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    echo "Route Host: https://$HOST"
    ```
 
-Once the Liberty Application is up and running, replace **\<Route_Host>** with the console output of **Route Host** for `https://<Route_Host>`, and open it in your browser to visit the application home page.
+Once the Liberty Application is up and running, open **Route Host** in your browser to visit the application home page.
 
 ### Lock down and secure LDAP access over the internet
 
@@ -346,7 +346,7 @@ Advance to these guides, which integrate Liberty application with other Azure se
 > [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Microsoft Entra OpenID Connect](howto-integrate-aad-ldap.md)
+> [Integrate your Liberty application with Microsoft Entra OpenID Connect](howto-integrate-aad-oidc.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]

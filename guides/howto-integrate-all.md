@@ -15,7 +15,7 @@ In previous guides, a Java application, which is running inside Open Liberty/Web
 * [Deploy a Java application inside Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md)
 * [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 * [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
-* [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
+* [Integrate your Liberty application with Microsoft Entra ID OpenID Connect](howto-integrate-aad-oidc.md)
 
 ## Set up different services
 

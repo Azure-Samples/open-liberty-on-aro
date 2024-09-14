@@ -275,10 +275,10 @@ Advance to one of the next guides, which integrate Liberty applications with dif
 > [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
+> [Integrate your Liberty application with Microsoft Entra ID OpenID Connect](howto-integrate-aad-oidc.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
+> [Integrate your Liberty application with Microsoft Entra Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
 
 Here are references used in this guide:
 
