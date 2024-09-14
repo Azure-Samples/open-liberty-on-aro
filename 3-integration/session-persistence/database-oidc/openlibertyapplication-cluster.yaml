@@ -4,8 +4,7 @@ metadata:
   name: javaee-cafe-cluster-session-persistence-db-oidc
   namespace: open-liberty-demo
 spec:
-  # Note: replace "${REPLICAS}" with number of pods to be created
-  replicas: ${REPLICAS}
+  replicas: 3
   applicationImage: javaee-cafe-session-persistence-db-oidc:1.0.0
   expose: true
   service:
@@ -15,8 +14,6 @@ spec:
     termination: reencrypt
     certificateSecretRef: tls-crt-secret
   env:
-  - name: SHOW_HOST_NAME
-    value: 'true'
   - name: CLIENT_ID
     valueFrom:
       secretKeyRef:
