@@ -1,7 +1,7 @@
 apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
-  name: javaee-cafe-cluster-session-persistence-db-ssl
+  name: javaee-cafe-session-persistence-db-ssl
   namespace: open-liberty-demo
 spec:
   replicas: 3
