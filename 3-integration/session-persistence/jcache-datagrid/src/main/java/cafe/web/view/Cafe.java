@@ -55,7 +55,7 @@ public class Cafe implements Serializable {
 	}
 
     public String getHostName() {
-        return "true".equals(System.getenv("SHOW_HOST_NAME")) ? System.getenv("HOSTNAME") : "";
+        return System.getenv("HOSTNAME");
     }
 
 	@PostConstruct

@@ -3,13 +3,14 @@
     <!-- Enable features -->
     <featureManager>
         <feature>cdi-4.0</feature>
-        <feature>enterpriseBeansLite-4.0</feature>        
-        <feature>xmlBinding-4.0</feature>
-        <feature>restfulWS-3.1</feature>
-        <feature>persistence-3.1</feature>
+        <feature>jsonb-3.0</feature>
         <feature>faces-4.0</feature>
-        <feature>sessionCache-1.0</feature>
+        <feature>restfulWS-3.1</feature>
+        <feature>xmlBinding-4.0</feature>
+        <feature>enterpriseBeansLite-4.0</feature>
+        <feature>persistence-3.1</feature>
         <feature>transportSecurity-1.0</feature>
+        <feature>sessionCache-1.0</feature>
     </featureManager>
 
     <!-- Define http & https endpoints -->

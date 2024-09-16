@@ -1,7 +1,7 @@
 apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
-  name: javaee-cafe-cluster-session-jcache-datagrid
+  name: javaee-cafe-session-persistence-jcache-datagrid
   namespace: open-liberty-demo
 spec:
   replicas: 3
@@ -14,8 +14,6 @@ spec:
     termination: reencrypt
     certificateSecretRef: tls-crt-secret
   env:
-  - name: SHOW_HOST_NAME
-    value: 'true'
   - name: SASL_MECHANISM
     value: DIGEST-MD5
   - name: INFINISPAN_HOST
