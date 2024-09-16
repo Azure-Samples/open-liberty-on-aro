@@ -1,6 +1,6 @@
 # Enable database session persistence for the Open Liberty application
 
-This is an Open Liberty sample enables persistence of HTTP sessions to a datasource using JDBC. Persisting HTTP session data to a database allows recovery of the data after a server restart or unexpected server failure. Additionally, this sample integrates with Microsoft Entra ID OpenID Connect for authentication and authorization.
+This is an Open Liberty sample enables persistence of HTTP sessions to a datasource using JDBC. Persisting HTTP session data to a database allows recovery of the data after a server restart or unexpected server failure. Failover of HTTP sessions can be achieved by configuring multiple servers to persist data to the same location. Additionally, this sample integrates with Microsoft Entra ID OpenID Connect for authentication and authorization.
 
 Check out the source code and follow steps below to run the sample locally, run the sample in local Docker, and deploy the sample on the ARO 4 cluster.
 
