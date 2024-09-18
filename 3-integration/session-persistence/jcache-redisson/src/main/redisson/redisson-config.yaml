@@ -1,0 +1,3 @@
+singleServerConfig:
+  password: ${singleServerConfig.password}
+  address: ${singleServerConfig.address}

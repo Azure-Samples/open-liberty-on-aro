@@ -28,23 +28,13 @@
     <!-- trust JDK’s default truststore -->
     <ssl id="defaultSSLConfig"  trustDefaultCerts="true" />
 
-    <httpSessionCache libraryRef="InfinispanLib" enableBetaSupportForInfinispan="true">
-        <properties infinispan.client.hotrod.server_list="${infinispan.host}:${infinispan.port}"/>
-        <properties infinispan.client.hotrod.auth_username="${infinispan.user}"/>
-        <properties infinispan.client.hotrod.auth_password="${infinispan.pass}"/>
-        <properties infinispan.client.hotrod.auth_realm="default"/>
-        <properties infinispan.client.hotrod.auth_server_name="infinispan"/>
-        <properties infinispan.client.hotrod.sasl_mechanism="${sasl.mechanism}"/>
-        <properties infinispan.client.hotrod.java_serial_whitelist=".*"/>
-        <properties infinispan.client.hotrod.marshaller="org.infinispan.commons.marshall.JavaSerializationMarshaller"/>
-        <properties infinispan.client.hotrod.trust_store_file_name="${server.config.dir}/${keystore.name}"/>
-        <properties infinispan.client.hotrod.trust_store_type="PKCS12"/>
-        <properties infinispan.client.hotrod.trust_store_password="${keystore.pass}"/>
-    </httpSessionCache>
-    <variable name="sasl.mechanism" defaultValue="PLAIN"/>
+    <!-- This yaml file could also be mounted and exposed via a ConfigMap or Kubernetes Secret -->
+    <httpSessionCache libraryRef="jCacheVendorLib"
+                      uri="file:${server.config.dir}/redisson-config.yaml" />
 
-    <library id="InfinispanLib">
-        <fileset dir="${shared.resource.dir}/infinispan" includes="*.jar" />
+    <library id="jCacheVendorLib">
+      <fileset dir="${shared.resource.dir}" includes="*"/>
+      <folder dir="${shared.resource.dir}" />
     </library>
 
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
