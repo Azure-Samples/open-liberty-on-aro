@@ -156,7 +156,7 @@ Once the Liberty Application is up and running, copy the value of **Route Host**
    oc delete pod <pod-name>
    ```
 
-1. Refresh the page, the new coffee is still there because the session data is persisted to the database and recovered after switching to another pod due to the load balancer.
+1. Refresh the page, sign in as the same user using Microsoft Entra ID if needed, and you should see the new coffee is still there because the session data is persisted to the database and recovered after switching to another pod due to the load balancer.
 
 ### Clean up
 
