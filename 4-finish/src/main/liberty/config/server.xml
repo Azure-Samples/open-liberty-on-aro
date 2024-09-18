@@ -61,7 +61,7 @@
 
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
         <jdbcDriver libraryRef="driver-library" />
-        <properties.microsoft.sqlserver
+        <properties.postgresql
           serverName="${db.server.name}"
           portNumber="${db.port.number}"
           databaseName="${db.name}"
