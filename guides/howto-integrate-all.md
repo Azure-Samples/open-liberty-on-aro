@@ -13,18 +13,18 @@ In this guide, you will integrate your Liberty application with different Azure 
 In previous guides, a Java application, which is running inside Open Liberty/WebSphere Liberty runtime, is deployed to an ARO 4 cluster. If you have not done these guides, walk them through with the following links and return here to continue.
 
 * [Deploy a Java application inside Open Liberty/WebSphere Liberty on an Azure Red Hat OpenShift 4 cluster](howto-deploy-java-liberty-app.md)
-* [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md)
 * [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 * [Integrate your Liberty application with Microsoft Entra ID OpenID Connect](howto-integrate-aad-oidc.md)
+* [Integrate your Liberty application with Elasticsearch stack](howto-integrate-elasticsearch-stack.md#distribute-your-application-logs-to-efk-stack-installed-on-aro-4-cluster)
 
 ## Set up different services
 
 When you complete all of previous guides, different services used for this guide have already set up. Let's recap them one by one.
 
 1. [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-liberty-app.md#set-up-azure-red-hat-openshift-cluster).
-2. [Set up Azure Active Directory](howto-integrate-aad-oidc.md#set-up-azure-active-directory).
-3. [Create an Azure Database for PostgreSQL Flexible server](howto-integrate-azure-database-for-postgres.md#create-an-azure-database-for-postgresql-flexible-server).
-4. [Deploy cluster logging](howto-integrate-elasticsearch-stack.md#deploy-cluster-logging).
+1. [Create an Azure Database for PostgreSQL Flexible server](howto-integrate-azure-database-for-postgres.md#create-an-azure-database-for-postgresql-flexible-server).
+1. [Set up an OpenID Connect provider with Microsoft Entra ID](howto-integrate-aad-oidc.md#set-up-an-openid-connect-provider-with-microsoft-entra-id).
+1. [Deploy cluster logging](howto-integrate-elasticsearch-stack.md#deploy-cluster-logging).
 
 ## Prepare your application
 
@@ -32,9 +32,9 @@ The application `<path-to-repo>/2-simple` used in the previous [basic guide](how
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
-| `server.xml` | [`<path-to-repo>/2-simple/src/main/liberty/config/server.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/src/main/liberty/config/server.xml) | [`<path-to-repo>/4-finish/src/main/liberty/config/server.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/liberty/config/server.xml) | Updated | Add `socialLogin-1.0`, `transportSecurity-1.0`, `appSecurity-3.0`, `jwt-1.0`, `mpJwt-1.1`, `mpConfig-1.3`, `jpa-2.2` features and their configurations. |
+| `server.xml` | [`<path-to-repo>/2-simple/src/main/liberty/config/server.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/src/main/liberty/config/server.xml) | [`<path-to-repo>/4-finish/src/main/liberty/config/server.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/liberty/config/server.xml) | Updated | Add `socialLogin-1.0`, `transportSecurity-1.0`, `appSecurity-5.0`, `jwt-1.0`, `mpJwt-2.1`, `mpConfig-3.1`, `persistence-3.1` features and their configurations. |
 | `web.xml` | [`<path-to-repo>/2-simple/src/main/webapp/WEB-INF/web.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/src/main/webapp/WEB-INF/web.xml) | [`<path-to-repo>/4-finish/src/main/webapp/WEB-INF/web.xml`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/webapp/WEB-INF/web.xml) | Updated | Add `security-role` and `security-constraint` for accessing web resources of the application. |
-| `CafeJwtUtil.java` | | [`<path-to-repo>/4-finish/src/main/java/cafe/web/view/CafeJwtUtil.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/java/cafe/web/view/CafeJwtUtil.java) | New | The utility class for retrieving ID token issued from Azure AD, and providing an API to determine if the logged-on user is in the configured **admin group** of Azure AD. |
+| `CafeJwtUtil.java` | | [`<path-to-repo>/4-finish/src/main/java/cafe/web/view/CafeJwtUtil.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/java/cafe/web/view/CafeJwtUtil.java) | New | The utility class for retrieving ID token issued from Microsoft Entra ID, and providing an API to determine if the logged-on user is in the configured **admin group** of Microsoft Entra ID. |
 | `CafeRequestFilter.java` | | [`<path-to-repo>/4-finish/src/main/java/cafe/web/view/CafeRequestFilter.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/java/cafe/web/view/CafeRequestFilter.java) | New | A client request filter for adding JWT token in **HTTP Authorization Header** for outbound requests. |
 | `Cafe.java` | [`<path-to-repo>/2-simple/src/mainjava/cafe/web/view/Cafe.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/src/main/java/cafe/web/view/Cafe.java) | [`<path-to-repo>/4-finish/src/main/java/cafe/web/view/Cafe.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/java/cafe/web/view/Cafe.java) | Updated | Register `CafeRequestFilter` for intercepting internal REST calls, add new APIs to get principal name of logged-on user and flag indicating whether the logged-on user can delete existing coffees or not. |
 | `CafeResource.java` | [`<path-to-repo>/2-simple/src/main/java/cafe/web/rest/CafeResource.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/src/main/java/cafe/web/rest/CafeResource.java) | [`<path-to-repo>/4-finish/src/main/java/cafe/web/rest/CafeResource.java`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/src/main/java/cafe/web/rest/CafeResource.java) | Updated | Inject `JsonWebToken` to verify the **groups claim** of the token for RBAC. |
@@ -64,37 +64,37 @@ To build the application image, Dockerfile needs to be prepared in advance:
 | `Dockerfile` | [`<path-to-repo>/2-simple/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile) | [`<path-to-repo>/4-finish/Dockerfile`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/Dockerfile) | Updated | Add JDBC driver into application image, which is based on Open Liberty base image. |
 | `Dockerfile-wlp` | [`<path-to-repo>/2-simple/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/2-simple/Dockerfile-wlp) | [`<path-to-repo>/4-finish/Dockerfile-wlp`](https://github.com/Azure-Samples/open-liberty-on-aro/blob/master/4-finish/Dockerfile-wlp) | Updated | Add JDBC driver into application image, which is based on WebSphere Liberty base image. |
 
-Follow steps below to build the application image and push it to the built-in container image registry:
+Follow steps below to build the application image and push it to the built-in container image registry.
 
-1. Change directory to `<path-to-repo>/4-finish` of your local clone.
-2. Download [postgresql-42.4.1.jar](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.4.1/postgresql-42.4.1.jar) and put it to current working directory.
-3. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-4. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
-5. Run the following commands to build application image and push it to the registry.
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+1. Run the following commands to build and push the image to the container registry of your Azure Red Hat OpenShift 4 cluster:
 
    ```bash
-   # Build and tag application image
-   # Note:
-   # - replace "${Docker_File}" with "Dockerfile" to build application image with Open Liberty base image
-   # - replace "${Docker_File}" with "Dockerfile-wlp" to build application image with WebSphere Liberty base image
-   docker build -t javaee-cafe-all-in-one:1.0.0 --pull --file=${Docker_File} .
+   # Change directory to "<path-to-repo>/4-finish"
+   cd <path-to-repo>/4-finish
 
-   # Note: replace "<Container_Registry_URL>" with the fully qualified name of the registry
-   Container_Registry_URL=<Container_Registry_URL>
+   # If you are building with the Open Liberty base image, the existing Dockerfile is ready for you
 
-   # Create a new tag with registry info that refers to source image
-   docker tag javaee-cafe-all-in-one:1.0.0:1.0.0 ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-all-in-one:1.0.0
+   # If you are building with the WebSphere Liberty base image, uncomment and execute the following two commands to rename Dockerfile-wlp to Dockerfile
+   # mv Dockerfile Dockerfile.backup
+   # mv Dockerfile-wlp Dockerfile
 
-   # Log in to the built-in container image registry
-   docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
+   # Change project to open-liberty-demo you created before
+   oc project open-liberty-demo
 
-   # Push image to the built-in container image registry
-   docker push ${Container_Registry_URL}/open-liberty-demo/javaee-cafe-all-in-one:1.0.0
+   # Create an image stream
+   oc create imagestream javaee-cafe-all-in-one
+
+   # Create a build configuration that specifies the image stream tag of the build output
+   oc new-build --name javaee-cafe-all-in-one-config --binary --strategy docker --to javaee-cafe-all-in-one:1.0.0
+
+   # Start the build to upload local contents, containerize, and output to the image stream tag specified before
+   oc start-build javaee-cafe-all-in-one-config --from-dir . --follow
    ```
 
 ## Deploy sample application
 
-To integrate the application with Azure AD OpenID Connect and Azure Database for PostgreSQL server on the ARO 4 cluster, a number of Kubernetes resource YAML files need to be updated or created.
+To integrate the application with Microsoft Entra ID OpenID Connect and Azure Database for PostgreSQL flexible server on the ARO 4 cluster, a number of Kubernetes resource YAML files need to be updated or created.
 
 | File Name             | Source Path                     | Destination Path              | Operation  | Description           |
 |-----------------------|---------------------------------|-------------------------------|------------|-----------------------|  
@@ -107,9 +107,8 @@ For reference, these changes have already been applied in `<path-to-repo>/4-fini
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
-3. Run the following commands to deploy the application.
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+1. Run the following commands to deploy the application.
 
    ```bash
    # Change directory to "<path-to-repo>/4-finish"
@@ -126,7 +125,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    export ADMIN_GROUP_ID=<group ID>
 
    # Create secret "aad-oidc-secret"
-   envsubst < aad-oidc-secret.yaml | oc create -f -
+   envsubst < aad-oidc-secret.yaml | oc apply -f -
 
    # Create TLS private key and certificate, which is also used as CA certificate for testing purpose
    openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
@@ -138,7 +137,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    export TLS_KEY=$(cat tls.key | base64 -w 0)
 
    # Create secret "tls-crt-secret"
-   envsubst < tls-crt-secret.yaml | oc create -f -
+   envsubst < tls-crt-secret.yaml | oc apply -f -
 
    # Create environment variables which will be passed to secret "db-secret-postgres"
    # Note: replace "<Server name>", "<Port number>", "<Admin username>", and "<Password>" with the ones you noted down before
@@ -149,7 +148,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    export DB_PASSWORD=<Password>
 
    # Create Secret "db-secret-postgres"
-   envsubst < db-secret.yaml | oc create -f -
+   envsubst < db-secret.yaml | oc apply -f -
 
    # Create OpenLibertyApplication "javaee-cafe-all-in-one"
    oc create -f openlibertyapplication.yaml
@@ -162,13 +161,13 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
 
    # Get host of the route
    HOST=$(oc get route javaee-cafe-all-in-one --template='{{ .spec.host }}')
-   echo "Route Host: $HOST"
+   echo "Route Host: https://$HOST"
    ```
 
 Once the Liberty Application is up and running, copy the value of **Route Host** from console output.
 
-1. Open your **Azure AD** > **App registrations** > your **registered application** > **Authentication** > Click **Add URI** in **Redirect URIs** section > Replace **\<Route_Host>** with the value of **Route Host** for `https://<Route_Host>/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe`, and fill it into the text box > Click **Save**.
-2. Replace **\<Route_Host>** with the value of **Route Host** for `https://<Route_Host>`, and open it in the **InPrivate** window of **Microsoft Edge**, verify the application is secured by Azure AD OpenID Connect and connected to Azure Database for PostgreSQL server.
+1. Open your **Microsoft Entra ID** > **App registrations** > your **registered application** > **Authentication** > Select **Add URI** in **Redirect URIs** section > Replace **\<Route_Host>** with the value of **Route Host** for `<Route_Host>/ibm/api/social-login/redirect/liberty-aad-oidc-javaeecafe`, and fill it into the text box > Select **Save**.
+2. Open **Route Host** in the **InPrivate** window of **Microsoft Edge**, verify the application is secured by Microsoft Entra ID OpenID Connect and connected to Azure Database for PostgreSQL flexible server.
 
    1. Sign in as a user, who doesn't belong to the admin group you created before.
    2. Update your password if necessary. Accept permission requested if necessary.
@@ -187,8 +186,6 @@ The application logs are shipped to the Elasticsearch cluster, and can be visual
 4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
 5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
 
-If you want to log in using the Azure AD user to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
-
 ## Next steps
 
 In this guide, you learned how to:
@@ -201,7 +198,7 @@ In this guide, you learned how to:
 
 To free OpenShift resources created for these guides:
 
-* [Connect to the ARO 4 cluster](/azure/openshift/tutorial-connect-cluster).
+* [Connect to the ARO 4 cluster](https://learn.microsoft.com/azure/openshift/connect-cluster).
 * Run `oc delete project open-liberty-demo` in a console.
 
 To delete the ARO 4 cluster, follow "[Tutorial: Delete an Azure Red Hat OpenShift 4 cluster](https://docs.microsoft.com/azure/openshift/tutorial-delete-cluster)".
