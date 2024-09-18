@@ -128,7 +128,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    envsubst < aad-oidc-secret.yaml | oc apply -f -
 
    # Create TLS private key and certificate, which is also used as CA certificate for testing purpose
-   openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
+   openssl req -x509 -subj "/C=US/ST=majguo/L=OpenLiberty/O=demo/CN=www.example.com" -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 
    # Create environment variables which will be passed to secret "tls-crt-secret"
    export CA_CRT=$(cat tls.crt | base64 -w 0)
@@ -140,12 +140,12 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
    envsubst < tls-crt-secret.yaml | oc apply -f -
 
    # Create environment variables which will be passed to secret "db-secret-postgres"
-   # Note: replace "<Server name>", "<Port number>", "<Admin username>", and "<Password>" with the ones you noted down before
-   export DB_SERVER_NAME=<Server name>.postgres.database.azure.com
-   export DB_PORT_NUMBER=<Port number>
-   export DB_NAME=postgres
-   export DB_USER=<Admin username>@<Server name>
-   export DB_PASSWORD=<Password>
+   # Note: replace "<PostgreSQL server name>", "<DB name>", "<DB admin>", and "<DB admin password>" with the ones you noted down before
+   export DB_SERVER_NAME=<PostgreSQL server name>.postgres.database.azure.com
+   export DB_PORT_NUMBER=5432
+   export DB_NAME=<DB name>
+   export DB_USER=<DB admin>
+   export DB_PASSWORD=<DB admin password>
 
    # Create Secret "db-secret-postgres"
    envsubst < db-secret.yaml | oc apply -f -
@@ -178,13 +178,7 @@ Once the Liberty Application is up and running, copy the value of **Route Host**
    7. You will see the email address of your AAD account displayed in the application home page, where the coffee **Delete** button is **enabled** now.
    8. Create new coffees. Delete existing coffees.
 
-The application logs are shipped to the Elasticsearch cluster, and can be visualized in the Kibana web console.
-
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials. Click **Monitoring** > **Logging**.
-2. In the new opened window, click **Log in with OpenShift**. Log in with `kubeadmin` if required.
-3. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
-4. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
-5. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
+The application logs are shipped to the Elasticsearch cluster, and can be visualized in the Kibana web console. Follow steps in [Visualize your application logs in Kibana (EFK)](howto-integrate-elasticsearch-stack.md#visualize-your-application-logs-in-kibana-efk) to access the Kibana web console to visualize the application logs.
 
 ## Next steps
 
