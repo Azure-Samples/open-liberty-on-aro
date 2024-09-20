@@ -8,7 +8,7 @@
     <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>${project.artifactId}</name>
-    <description>This is the basic Java EE application used in the demo.
+    <description>This is the basic Jakarta EE application used in the demo.
     It is a simple CRUD application. It uses Maven and Jakarta EE 10 (JAX-RS, EJB, CDI, JSON-B, JSF, Bean Validation).
     </description>
     <properties>
@@ -88,11 +88,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

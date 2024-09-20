@@ -1,10 +1,10 @@
-apiVersion: apps.openliberty.io/v1beta2
+apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
   name: javaee-cafe-aad-ldap
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-aad-ldap:1.0.0
   expose: true
   service:

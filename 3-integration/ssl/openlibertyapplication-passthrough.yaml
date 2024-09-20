@@ -1,10 +1,10 @@
-apiVersion: apps.openliberty.io/v1beta2
+apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
   name: javaee-cafe-ssl-passthrough
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-ssl:1.0.0
   pullPolicy: Always
   expose: true

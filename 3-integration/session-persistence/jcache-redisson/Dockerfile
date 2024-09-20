@@ -1,0 +1,46 @@
+# Open Liberty base image
+FROM icr.io/appcafe/open-liberty:kernel-slim-java17-openj9-ubi
+
+# Add config files
+COPY --chown=1001:0 src/main/liberty/config/server.xml /config/server.xml
+
+# This script will add the requested XML snippets to enable Liberty features and grow image to be fit-for-purpose using featureUtility.
+# Only available in 'kernel-slim'. The 'full' tag already includes all features for convenience.
+RUN features.sh
+
+# Add app and other dependencies
+COPY --chown=1001:0 target/javaee-cafe.war /config/apps/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/postgresql-42.7.2.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/byte-buddy-1.14.5.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/cache-api-1.1.1.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jackson-annotations-2.15.2.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jackson-core-2.15.2.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jackson-databind-2.15.2.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jackson-dataformat-yaml-2.15.2.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jboss-marshalling-2.0.11.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jboss-marshalling-river-2.0.11.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jodd-bean-5.1.6.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/jodd-core-5.1.6.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/kryo-5.5.0.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/minlog-1.3.1.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-buffer-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-codec-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-codec-dns-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-common-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-handler-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-resolver-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-resolver-dns-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-transport-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/netty-transport-native-unix-common-4.1.96.Final.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/objenesis-3.3.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/reactive-streams-1.0.4.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/reactor-core-3.5.3.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/redisson-3.23.4.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/reflectasm-1.11.9.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/rxjava-3.1.6.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/slf4j-api-1.7.36.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/slf4j-simple-1.7.36.jar /opt/ol/wlp/usr/shared/resources/
+COPY --chown=1001:0 target/liberty/wlp/usr/shared/resources/snakeyaml-2.0.jar /opt/ol/wlp/usr/shared/resources/
+
+# This script will add the requested XML snippets, grow image to be fit-for-purpose and apply interim fixes
+RUN configure.sh

@@ -1,10 +1,10 @@
-apiVersion: apps.openliberty.io/v1beta2
+apiVersion: apps.openliberty.io/v1
 kind: OpenLibertyApplication
 metadata:
   name: javaee-cafe-aad-oidc
   namespace: open-liberty-demo
 spec:
-  replicas: 1
+  replicas: 3
   applicationImage: javaee-cafe-aad-oidc:1.0.0
   expose: true
   service:
@@ -14,6 +14,9 @@ spec:
     termination: reencrypt
     certificateSecretRef: tls-crt-secret
   env:
+  # Set WLP_LOGGING_CONSOLE_FORMAT to SIMPLE to output logs in a human-readable format instead of the default JSON logging format
+  - name: WLP_LOGGING_CONSOLE_FORMAT
+    value: SIMPLE
   - name: CLIENT_ID
     valueFrom:
       secretKeyRef:

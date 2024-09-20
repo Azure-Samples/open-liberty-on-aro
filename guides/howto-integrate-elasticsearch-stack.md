@@ -115,38 +115,19 @@ As long as the application logs are shipped to the Elasticsearch cluster, they c
 
 Another option is to install EFK (Elasticsearch, Fluentd, and Kibana) stack on the ARO 4 cluster, which aggregates log data from all containers running on the cluster. The steps below describe the process of deploying EFK stack using the **Elasticsearch Operator** and the **Cluster Logging Operator**.
 > [!NOTE]
-> Elasticsearch is a memory-intensive application. Refer to section [Set up Azure Red Hat OpenShift cluster](howto-deploy-java-liberty-app.md#set-up-azure-red-hat-openshift-cluster) from the previous guide to learn how to specify appropriate virtual machine size for the worker nodes when creating the cluster.
+> Elasticsearch is a memory-intensive application. By default, OpenShift Container Platform installs three Elasticsearch nodes with memory requests and limits of 16 GB. Specify the proper virtual machine size for the worker nodes using the `--worker-vm-size` parameter. For more information, see the following articles:
+> * [Azure CLI to create a cluster](https://learn.microsoft.com/cli/azure/aro#az-aro-create)
+> * [Supported virtual machine sizes for memory optimized](https://learn.microsoft.com/azure/openshift/support-policies-v4#memory-optimized)
 
 ### Deploy cluster logging
 
 Follow the instructions in these tutorials and then return here to continue.
 
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials.
-2. [Log in to the OpenShift CLI with the token for `kubeadmin`](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
-3. Install the Elasticsearch Operator by following the steps in [Install the Elasticsearch Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-eo-cli_cluster-logging-deploying).
-4. Install the Cluster Logging Operator by following the steps in [Install the Cluster Logging Operator using the CLI](https://docs.openshift.com/container-platform/4.3/logging/cluster-logging-deploying.html#cluster-logging-deploy-clo-cli_cluster-logging-deploying).
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+1. Install the Elasticsearch Operator, Logging Operator and instance by following the steps in [Installing Logging with Elasticsearch using the web console](https://docs.openshift.com/container-platform/4.14/observability/logging/cluster-logging-deploying.html#logging-es-deploy-console_cluster-logging-deploying).
    > [!NOTE]
-   > To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create a Cluster Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name.
-
-After the newly created Cluster Logging instance is up and running, configure Fluentd to merge the JSON log message bodies emitted by sample application.
-
-1. Switch to project `openshift-logging`:
-
-   ```bash
-   oc project openshift-logging
-   ```
-
-2. Change the cluster logging instance’s **managementState** field from **Managed** to **Unmanaged**:
-
-   ```bash
-   oc edit ClusterLogging instance
-   ```
-
-3. Set the environment variable **MERGE_JSON_LOG** to **true**:
-
-   ```bash
-   oc set env ds/fluentd MERGE_JSON_LOG=true
-   ```
+   > * The OpenShift version deployed in ARO 4 cluster is `4.13.40` in this guide.
+   > * To specify the name of an existing **StorageClass** for Elasticsearch storage in step **Create an OpenShift Logging instance**, open **ARO web console** > **Storage** > **Storage Classes** and find the supported storage class name. For example, `managed-csi` is used in this guide.
 
 ### Deploy sample application
 
@@ -162,9 +143,9 @@ For reference, you can find these deployment files from `<path-to-repo>/3-integr
 
 Now you can deploy the sample Liberty application to the ARO 4 cluster with the following steps.
 
-1. Log in to the OpenShift web console from your browser using the credentials of the Azure AD user.
-2. [Log in to the OpenShift CLI with the token for the Azure AD user](howto-deploy-java-liberty-app.md#log-in-to-the-openshift-cli-with-the-token).
-3. Run the following commands to deploy the application.
+1. Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+1. Make sure you have built and pushed the Docker image of the sample application `<path-to-repo>/2-simple` to the Azure Container Registry. If not, follow the steps in [Prepare the application image](howto-deploy-java-liberty-app.md#prepare-the-application-image) to build and push the Docker image.
+1. Run the following commands to deploy the application.
 
    ```bash
    # Change directory to "<path-to-repo>/3-integration/elk-logging/cluster-logging"
@@ -184,7 +165,7 @@ Now you can deploy the sample Liberty application to the ARO 4 cluster with the 
 
    # Get host of the route
    HOST=$(oc get route javaee-cafe-elk-cluster-logging --template='{{ .spec.host }}')
-   echo "Route Host: $HOST"
+   echo "Route Host: https://$HOST"
    ```
 
 Once the Liberty Application is up and running:
@@ -196,18 +177,14 @@ Once the Liberty Application is up and running:
 
 As long as the application logs are shipped to the Elasticsearch cluster, they can be visualized in the Kibana web console.
 
-1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials. Click **Monitoring** > **Logging**.
-2. In the new opened window, click **Log in with OpenShift**. Log in with `kubeadmin` if required.
-3. In **Authorize Access** page, click **Allow selected permissions**. Wait until the Kibana web console is displayed.
-4. Open **Management** > **Index Patterns** > Select **project.\*** > Click **Refresh field list** icon at top-right of the page.
-
-   ![refresh-field-list.png](./media/howto-integrate-elasticsearch-stack/refresh-field-list.png)
-5. Click **Discover**. Select index pattern **project.\*** from the dropdown list.
-6. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **loglevel**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
+1. Log in to the OpenShift web console from your browser using the `kubeadmin` credentials. From top right toolbar, select matrix like icon > **Observability** > **Logging**. Sign in with the `kubeadmin` credentials if prompted.
+1. If you signed in at the first time, select **Allow selected permissions** in **Authorize Access** page.
+1. Wait until the Kibana web console is displayed.
+1. Open **Management** > **Index Patterns** > Select **app\*** > **Next step ** > Select **@timestamp** > **Create index pattern**.
+1. Select **Discover**. Select index pattern **app.\*** from the dropdown list.
+1. Add **kubernetes.namespace_name**, **kubernetes.pod_name**, **log_type**, and **message** from **Available Fields** into **Selected Fields**. Discover application logs from the work area of the page.
 
    ![discover-application-logs-cluster-logging](./media/howto-integrate-elasticsearch-stack/discover-application-logs-cluster-logging.png)
-
-If you want to log in using the Azure AD user to view logs in the Kibana web console, follow the steps above but replace index pattern **project.\*** with **project.open-liberty-demo.\<random-guid>.\***.
 
 ## Next steps
 
@@ -219,16 +196,13 @@ In this guide, you learned how to:
 
 Advance to these guides, which integrate Liberty application with other Azure services:
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure managed databases](howto-integrate-azure-managed-databases.md)
+> [Integrate your Liberty application with Azure Database for PostgreSQL](howto-integrate-azure-database-for-postgres.md)
 
 > [!div class="nextstepaction"]
-> [Set up your Liberty application in a multi-node stateless cluster with load balancing](howto-setup-stateless-cluster.md)
+> [Integrate your Liberty application with Microsoft Entra ID OpenID Connect](howto-integrate-aad-oidc.md)
 
 > [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory OpenID Connect](howto-integrate-aad-oidc.md)
-
-> [!div class="nextstepaction"]
-> [Integrate your Liberty application with Azure Active Directory Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
+> [Integrate your Liberty application with Microsoft Entra Domain Service via Secure LDAP](howto-integrate-aad-ldap.md)
 
 If you've finished all of above guides, advance to the complete guide, which incorporates all of Azure service integrations:
 > [!div class="nextstepaction"]

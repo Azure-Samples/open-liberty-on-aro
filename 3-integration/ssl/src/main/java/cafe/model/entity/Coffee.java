@@ -2,7 +2,7 @@ package cafe.model.entity;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Coffee implements Serializable {

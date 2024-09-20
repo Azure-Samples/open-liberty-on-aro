@@ -41,14 +41,14 @@ Press "Ctrl+C" to stop the app.
 
 ## Deploy the sample on the ARO 4 cluster
 
-You should already deployed an ARO 4 cluster, created a project `open-liberty-demo`, and a user who has been granted `admin` role to project `open-liberty-demo`.
+You should already deployed an ARO 4 cluster and created a project `open-liberty-demo`.
 
-First, sign in with the user and switch to project `open-liberty-demo`:
+Make sure you have already signed in to the OpenShift CLI using the `kubeadmin` credentials. If not, follow [Connect using the OpenShift CLI](https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-using-the-openshift-cli) to sign using `oc login` command.
+
+Now switch to project `open-liberty-demo`:
 
 ```
-DEMO_PROJECT=open-liberty-demo
-oc login -u <user-name> -p <password> --server=<api-server-url>
-oc project $DEMO_PROJECT
+oc project open-liberty-demo
 ```
 
 Then create an image stream, a build config and then start the build to upload the contents for building the image: 
@@ -77,7 +77,7 @@ oc get route javaee-cafe-ssl-passthrough
 
 Open `https://<copied-value>` in the browser to test the application.
 
-Alternatively, you can also open the copied value in the browser, and it's expected to be automatically redirected to `https` endpoint accordingly. However, the fix for the open issue [insecureEdgeTerminationPolicy not set to redirect on passthrough route](https://github.com/OpenLiberty/open-liberty-operator/issues/297#issuecomment-996787319) seems not released in Open Liberty Operator 0.8.0 which is currently available from the OperatorHub, so redirect won't work now.
+Alternatively, you can also open the copied value in the browser, and it's expected to be automatically redirected to `https` endpoint accordingly. The fix for the open issue [insecureEdgeTerminationPolicy not set to redirect on passthrough route](https://github.com/OpenLiberty/open-liberty-operator/issues/297#issuecomment-996787319) seems released in the version of installed Open Liberty Operator, so redirect works now.
 
 ### Option 2: create a re-encrypt route with a custom certificate
 
@@ -85,7 +85,7 @@ You can also configure a secure route using reencrypt TLS termination with a cus
 
 ```
 # Create secret "tls-crt-secret"
-openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
+openssl req -x509 -subj "/C=US/ST=majguo/L=OpenLiberty/O=demo/CN=www.example.com" -sha256 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt
 
 export CA_CRT=$(cat tls.crt | base64 -w 0)
 export DEST_CA_CRT=$(cat tls.crt | base64 -w 0)
