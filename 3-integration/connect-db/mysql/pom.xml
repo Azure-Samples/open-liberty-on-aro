@@ -39,9 +39,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.2.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.protobuf</groupId>
@@ -148,7 +148,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>mysql-connector-java</includeArtifactIds>
+                            <includeArtifactIds>mysql-connector-j</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>
                         </configuration>
                     </execution>
