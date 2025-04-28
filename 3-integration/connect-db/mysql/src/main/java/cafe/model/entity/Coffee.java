@@ -6,9 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 @Entity
 @NamedQuery(name = "findAllCoffees", query = "SELECT o FROM Coffee o")
 public class Coffee implements Serializable {
@@ -18,8 +16,8 @@ public class Coffee implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    protected String name;
-    protected Double price;
+    private String name;
+    private Double price;
 
     public Coffee() {
     }

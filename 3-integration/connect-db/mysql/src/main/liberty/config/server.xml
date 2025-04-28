@@ -9,7 +9,6 @@
         <feature>persistence-3.1</feature>
         <feature>restfulWS-3.1</feature>
         <feature>ssl-1.0</feature>
-        <feature>xmlBinding-4.0</feature>
     </featureManager>
 
     <!-- Define http & https endpoints -->
@@ -27,7 +26,7 @@
                     location="${server.config.dir}/apps/javaee-cafe-mysql.war">
     </webApplication>
 
-    <variable name="db.port.number" defaultValue="1433"/>
+    <variable name="db.port.number" defaultValue="3306"/>
     <dataSource id="JavaEECafeDB" jndiName="jdbc/JavaEECafeDB">
         <jdbcDriver libraryRef="driver-library" />
         <properties
