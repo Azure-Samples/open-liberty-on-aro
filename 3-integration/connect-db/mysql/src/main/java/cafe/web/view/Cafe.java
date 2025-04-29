@@ -22,7 +22,7 @@ import java.util.List;
 public class Cafe {
 
     private String baseUri;
-    private transient Client client;
+    private Client client;
 
     @NotNull
     @NotEmpty
