@@ -24,12 +24,6 @@
         <servlet-name>jakarta.ws.rs.core.Application</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
-
-    <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
-    </session-config>
     
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
