@@ -29,7 +29,6 @@ public class Cafe {
     private String name;
     @NotNull
     private Double price;
-    private List<Coffee> coffeeList;
 
     public String getName() {
         return name;

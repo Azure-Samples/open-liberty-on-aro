@@ -21,7 +21,6 @@
         <param.db.port.number>${env.DB_PORT_NUMBER}</param.db.port.number>
         <param.db.server.name>${env.DB_SERVER_NAME}</param.db.server.name>
         <param.db.user>${env.DB_USER}</param.db.user>
-        <param.namespace>${env.NAMESPACE}</param.namespace>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
