@@ -33,7 +33,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Set up JDK 1.8
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@0f62d2ad8407a414cddd4790bed06fd9ebda0f56 # v1.4.5
               with:
                 java-version: 1.8
             - name: Install oc
@@ -61,7 +61,7 @@ jobs:
                 echo "docker version"
                 sudo docker --version
                 sudo systemctl start docker
-            - uses: azure/login@v1
+            - uses: azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
               id: azure-login
               with:
                 creds: ${{ env.azureCredentials }}
@@ -74,7 +74,7 @@ jobs:
                 Container_Registry_URL=${{ github.event.inputs.containerRegistryUrl }}
                 docker login -u $(oc whoami) -p $(oc whoami -t) ${Container_Registry_URL}
             - name: Checkout open-liberty-on-aks
-              uses: actions/checkout@v2
+              uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
             - name: Setup environment variables
               run: |
                 echo "DB_SERVER_NAME"=${{ env.dbServerName }} >> $GITHUB_ENV
@@ -97,12 +97,12 @@ jobs:
 
                 mvn clean install
             - name: Archive server.xml
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # v1.0.0
               with:
                 name: archivefiles
                 path: 3-integration/connect-db/postgres/target/liberty/wlp/usr/servers/defaultServer/server.xml
             - name: Archive Dockerfile
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # v1.0.0
               with:
                 name: archivefiles
                 path: 3-integration/connect-db/postgres/target/Dockerfile
@@ -124,7 +124,7 @@ jobs:
                 docker tag ${IMAGE_NAME}:${IMAGE_VERSION} ${Container_Registry_URL}/${NAMESPACE}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}
                 docker push ${Container_Registry_URL}/${NAMESPACE}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}
             - name: Archive db-secret.yaml
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # v1.0.0
               with:
                 name: archivefiles
                 path: 3-integration/connect-db/postgres/target/db-secret.yaml
@@ -136,7 +136,7 @@ jobs:
                 lineNumber=$(grep -n 'replicas' openlibertyapplication.yaml | grep -Eo '^[^:]+')
                 sed -i "$lineNumber a \  applicationImage: ${Container_Registry_URL}/${IMAGE_NAME}:${{ github.run_id }}${{ github.run_number }}" openlibertyapplication.yaml
             - name: Archive openlibertyapplication.yaml
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # v1.0.0
               with:
                 name: archivefiles
                 path: 3-integration/connect-db/postgres/target/openlibertyapplication.yaml

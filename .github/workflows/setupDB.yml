@@ -19,19 +19,19 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Set up JDK 1.8
-              uses: actions/setup-java@v1
+              uses: actions/setup-java@0f62d2ad8407a414cddd4790bed06fd9ebda0f56 # v1.4.5
               with:
                 java-version: 1.8
     deploy-db:
         needs: preflight
         runs-on: ubuntu-latest
         steps:
-            - uses: azure/login@v1
+            - uses: azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
               id: azure-login
               with:
                 creds: ${{ env.azureCredentials }}
             - name: Create Resource Group
-              uses: azure/CLI@v1
+              uses: azure/CLI@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1.0.9
               with:
                 azcliversion: ${{ env.azCliVersion }}
                 inlineScript: |
@@ -39,7 +39,7 @@ jobs:
                     az group create --verbose --name ${{ env.resourceGroupForDB }} --location ${{ env.location }}
             - name: Set Up Azure Postgresql to Test dbTemplate
               id: setup-postgresql
-              uses: azure/CLI@v1
+              uses: azure/CLI@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1.0.9
               with:
                 azcliversion: ${{ env.azCliVersion }}
                 inlineScript: |
